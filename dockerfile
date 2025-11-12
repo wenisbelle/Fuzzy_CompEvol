@@ -24,9 +24,9 @@ RUN pip install pytest
 RUN pip install numpy && pip install matplotlib && pip install scipy
 
 
-RUN mkdir -p /Comp_mov/src
+RUN mkdir -p /FuzzyGA/src
 
-WORKDIR /Comp_mov
+WORKDIR /FuzzyGA/src
 
 
     

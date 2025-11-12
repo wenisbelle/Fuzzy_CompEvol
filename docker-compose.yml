@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   vision_dev:
-    image: fuzzy_evol:latest
-    container_name: fuzzy_evol_container
-    hostname: fuzzy_evol_container
+    image: fuzzy_ga:latest
+    container_name: fuzzy_ga_container
+    hostname: fuzzy_ga_container
     runtime: nvidia
     environment:
       - QT_X11_NO_MITSHM=1
@@ -15,7 +15,7 @@ services:
       - /dev/dri  # for GPU access
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ./src:/Comp_mov/src:rw  # Mount the current directory as readable and writable
+      - ./src:/FuzzyGA/src:rw  # Mount the current directory as readable and writable
 
     deploy:
       resources:

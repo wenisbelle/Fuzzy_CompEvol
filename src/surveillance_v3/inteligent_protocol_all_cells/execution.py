@@ -9,10 +9,10 @@ from .inteligent_mobility_protocol import PointOfInterest, drone_protocol_factor
 from gradysim.simulator.handler.communication import CommunicationHandler, CommunicationMedium
 
 
-def run_simulation_once():
+def create_and_run_simulation(drone_params: dict):
     # Configuring simulation
     config = SimulationConfiguration(
-        duration=500, 
+        duration=50, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
@@ -25,17 +25,7 @@ def run_simulation_once():
     )))
 
 
-    drone_params = {
-        "uncertainty_rate": 0.05,
-        "vanishing_update_time": 10.0,
-        "map_threshold": 0.5,
-        "distance_norm": 200,
-        "cluster_size_norm": 1,
-        "number_of_drones": 2,    
-        "map_width": 10,
-        "map_height": 10
-    }
-
+    results_aggregator = {}
     ConfiguredDrone = drone_protocol_factory(
         uncertainty_rate=drone_params["uncertainty_rate"],
         vanishing_update_time=drone_params["vanishing_update_time"],
@@ -44,22 +34,29 @@ def run_simulation_once():
         cluster_size_norm=drone_params["cluster_size_norm"],
         number_of_drones=drone_params["number_of_drones"],
         map_width=drone_params["map_width"],
-        map_height=drone_params["map_height"]
+        map_height=drone_params["map_height"],
+        results_aggregator=results_aggregator
     )
 
-    builder.add_node(ConfiguredDrone, (0, 0, 0))
-    builder.add_node(ConfiguredDrone, (0, 0, 0))
+    for _ in range(drone_params["number_of_drones"]):
+        builder.add_node(ConfiguredDrone, (0, 0, 0))
 
-
-    # Instantiating ground sensors to represent the map
-    for i in range(10):
-        for j in range(10):
+    map_width = drone_params["map_width"]
+    map_height = drone_params["map_height"]
+    for i in range(map_width):
+        for j in range(map_height):
+            # Assuming the coordinate logic is (10*i-50, 10*j-50, 0)
+            # based on the original 10x10 map
+            x_coord = 10 * i - (map_width * 10) / 2
+            y_coord = 10 * j - (map_height * 10) / 2
             builder.add_node(PointOfInterest,
-                             (10*i-50, 10*j-50, 0))    
+                             (x_coord, y_coord, 0))    
 
     # Building & starting
     simulation = builder.build()
     simulation.start_simulation()
+    
+    return results_aggregator
 
 
 def main():
@@ -71,9 +68,23 @@ def main():
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    NUMBER_OF_RUNS = 10
+    drone_params = {
+        "uncertainty_rate": 0.05,
+        "vanishing_update_time": 10.0,
+        "map_threshold": 0.5,
+        "distance_norm": 200,
+        "cluster_size_norm": 1,
+        "number_of_drones": 2,    
+        "map_width": 10,
+        "map_height": 10
+    }
+
+    NUMBER_OF_RUNS = 1
     for i in range(NUMBER_OF_RUNS):
-        run_simulation_once()
+        print(f"Starting run {i+1}/{NUMBER_OF_RUNS}...")
+        simulation_results = create_and_run_simulation(drone_params)        
+        logging.info(f"Run {i+1} results: {simulation_results}")
+        print(f"Run {i+1} finished. Results: {simulation_results}")
 
 if __name__ == "__main__":
     main()
