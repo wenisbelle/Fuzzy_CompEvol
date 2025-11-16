@@ -8,18 +8,22 @@ from gradysim.simulator.simulation import SimulationConfiguration, SimulationBui
 from .inteligent_mobility_protocol import PointOfInterest, drone_protocol_factory
 from gradysim.simulator.handler.communication import CommunicationHandler, CommunicationMedium
 
+from deap import algorithms, base, creator, tools
+import numpy as np
 
-def create_and_run_simulation(drone_params: dict):
+#### Objective function using simulation execution ####
+#### GradySim function #######
+def create_and_run_simulation(individual):
     # Configuring simulation
     config = SimulationConfiguration(
-        duration=50, 
+        duration=250, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
 
     builder.add_handler(TimerHandler())
     builder.add_handler(MobilityHandler())
-    builder.add_handler(VisualizationHandler())
+    #builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
         transmission_range=30
     )))
@@ -27,22 +31,23 @@ def create_and_run_simulation(drone_params: dict):
 
     results_aggregator = {}
     ConfiguredDrone = drone_protocol_factory(
-        uncertainty_rate=drone_params["uncertainty_rate"],
-        vanishing_update_time=drone_params["vanishing_update_time"],
-        map_threshold=drone_params["map_threshold"],
-        distance_norm=drone_params["distance_norm"],
-        cluster_size_norm=drone_params["cluster_size_norm"],
-        number_of_drones=drone_params["number_of_drones"],
-        map_width=drone_params["map_width"],
-        map_height=drone_params["map_height"],
+        uncertainty_rate=0.5,
+        vanishing_update_time=10.0,
+        trajectory_accomulate_fitness_norm=individual[0],
+        distance_norm=individual[1],
+        uncertainty_norm=individual[2],
+        distance_between_drone_norm=individual[3],
+        number_of_drones=3,
+        map_width=10,
+        map_height=10,
         results_aggregator=results_aggregator
     )
 
-    for _ in range(drone_params["number_of_drones"]):
+    for _ in range(3):
         builder.add_node(ConfiguredDrone, (0, 0, 0))
 
-    map_width = drone_params["map_width"]
-    map_height = drone_params["map_height"]
+    map_width = 10
+    map_height = 10
     for i in range(map_width):
         for j in range(map_height):
             # Assuming the coordinate logic is (10*i-50, 10*j-50, 0)
@@ -55,8 +60,25 @@ def create_and_run_simulation(drone_params: dict):
     # Building & starting
     simulation = builder.build()
     simulation.start_simulation()
-    
-    return results_aggregator
+
+    total_uncertainty_drone1 = results_aggregator[0]['accomulated_uncertainty']
+    total_uncertainty_drone2 = results_aggregator[1]['accomulated_uncertainty']
+    total_uncertainty_drone3 = results_aggregator[2]['accomulated_uncertainty']
+
+
+    return (total_uncertainty_drone1+total_uncertainty_drone2+total_uncertainty_drone3)/3
+
+########### GA part ##########
+def objective_function(individual):
+    return create_and_run_simulation(individual),
+
+
+def random_distance_norm():
+    return random.uniform(0.0,1000.0)
+
+def random_norm_values():
+    return random.uniform(0.0, 200.0)
+
 
 
 def main():
@@ -68,23 +90,35 @@ def main():
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    drone_params = {
-        "uncertainty_rate": 0.05,
-        "vanishing_update_time": 10.0,
-        "map_threshold": 0.5,
-        "distance_norm": 200,
-        "cluster_size_norm": 1,
-        "number_of_drones": 2,    
-        "map_width": 10,
-        "map_height": 10
-    }
+    
+    ### Defining the GA ###
+    creator.create("FitnessMin", base.Fitness, weights=(-1.0,)) ## Minimize the accomulated uncertainty 
+    creator.create("Individual", list,  fitness=creator.FitnessMin) ## individual
+    
+    N_GENES = 4
+    toolbox = base.Toolbox()
+    toolbox.register("individual", tools.initCycle, creator.Individual, [random_norm_values, random_distance_norm, random_norm_values, random_norm_values], 1)
+    toolbox.register("population", tools.initRepeat, list, toolbox.individual) 
 
-    NUMBER_OF_RUNS = 1
-    for i in range(NUMBER_OF_RUNS):
-        print(f"Starting run {i+1}/{NUMBER_OF_RUNS}...")
-        simulation_results = create_and_run_simulation(drone_params)        
-        logging.info(f"Run {i+1} results: {simulation_results}")
-        print(f"Run {i+1} finished. Results: {simulation_results}")
+    toolbox.register("evaluate", objective_function)
+    toolbox.register("mate", tools.cxOnePoint)
+    toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.05)
+    toolbox.register("select", tools.selTournament, tournsize=3)
+
+    pop = toolbox.population(n=20)                            
+    hof = tools.HallOfFame(1)                                
+    stats = tools.Statistics(lambda ind: ind.fitness.values)  
+    stats.register("avg", np.mean)
+    stats.register("std", np.std)
+    stats.register("min", np.min)
+    stats.register("max", np.max)
+
+    pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.1, ngen=30, stats=stats, halloffame=hof, verbose=True)
+    print("=== Final Results ===")
+    print(log)
+
+    print("Melhor Indivíduo:")
+    print(hof[0])
 
 if __name__ == "__main__":
     main()

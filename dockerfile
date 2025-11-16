@@ -22,6 +22,7 @@ RUN apt-get update
 RUN apt-get install -y python3-pip 
 RUN pip install pytest
 RUN pip install numpy && pip install matplotlib && pip install scipy
+RUN pip install deap
 
 
 RUN mkdir -p /FuzzyGA/src

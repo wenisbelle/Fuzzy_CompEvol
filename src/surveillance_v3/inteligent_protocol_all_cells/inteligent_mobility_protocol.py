@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import json
 import random
 from .visualization import MapVisualizer
-from .cluster import ClusterDetector
+from .fitness import FitnessEvaluator
 
 from gradysim.protocol.interface import IProtocol
 from gradysim.protocol.messages.telemetry import Telemetry
@@ -42,6 +42,7 @@ class ShareMapMessage(TypedDict):
     message_type: int 
     map: list
     sender: int
+    drone_position: list
 
 class SendGoToMessage(TypedDict):
     message_type: int 
@@ -71,14 +72,17 @@ class Drone(IProtocol):
     camera: CameraHardware
     _log: logging.Logger
     visualizer: MapVisualizer = None
+    ### Variable to track how many interactions happened ###
+    Number_of_Encounters: int = 0
 
     ##### Configuration for drone inheritance #####
     _config = {
         "uncertainty_rate": 10,
         "vanishing_update_time": 10.0,
-        "map_threshold": 10,
-        "distance_norm": 100,
-        "cluster_size_norm": 10,
+        "trajectory_accomulate_fitness_norm": 10.0,
+        "distance_norm": 100.0,
+        "uncertainty_norm": 1.0,
+        "distance_between_drone_norm": 50.0,
         "number_of_drones": 2,
         "map_width": 10,
         "map_height": 10
@@ -89,11 +93,14 @@ class Drone(IProtocol):
         self.drone_position = None
         self.goto_command = np.zeros(3)
 
+        self.TIMEOUT_TO_UPDATE_DESTINATION = 3.0
+
         self.UNCERTAINTY_RATE = self._config["uncertainty_rate"]
         self.VANISHING_UPDATE_TIME = self._config["vanishing_update_time"]
-        self.MAP_THRESHOLD = self._config["map_threshold"]
+        self.TRAJECTORY_ACCOMULATE_FITNESS_NORM = self._config["trajectory_accomulate_fitness_norm"]
         self.DISTANCE_NORM = self._config["distance_norm"]
-        self.CLUSTER_SIZE_NORM = self._config["cluster_size_norm"]
+        self.UNCERTAINTY_NORM = self._config["uncertainty_norm"]
+        self.DISTANCE_BETWEEN_DRONE_NORM = self._config["distance_between_drone_norm"]
         self.NUMBER_OF_DRONES = self._config["number_of_drones"]
         self.MAP_WIDTH = self._config["map_width"]
         self.MAP_HEIGHT = self._config["map_height"]
@@ -105,25 +112,24 @@ class Drone(IProtocol):
         self.map[:,:,0] = 1
         self.total_uncertainty = self.map[:,:,0].sum()
         self.is_cell_visited = np.zeros((self.MAP_HEIGHT, self.MAP_WIDTH))
-
-       
+        self.accomulated_uncertainty = 0.0
+             
         ##### Initial state #####
         self.status = DroneStatus.MAPPING      
         
         ##### Tunning parameters log #####
-        self._log.info(f"Drone {self.provider.get_id()} uncertainty rate {self.UNCERTAINTY_RATE}, vanishing time {self.VANISHING_UPDATE_TIME}, map threshold {self.MAP_THRESHOLD}")
+        #self._log.info(f"Drone {self.provider.get_id()}. Distance norm: {self.DISTANCE_NORM}. Uncertainty norm: {self.UNCERTAINTY_NORM}. Trajectory accomulate fitness norm: {self.TRAJECTORY_ACCOMULATE_FITNESS_NORM}")
 
+        ##### Camera Configuration #####
+        configuration = CameraConfiguration(20, 30, 180, 0)
+        self.camera = CameraHardware(self, configuration)
+
+        ### It's considered that the at any high the camera reach will be enough #####
         ##### Cluster plugins initialization #####
-        self.cluster_detector = ClusterDetector(map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT)
+        self.fitness = FitnessEvaluator(map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells = 10, camera_angle=np.pi/6)
         
         ##### Communication tracking. Avoiding communications loops #####
         self.last_drone_interaction_time = np.zeros(self.NUMBER_OF_DRONES)  
-
-        ##### Visualizer initialization #####
-        #if Drone.visualizer is None:
-        #    Drone.visualizer = MapVisualizer(num_drones=self.NUMBER_OF_DRONES, map_size=self.MAP_WIDTH * self.MAP_HEIGHT, threshold=self.MAP_THRESHOLD)
-        ##### First map visualization update #####
-        #self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
 
         ##### Initial random position #####
         self.goto_command = np.array([random.uniform(-5*self.MAP_WIDTH, 5*self.MAP_WIDTH), random.uniform(-5*self.MAP_HEIGHT, 5*self.MAP_HEIGHT), 10])
@@ -153,40 +159,41 @@ class Drone(IProtocol):
                                 
                 ##### Checking the total uncertainty after camera update #####
                 self.total_uncertainty = self.map[:,:,0].sum()
-                self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
+                self.accomulated_uncertainty += self.total_uncertainty
+                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
+                ###### Printar isso aqui depois nos testes####
+                ##############################################
+                ##############################################                
+                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
 
-        ##### Updating visualizer after camera update #####
-        if self.visualizer:
-            self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
-
+    ##### Map updating ##### 
     def vanishing_map_routine(self):
         self.map[:, :, 0] = self.map[:, :, 0] + self.UNCERTAINTY_RATE
 
         ##### Checking if the cell was visited #####
         ##### Importante parameter. If there are unviseted cells, there will be penalizations in the algorithm #####
         self.is_cell_visited[self.map[:, :, 1] > 0.0] = 1
-        self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
+        ###### Printar isso aqui depois nos testes####
+        ##############################################
+        ############################################## 
+        #self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
 
-        ##### Update visualizaer after the increase in uncertainty #####
-        if self.visualizer:
-            self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
-        
-
-    
-    ##### Self mobility command. When the UAV reaches the destination, it calculates the next one #####
+         
+    ##### Self mobility command. When the drone reaches the destination, it calculates the next one #####
     def internal_mobility_command(self):
         map_center_offset = (self.MAP_WIDTH * 10) / 2
 
-        cells_fitness_scores = self.cluster_detector.cells_fitness(
+        cells_fitness_scores = self.fitness.cells_fitness(
             self.map[:, :, 0],
             self.drone_position, 
-            distance_norm=self.MAP_WIDTH*self.MAP_HEIGHT, 
-            uncertainty_norm=1,
+            distance_norm=self.DISTANCE_NORM, 
+            uncertainty_norm=self.UNCERTAINTY_NORM,
+            trajectory_accomulate_fitness_norm=self.TRAJECTORY_ACCOMULATE_FITNESS_NORM,
             map_center_offset=map_center_offset,
             distance_between_cells=10
         )
 
-        target_coords = self.cluster_detector.choose_one_cell(cells_fitness_scores)
+        target_coords = self.fitness.choose_one_cell(cells_fitness_scores)
         target_row, target_col = target_coords
 
         x_goto = target_row * 10 - map_center_offset
@@ -197,20 +204,26 @@ class Drone(IProtocol):
         self.provider.send_mobility_command(command)
 
     
-    ##### External mobility command. When receiving encountering another UAV, the one with highest ID calculates the new destinations #####
-    def external_mobility_command(self):
+    ##### External mobility command. When receiving encountering another drone, the one with highest ID calculates the new destinations #####
+    def external_mobility_command(self, another_drone_position: list):
         map_center_offset = (self.MAP_WIDTH * 10) / 2
 
-        cells_fitness_scores = self.cluster_detector.cells_fitness(
+        # transform list to tuple
+        another_drone_position = tuple(another_drone_position)
+
+        cells_fitness_scores = self.fitness.two_cells_fitness(
             self.map[:, :, 0],
             self.drone_position, 
-            distance_norm=self.MAP_WIDTH*self.MAP_HEIGHT, 
-            uncertainty_norm=1,
+            distance_norm=self.DISTANCE_NORM, 
+            uncertainty_norm=self.UNCERTAINTY_NORM,
+            trajectory_accomulate_fitness_norm=self.TRAJECTORY_ACCOMULATE_FITNESS_NORM,
             map_center_offset=map_center_offset,
-            distance_between_cells=10
+            distance_between_cells=10,
+            another_drone_position=another_drone_position,
+            distance_between_drone_norm=self.DISTANCE_BETWEEN_DRONE_NORM
         )
 
-        target_coords = self.cluster_detector.choose_two_cells(cells_fitness_scores)
+        target_coords = self.fitness.choose_two_cells(cells_fitness_scores)
         target_row_1, target_col_1 = target_coords[0]
         target_row_2, target_col_2 = target_coords[1]
 
@@ -264,7 +277,8 @@ class Drone(IProtocol):
             message: ShareMapMessage = {
                 'message_type': MessageType.SHARE_MAP_MESSAGE.value,
                 'map': self.map.tolist(),
-                'sender': self.provider.get_id()
+                'sender': self.provider.get_id(),
+                'drone_position': np.array(self.drone_position).tolist()
                 }
             destination_id = heartbeat_msg['sender']                
             command = SendMessageCommand(json.dumps(message), destination_id)
@@ -316,15 +330,21 @@ class Drone(IProtocol):
         msg_type = data['message_type']
 
         if msg_type == MessageType.HEARTBEAT_MESSAGE.value:
+
             self.received_heartbeat(data)
 
         elif msg_type == MessageType.SHARE_MAP_MESSAGE.value:
             self.map = self.updated_map(data)
 
-            if self.provider.current_time() - self.last_drone_interaction_time[data['sender']]  > 3.0: # the drone id starts at 0
+            if self.provider.current_time() - self.last_drone_interaction_time[data['sender']]  > self.TIMEOUT_TO_UPDATE_DESTINATION: # the drone id starts at 0
                 if self.provider.get_id() >= data['sender']:
+                    ### Update the number of interactions ###
+                    Drone.Number_of_Encounters += 1
+
+                    #self._log.info(f"Received map from drone {data['sender']}. My position: {self.drone_position}, other drone position: {another_drone_position}")
+                    
                     #self._log.info(f"Node {self.provider.get_id()} is calculating the new destinations")
-                    send_command = self.external_mobility_command()
+                    send_command = self.external_mobility_command(data['drone_position'])
 
                     #self._log.info(f"After updating map going to {self.goto_command} and sending {send_command} to drone {data['sender']}")
                     command = GotoCoordsMobilityCommand(*self.goto_command)
@@ -352,12 +372,14 @@ class Drone(IProtocol):
         total_cells = self.MAP_WIDTH * self.MAP_HEIGHT
         visited_cells = np.sum(self.is_cell_visited)
         unvisited_cells = total_cells - visited_cells
-        print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
-
+        #print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
+        #print(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters / 2}")
+        
         if self.results_aggregator is not None:
             self.results_aggregator[self.provider.get_id()] = {
                 "final_uncertainty": float(final_uncertainty),
-                "unvisited_cells": float(unvisited_cells)
+                "unvisited_cells": float(unvisited_cells),
+                "accomulated_uncertainty": float(self.accomulated_uncertainty)
             }
 
 
@@ -365,9 +387,10 @@ class Drone(IProtocol):
 def drone_protocol_factory(
     uncertainty_rate: float, 
     vanishing_update_time: float, 
-    map_threshold: float,
+    trajectory_accomulate_fitness_norm: float,
     distance_norm: float,
-    cluster_size_norm: float,
+    uncertainty_norm: float,
+    distance_between_drone_norm: float,
     number_of_drones: int,
     map_width: int,
     map_height: int,
@@ -380,9 +403,10 @@ def drone_protocol_factory(
     config = {
         "uncertainty_rate": uncertainty_rate,
         "vanishing_update_time": vanishing_update_time,
-        "map_threshold": map_threshold,
+        "trajectory_accomulate_fitness_norm": trajectory_accomulate_fitness_norm,
         "distance_norm": distance_norm,
-        "cluster_size_norm": cluster_size_norm,
+        "uncertainty_norm": uncertainty_norm,
+        "distance_between_drone_norm": distance_between_drone_norm,
         "number_of_drones": number_of_drones,
         "map_width": map_width,
         "map_height": map_height,
