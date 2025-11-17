@@ -13,14 +13,14 @@ def parse_uav_log(log_file_path):
     uav_data_lists = defaultdict(lambda: [[], [], []])
     uncertainty_pattern = re.compile(r"At time: ([\d\.]+), node (\d+) map has total uncertainty of ([\d\.]+)")
     unvisited_pattern = re.compile(r"At time: ([\d\.]+), the node (\d+) has ([\d\.]+) unvisited cells")
-    threshold_pattern = re.compile(r"At time: ([\d\.]+), node (\d+) map has a total of (\d+) cell abouve threshold")
+    accomulated_uncertainty_pattern = re.compile(r"At time: ([\d\.]+), node (\d+) map has a accomulated uncertainty of ([\d\.]+)")
 
     try:
         with open(log_file_path, 'r') as f:
             for line in f:
                 match_uncertainty = uncertainty_pattern.match(line)
                 match_unvisited = unvisited_pattern.match(line)
-                match_threshold = threshold_pattern.match(line)
+                match_accomulated = accomulated_uncertainty_pattern.match(line)
 
                 if match_uncertainty:
                     time, uav_id, value = match_uncertainty.groups()
@@ -28,9 +28,9 @@ def parse_uav_log(log_file_path):
                 elif match_unvisited:
                     time, uav_id, value = match_unvisited.groups()
                     uav_data_lists[int(uav_id)][1].append([float(value), float(time)])
-                elif match_threshold:
-                    time, uav_id, value = match_threshold.groups()
-                    uav_data_lists[int(uav_id)][2].append([int(value), float(time)])
+                elif match_accomulated:
+                    time, uav_id, value = match_accomulated.groups()
+                    uav_data_lists[int(uav_id)][2].append([float(value), float(time)])
     except FileNotFoundError:
         print(f"Error: The file '{log_file_path}' was not found.")
         return None
@@ -39,8 +39,8 @@ def parse_uav_log(log_file_path):
     for uav_id, data_lists in sorted(uav_data_lists.items()):
         uncertainty_arr = np.array(data_lists[0]).T if data_lists[0] else np.empty((2, 0))
         unvisited_arr = np.array(data_lists[1]).T if data_lists[1] else np.empty((2, 0))
-        threshold_arr = np.array(data_lists[2]).T if data_lists[2] else np.empty((2, 0))
-        processed_uav_data[uav_id] = [uncertainty_arr, unvisited_arr, threshold_arr]
+        accomulated_uncertainty_arr = np.array(data_lists[2]).T if data_lists[2] else np.empty((2, 0))
+        processed_uav_data[uav_id] = [uncertainty_arr, unvisited_arr, accomulated_uncertainty_arr]
 
     return processed_uav_data
 
@@ -169,7 +169,7 @@ def parse_and_average_logs_from_folder(folder_path):
         all_uav_ids.update(sim_data.keys())
 
     for uav_id in sorted(list(all_uav_ids)):
-        for metric_idx in range(3): # 0: uncertainty, 1: unvisited, 2: threshold
+        for metric_idx in range(3): # 0: uncertainty, 1: unvisited, 2: accomulated uncertainty
             
             # Gather data for this specific UAV and metric from every simulation
             all_runs_for_metric = []
@@ -218,7 +218,7 @@ def plot_swarm_comparison(labeled_datasets):
     metrics = [
         {'title': 'Total Map Uncertainty', 'ylabel': 'Uncertainty Value'},
         {'title': 'Number of Unvisited Cells', 'ylabel': 'Cell Count'},
-        {'title': 'Cells Under Information Threshold', 'ylabel': 'Cell Count'}
+        {'title': 'Accomulated Uncertainty', 'ylabel': 'Accomulated Uncertainty Value'}
     ]
     # Define a list of colors to cycle through for each dataset
     dataset_colors = ['#1f77b4', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
@@ -361,134 +361,12 @@ def plot_swarm_uncertainty(labeled_datasets):
     plt.show()
 
 
-inteligent_protocol1 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/2UAV_100A/inteligent_protocol")
-random_max_uncertainty1 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/2UAV_100A/max_uncertainty")
-random_protocol1 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/2UAV_100A/random")
-
-inteligent_protocol2 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/4UAV_100A/inteligent_protocol")
-random_max_uncertainty2 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/4UAV_100A/max_uncertainty")
-random_protocol2 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/4UAV_100A/random")
-
-inteligent_protocol3 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/8UAV_100A/inteligent_protocol")
-random_max_uncertainty3 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/8UAV_100A/max_uncertainty")
-random_protocol3 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/8UAV_100A/random")
-#
-#######################################################################################################################################
-
-inteligent_protocol4 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/2UAV_200A/inteligent_protocol")
-random_max_uncertainty4 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/2UAV_200A/max_uncertainty")
-random_protocol4 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/2UAV_200A/random")
-
-inteligent_protocol5 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/4UAV_200A/inteligent_protocol")
-random_max_uncertainty5 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/4UAV_200A/max_uncertainty")
-random_protocol5 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/4UAV_200A/random")
-
-inteligent_protocol6 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/8UAV_200A/inteligent_protocol")
-random_max_uncertainty6 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/8UAV_200A/max_uncertainty")
-random_protocol6 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/8UAV_200A/random")
-
-
-inteligent_protocol7 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/16UAV_200A/inteligent_protocol")
-random_max_uncertainty7 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/16UAV_200A/max_uncertainty")
-random_protocol7 = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/16UAV_200A/random")
-
-
-#####################################
-inteligent_protocol_3uav = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/3UAV_100A/inteligent_protocol")
-random_max_uncertainty_3uav = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/3UAV_100A/max_uncertainty")
-random_protocol_3uav = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/3UAV_100A/random")
-
-inteligent_protocol_6uav = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/6UAV_100A/inteligent_protocol")
-random_max_uncertainty_6uav = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/6UAV_100A/max_uncertainty")
-random_protocol_6uav = parse_and_average_logs_from_folder("/Comp_mov/src/surveillance_v3/logs/article/6UAV_100A/random")
+inteligent_protocol_3uav_GA_fitness_function = parse_and_average_logs_from_folder("/FuzzyGA/src/surveillance_v3/logs/inteligent_protocol_all_cells")
 
 labeled_datasets1 = {
-    "Cluster Fitness": inteligent_protocol1,
-    "Greedy": random_max_uncertainty1,
-    "Random": random_protocol1,
+    "Cluster Fitness": inteligent_protocol_3uav_GA_fitness_function,
 }
-
-labeled_datasets2 = {
-    "Cluster Fitness": inteligent_protocol2,
-    "Greedy": random_max_uncertainty2,
-    "Random": random_protocol2,
-}
-
-labeled_datasets3 = {
-    "Cluster Fitness": inteligent_protocol3,
-    "Greedy": random_max_uncertainty3,
-    "Random": random_protocol3,
-}
-
-labeled_datasets4 = {
-    "Cluster Fitness": inteligent_protocol4,
-    "Max Uncertainty Random": random_max_uncertainty4,
-    "Random": random_protocol4,
-}
-
-
-labeled_datasets5 = {
-    "Cluster Fitness": inteligent_protocol5,
-    "Max Uncertainty Random": random_max_uncertainty5,
-    "Random": random_protocol5,
-}
-
-labeled_datasets6 = {
-    "Cluster Fitness": inteligent_protocol6,
-    "Max Uncertainty Random": random_max_uncertainty6,
-    "Random": random_protocol6,
-}
-
-labeled_datasets7 = {
-    "Cluster Fitness": inteligent_protocol7,
-    "Max Uncertainty Random": random_max_uncertainty7,
-    "Random": random_protocol7,
-}
-
-labeled_datasets_3uav = {
-    "Cluster Fitness": inteligent_protocol_3uav,
-    "Greedy": random_max_uncertainty_3uav,
-    "Random": random_protocol_3uav,
-}
-
-labeled_datasets_6uav = {
-    "Cluster Fitness": inteligent_protocol_6uav,
-    "Greedy": random_max_uncertainty_6uav,
-    "Random": random_protocol_6uav,
-}
-
-
-#plot_swarm_comparison(labeled_datasets1)
-#plot_swarm_comparison(labeled_datasets2)
-#plot_swarm_comparison(labeled_datasets3)
-
-#plot_swarm_comparison(labeled_datasets4)
-#plot_swarm_comparison(labeled_datasets5)
-#plot_swarm_comparison(labeled_datasets6)
-#plot_swarm_comparison(labeled_datasets_3uav)
-#plot_swarm_comparison(labeled_datasets_6uav)
 
 plot_swarm_uncertainty(labeled_datasets1)
-plot_swarm_uncertainty(labeled_datasets_3uav)
-plot_swarm_uncertainty(labeled_datasets2)
-plot_swarm_uncertainty(labeled_datasets_6uav)
-plot_swarm_uncertainty(labeled_datasets3)
+plot_swarm_comparison(labeled_datasets1)
 
-
-#plot_uncertainty_comparison_stacked_triple(
-#    labeled_set_1=labeled_datasets1,
-#    labeled_set_2=labeled_datasets2,
-#    labeled_set_3=labeled_datasets3,
-#    title_1="2 UAVs - 100x100 Area",
-#    title_2="4 UAVs - 100x100 Area",
-#    title_3="8 UAVs - 100x100 Area"
-#)
-#
-plot_uncertainty_comparison_stacked_triple(
-    labeled_set_1=labeled_datasets4,
-    labeled_set_2=labeled_datasets5,
-    labeled_set_3=labeled_datasets6,
-    title_1="2 UAVs - 200x200 Area",
-    title_2="4 UAVs - 200x200 Area",
-    title_3="8 UAVs - 200x200 Area"
-)

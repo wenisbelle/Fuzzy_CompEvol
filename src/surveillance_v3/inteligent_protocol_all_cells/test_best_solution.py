@@ -5,7 +5,7 @@ from gradysim.simulator.handler.mobility import MobilityHandler
 from gradysim.simulator.handler.timer import TimerHandler
 from gradysim.simulator.handler.visualization import VisualizationHandler
 from gradysim.simulator.simulation import SimulationConfiguration, SimulationBuilder
-from .inteligent_mobility_protocol import PointOfInterest, drone_protocol_factory
+from .test_inteligent_mobility_protocol import PointOfInterest, drone_protocol_factory
 from gradysim.simulator.handler.communication import CommunicationHandler, CommunicationMedium
 
 from deap import algorithms, base, creator, tools
@@ -16,14 +16,14 @@ import numpy as np
 def create_and_run_simulation(individual):
     # Configuring simulation
     config = SimulationConfiguration(
-        duration=500, 
+        duration=250, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
 
     builder.add_handler(TimerHandler())
     builder.add_handler(MobilityHandler())
-    #builder.add_handler(VisualizationHandler())
+    builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
         transmission_range=30
     )))
@@ -31,7 +31,7 @@ def create_and_run_simulation(individual):
 
     results_aggregator = {}
     ConfiguredDrone = drone_protocol_factory(
-        uncertainty_rate=0.05,
+        uncertainty_rate=0.5,
         vanishing_update_time=10.0,
         trajectory_accomulate_fitness_norm=individual[0],
         distance_norm=individual[1],
@@ -68,47 +68,21 @@ def create_and_run_simulation(individual):
 
     return (total_uncertainty_drone1+total_uncertainty_drone2+total_uncertainty_drone3)/3
 
-########### GA part ##########
-def objective_function(individual):
-    return create_and_run_simulation(individual),
-
-
-def random_distance_norm():
-    return random.uniform(0.0,1000.0)
-
-def random_norm_values():
-    return random.uniform(0.0, 200.0)
-
-
+#### Main to test the best individual found #####
 def main():
-    ### Defining the GA ###
-    creator.create("FitnessMin", base.Fitness, weights=(-1.0,)) ## Minimize the accomulated uncertainty 
-    creator.create("Individual", list,  fitness=creator.FitnessMin) ## individual
+    logging.basicConfig(
+        level=logging.INFO,  
+        filename=f'surveillance_v3/logs/inteligent_protocol_all_cells/simulation.log', 
+        filemode='w', 
+        #format='%(asctime)s - %(levelname)s - %(message)s'
+        format='%(message)s'  
+    )
+
+    best_individual = [165.0, 990.0, 36.0, 190.0]  # Example best individual
     
-    toolbox = base.Toolbox()
-    toolbox.register("individual", tools.initCycle, creator.Individual, [random_norm_values, random_distance_norm, random_norm_values, random_norm_values], 1)
-    toolbox.register("population", tools.initRepeat, list, toolbox.individual) 
-
-    toolbox.register("evaluate", objective_function)
-    toolbox.register("mate", tools.cxTwoPoint)
-    toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=10, indpb=0.05)
-    toolbox.register("select", tools.selTournament, tournsize=3)
-
-    pop = toolbox.population(n=20)                            
-    hof = tools.HallOfFame(1)                                
-    stats = tools.Statistics(lambda ind: ind.fitness.values)  
-    stats.register("avg", np.mean)
-    stats.register("std", np.std)
-    stats.register("min", np.min)
-    stats.register("max", np.max)
-
-    pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.1, ngen=50, stats=stats, halloffame=hof, verbose=True)
-    print("=== Final Results ===")
-    print(log)
-
-    print("Melhor Indivíduo:")
-    print(hof[0])
-
+    for _ in range(10):
+        final_uncertainty = create_and_run_simulation(best_individual)
+        print(f"Final uncertainty with best individual {best_individual}: {final_uncertainty}")
 
 if __name__ == "__main__":
     main()
