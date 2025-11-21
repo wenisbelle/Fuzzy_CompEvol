@@ -23,7 +23,7 @@ def create_and_run_simulation(individual):
 
     builder.add_handler(TimerHandler())
     builder.add_handler(MobilityHandler())
-    builder.add_handler(VisualizationHandler())
+    #builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
         transmission_range=30
     )))
@@ -142,16 +142,16 @@ def init_individual(icls, generators):
     return icls(flat_list)
 
 def random_uncertainty_interval():
-    return([random.uniform(0.0,10.0) for _ in range(3)])
+    return([random.uniform(0.0,5.0) for _ in range(3)])
 
 def random_distance_interval():
     return ([random.uniform(0.0, 50.0) for _ in range(3)])
 
 def random_individual_cell_uncertainty_interval():
-    return ([random.uniform(0.0, 1.0) for _ in range(3)])
+    return ([random.uniform(0.0, 5.0) for _ in range(3)])
 
 def random_one_cell_priority_interval():
-    return ([random.uniform(0.0, 5.0) for _ in range(3)]) 
+    return ([random.uniform(0.0, 0.25) for _ in range(3)]) 
 
 
 def main():
@@ -171,9 +171,9 @@ def main():
     toolbox.register("population", tools.initRepeat, list, toolbox.individual) 
 
     toolbox.register("evaluate", objective_function)
-    toolbox.decorate("evaluate", tools.DeltaPenalty(is_feasible, 0, distance))
+    toolbox.decorate("evaluate", tools.DeltaPenalty(is_feasible, 100000.0, distance))
     toolbox.register("mate", tools.cxTwoPoint)
-    toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=10, indpb=0.05)
+    toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.05)
     toolbox.register("select", tools.selTournament, tournsize=3)
 
     pop = toolbox.population(n=50)                            
