@@ -11,12 +11,16 @@ from gradysim.simulator.handler.communication import CommunicationHandler, Commu
 from deap import algorithms, base, creator, tools
 import numpy as np
 
+how_many_simulations = 0
+
 #### Objective function using simulation execution ####
 #### GradySim function #######
 def create_and_run_simulation(individual):
     # Configuring simulation
+    global how_many_simulations
+    how_many_simulations +=1
     config = SimulationConfiguration(
-        duration=500, 
+        duration=100, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
@@ -61,9 +65,11 @@ def create_and_run_simulation(individual):
     total_uncertainty_drone1 = results_aggregator[0]['accomulated_uncertainty']
     total_uncertainty_drone2 = results_aggregator[1]['accomulated_uncertainty']
     total_uncertainty_drone3 = results_aggregator[2]['accomulated_uncertainty']
-
-
-    return (total_uncertainty_drone1+total_uncertainty_drone2+total_uncertainty_drone3)/3
+    medium_uncertainty = (total_uncertainty_drone1+total_uncertainty_drone2+total_uncertainty_drone3)/3
+    print(f"Individual: {individual}")
+    print(f"Variable to be minimized: {medium_uncertainty}")
+    print(f"Total number of simulations: {how_many_simulations}")
+    return medium_uncertainty
 
 ########### GA part ##########
 def objective_function(individual):
@@ -148,7 +154,7 @@ def random_distance_interval():
     return ([random.uniform(0.0, 50.0) for _ in range(3)])
 
 def random_individual_cell_uncertainty_interval():
-    return ([random.uniform(0.0, 5.0) for _ in range(3)])
+    return ([random.uniform(0.0, 0.50) for _ in range(3)])
 
 def random_one_cell_priority_interval():
     return ([random.uniform(0.0, 0.25) for _ in range(3)]) 
@@ -171,12 +177,12 @@ def main():
     toolbox.register("population", tools.initRepeat, list, toolbox.individual) 
 
     toolbox.register("evaluate", objective_function)
-    toolbox.decorate("evaluate", tools.DeltaPenalty(is_feasible, 100000.0, distance))
+    toolbox.decorate("evaluate", tools.DeltaPenalty(is_feasible, 1000000.0, distance))
     toolbox.register("mate", tools.cxTwoPoint)
     toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.05)
     toolbox.register("select", tools.selTournament, tournsize=3)
 
-    pop = toolbox.population(n=50)                            
+    pop = toolbox.population(n=20)                            
     hof = tools.HallOfFame(1)                                
     stats = tools.Statistics(lambda ind: ind.fitness.values)  
     stats.register("avg", np.mean)

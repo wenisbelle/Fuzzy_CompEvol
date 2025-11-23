@@ -363,6 +363,7 @@ def plot_swarm_uncertainty(labeled_datasets):
 
 inteligent_protocol_3uav_GA_fitness_function = parse_and_average_logs_from_folder("/FuzzyGA/src/logs/test_ga")
 inteligent_protocol_3uav_fuzzy_hand_tunning = parse_and_average_logs_from_folder("/FuzzyGA/src/logs/fuzzy_hand_tunning")
+inteligent_protocol_3uav_fuzzy_ga_tunning = parse_and_average_logs_from_folder("/FuzzyGA/src/logs/fuzzy_ga_tunning")
 
 labeled_datasets1 = {
     "Cluster Fitness": inteligent_protocol_3uav_GA_fitness_function,
@@ -372,8 +373,15 @@ labeled_datasets2 = {
     "Fuzzy Hand Tunning": inteligent_protocol_3uav_fuzzy_hand_tunning,
 }
 
+labeled_datasets3 = {
+    "Fuzzy GA Tunning": inteligent_protocol_3uav_fuzzy_ga_tunning,
+}
+
 plot_swarm_uncertainty(labeled_datasets1)
 plot_swarm_comparison(labeled_datasets1)
 
 plot_swarm_uncertainty(labeled_datasets2)
 plot_swarm_comparison(labeled_datasets2)
+
+plot_swarm_uncertainty(labeled_datasets3)
+plot_swarm_comparison(labeled_datasets3)
