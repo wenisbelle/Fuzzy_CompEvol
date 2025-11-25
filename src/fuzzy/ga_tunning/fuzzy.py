@@ -207,12 +207,18 @@ class FuzzyEvaluator:
         combined_priority_scores = []
         first_drone_priority_score_list = self.cells_priority(map_data, first_drone_position, map_center_offset, distance_between_cells)
         second_drone_priority_score_list = self.cells_priority(map_data, second_drone_position, map_center_offset, distance_between_cells)
+        TOP_K = 10 
+        first_drone_priority_score_list.sort(key=lambda x: x[0], reverse=True)
+        second_drone_priority_score_list.sort(key=lambda x: x[0], reverse=True)
+        
+        best_first = first_drone_priority_score_list[:TOP_K]
+        best_second = second_drone_priority_score_list[:TOP_K]
 
-        for first_drone_index in range(len(first_drone_priority_score_list)):
-            first_priority, first_cell = first_drone_priority_score_list[first_drone_index]
+        for first_drone_index in range(len(best_first)):
+            first_priority, first_cell = best_first[first_drone_index]
 
-            for second_drone_index in range(len(second_drone_priority_score_list)):
-                second_priority, second_cell = second_drone_priority_score_list[second_drone_index]
+            for second_drone_index in range(len(best_second)):
+                second_priority, second_cell = best_second[second_drone_index]
 
             #### Distance between drones penalty ####
             x_first_cell = distance_between_cells*first_cell[0] - map_center_offset

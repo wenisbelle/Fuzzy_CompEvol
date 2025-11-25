@@ -20,7 +20,7 @@ def create_and_run_simulation(individual):
     global how_many_simulations
     how_many_simulations +=1
     config = SimulationConfiguration(
-        duration=100, 
+        duration=200, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
@@ -182,7 +182,7 @@ def main():
     toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.05)
     toolbox.register("select", tools.selTournament, tournsize=3)
 
-    pop = toolbox.population(n=20)                            
+    pop = toolbox.population(n=40)                            
     hof = tools.HallOfFame(1)                                
     stats = tools.Statistics(lambda ind: ind.fitness.values)  
     stats.register("avg", np.mean)
@@ -193,6 +193,11 @@ def main():
     pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.5, mutpb=0.1, ngen=50, stats=stats, halloffame=hof, verbose=True)
     print("=== Final Results ===")
     print(log)
+
+    log_filename = "ga_logbook.txt"
+    with open(log_filename, "w") as f:
+        # Use str(log) to get the Logbook content as a string
+        f.write(str(log))
 
     print("Melhor Indivíduo:")
     print(hof[0])

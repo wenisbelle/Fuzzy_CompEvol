@@ -15,9 +15,9 @@ class FuzzyEvaluator:
         
         ## Creating the fuzzy system without the ga optimization
         ### First system
-        self.uncertainty = ctrl.Antecedent(np.arange(0, 30, 0.01), 'uncertainty')
-        self.distance = ctrl.Antecedent(np.arange(0, 150, 1.0), 'distance')
-        self.individual_cell_uncertainty = ctrl.Antecedent(np.arange(0, 2.0, 0.01), 'individual_cell_uncertainty')
+        self.uncertainty = ctrl.Antecedent(np.arange(0, 30, 0.5), 'uncertainty')
+        self.distance = ctrl.Antecedent(np.arange(0, 150, 5.0), 'distance')
+        self.individual_cell_uncertainty = ctrl.Antecedent(np.arange(0, 2.0, 0.05), 'individual_cell_uncertainty')
         self.one_cell_priority = ctrl.Consequent(np.arange(0, 1.0, 0.01), 'one_cell_priority', defuzzify_method = 'centroid')
 
         self.uncertainty['low'] = fuzz.trapmf(self.uncertainty.universe, [-1, 0, 2, 5])
@@ -201,27 +201,35 @@ class FuzzyEvaluator:
         combined_priority_scores = []
         first_drone_priority_score_list = self.cells_priority(map_data, first_drone_position, map_center_offset, distance_between_cells)
         second_drone_priority_score_list = self.cells_priority(map_data, second_drone_position, map_center_offset, distance_between_cells)
+    
+        TOP_K = 10 
+        first_drone_priority_score_list.sort(key=lambda x: x[0], reverse=True)
+        second_drone_priority_score_list.sort(key=lambda x: x[0], reverse=True)
+        
+        best_first = first_drone_priority_score_list[:TOP_K]
+        best_second = second_drone_priority_score_list[:TOP_K]
 
-        for first_drone_index in range(len(first_drone_priority_score_list)):
-            first_priority, first_cell = first_drone_priority_score_list[first_drone_index]
 
-            for second_drone_index in range(len(second_drone_priority_score_list)):
-                second_priority, second_cell = second_drone_priority_score_list[second_drone_index]
+        for first_drone_index in range(len(best_first)):
+            first_priority, first_cell = best_first[first_drone_index]
 
-            #### Distance between drones penalty ####
-            x_first_cell = distance_between_cells*first_cell[0] - map_center_offset
-            y_first_cell = distance_between_cells*first_cell[1] - map_center_offset
-            x_second_cell = distance_between_cells*second_cell[0] - map_center_offset
-            y_second_cell = distance_between_cells*second_cell[1] - map_center_offset
+            for second_drone_index in range(len(best_second)):
+                second_priority, second_cell = best_second[second_drone_index]
 
-            distance_between_targets = np.sqrt((x_first_cell-x_second_cell)**2 + (y_first_cell-y_second_cell)**2)
+                #### Distance between drones penalty ####
+                x_first_cell = distance_between_cells*first_cell[0] - map_center_offset
+                y_first_cell = distance_between_cells*first_cell[1] - map_center_offset
+                x_second_cell = distance_between_cells*second_cell[0] - map_center_offset
+                y_second_cell = distance_between_cells*second_cell[1] - map_center_offset
 
-            self.two_cells_priority.input['sum_priorities'] = first_priority + second_priority
-            self.two_cells_priority.input['distance_between_targets'] = distance_between_targets
-            self.two_cells_priority.compute()
-            combined_priority = self.two_cells_priority.output['pair_priority']
-            combined_priority_scores.append((combined_priority, first_cell, second_cell))
-            #print(f"Pair ({first_cell}, {second_cell}): Combined Priority={combined_priority}")
+                distance_between_targets = np.sqrt((x_first_cell-x_second_cell)**2 + (y_first_cell-y_second_cell)**2)
+
+                self.two_cells_priority.input['sum_priorities'] = first_priority + second_priority
+                self.two_cells_priority.input['distance_between_targets'] = distance_between_targets
+                self.two_cells_priority.compute()
+                combined_priority = self.two_cells_priority.output['pair_priority']
+                combined_priority_scores.append((combined_priority, first_cell, second_cell))
+                #print(f"Pair ({first_cell}, {second_cell}): Combined Priority={combined_priority}")
 
         return combined_priority_scores
     
