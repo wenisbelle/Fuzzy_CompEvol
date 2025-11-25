@@ -53,7 +53,7 @@ class FuzzyEvaluator:
         #plt.show()
         #self.one_cell_priority.view()
         #plt.show()
-        
+        # 
 
         #### Rules
         FS1_rule1 = ctrl.Rule(self.uncertainty['high'] & self.distance['close'], self.one_cell_priority['very_high'])
@@ -207,12 +207,18 @@ class FuzzyEvaluator:
         combined_priority_scores = []
         first_drone_priority_score_list = self.cells_priority(map_data, first_drone_position, map_center_offset, distance_between_cells)
         second_drone_priority_score_list = self.cells_priority(map_data, second_drone_position, map_center_offset, distance_between_cells)
+        TOP_K = 10 
+        first_drone_priority_score_list.sort(key=lambda x: x[0], reverse=True)
+        second_drone_priority_score_list.sort(key=lambda x: x[0], reverse=True)
+        
+        best_first = first_drone_priority_score_list[:TOP_K]
+        best_second = second_drone_priority_score_list[:TOP_K]
 
-        for first_drone_index in range(len(first_drone_priority_score_list)):
-            first_priority, first_cell = first_drone_priority_score_list[first_drone_index]
+        for first_drone_index in range(len(best_first)):
+            first_priority, first_cell = best_first[first_drone_index]
 
-            for second_drone_index in range(len(second_drone_priority_score_list)):
-                second_priority, second_cell = second_drone_priority_score_list[second_drone_index]
+            for second_drone_index in range(len(best_second)):
+                second_priority, second_cell = best_second[second_drone_index]
 
             #### Distance between drones penalty ####
             x_first_cell = distance_between_cells*first_cell[0] - map_center_offset
@@ -252,10 +258,7 @@ class FuzzyEvaluator:
 ##### For sanaty checks purposes only #####
 """
 def main():
-    sample_fuzzy_parameters_fixed = np.array([4.060, 0.002, 4.265,
-                                            36.14,48.256, 30.9,
-                                            0.313, 0.315, 0.200,
-                                            0.182, 0.165, 0.112])
+    sample_fuzzy_parameters_fixed = np.array([1.56, 4.93, 0.70, 47.50, 23.61, 40.30, 0.27, 0.43, 0.42, 0.107, 0.202, 0.0])
     evaluator = FuzzyEvaluator(map_width=10, map_height=10, camera_angle=np.radians(30), fuzzy_parameters=sample_fuzzy_parameters_fixed)
     
 if __name__ == "__main__":
