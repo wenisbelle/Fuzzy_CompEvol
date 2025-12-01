@@ -10,17 +10,20 @@ def parse_uav_log(log_file_path):
     Parses a SINGLE UAV log file to extract data for each UAV.
     (This function is unchanged)
     """
-    uav_data_lists = defaultdict(lambda: [[], [], []])
+    uav_data_lists = defaultdict(lambda: [[], [], [], []]) # Each UAV ID maps to 4 lists: uncertainty, unvisited, accomulated uncertainty, accomulated distance
     uncertainty_pattern = re.compile(r"At time: ([\d\.]+), node (\d+) map has total uncertainty of ([\d\.]+)")
     unvisited_pattern = re.compile(r"At time: ([\d\.]+), the node (\d+) has ([\d\.]+) unvisited cells")
     accomulated_uncertainty_pattern = re.compile(r"At time: ([\d\.]+), node (\d+) map has a accomulated uncertainty of ([\d\.]+)")
-
+    accomulated_distance = re.compile(r"At time: ([\d\.]+), node (\d+) has traveled a total distance of ([\d\.]+)")
+    
+    
     try:
         with open(log_file_path, 'r') as f:
             for line in f:
                 match_uncertainty = uncertainty_pattern.match(line)
                 match_unvisited = unvisited_pattern.match(line)
                 match_accomulated = accomulated_uncertainty_pattern.match(line)
+                match_distance = accomulated_distance.match(line)
 
                 if match_uncertainty:
                     time, uav_id, value = match_uncertainty.groups()
@@ -31,6 +34,10 @@ def parse_uav_log(log_file_path):
                 elif match_accomulated:
                     time, uav_id, value = match_accomulated.groups()
                     uav_data_lists[int(uav_id)][2].append([float(value), float(time)])
+                elif match_distance:
+                    time, uav_id, value = match_distance.groups()
+                    uav_data_lists[int(uav_id)][3].append([float(value), float(time)])
+
     except FileNotFoundError:
         print(f"Error: The file '{log_file_path}' was not found.")
         return None
@@ -40,7 +47,8 @@ def parse_uav_log(log_file_path):
         uncertainty_arr = np.array(data_lists[0]).T if data_lists[0] else np.empty((2, 0))
         unvisited_arr = np.array(data_lists[1]).T if data_lists[1] else np.empty((2, 0))
         accomulated_uncertainty_arr = np.array(data_lists[2]).T if data_lists[2] else np.empty((2, 0))
-        processed_uav_data[uav_id] = [uncertainty_arr, unvisited_arr, accomulated_uncertainty_arr]
+        accomulated_distance_arr = np.array(data_lists[3]).T if data_lists[3] else np.empty((2, 0))
+        processed_uav_data[uav_id] = [uncertainty_arr, unvisited_arr, accomulated_uncertainty_arr, accomulated_distance_arr]
 
     return processed_uav_data
 
@@ -169,7 +177,7 @@ def parse_and_average_logs_from_folder(folder_path):
         all_uav_ids.update(sim_data.keys())
 
     for uav_id in sorted(list(all_uav_ids)):
-        for metric_idx in range(3): # 0: uncertainty, 1: unvisited, 2: accomulated uncertainty
+        for metric_idx in range(4): # 0: uncertainty, 1: unvisited, 2: accomulated uncertainty, 3: accomulated distance
             
             # Gather data for this specific UAV and metric from every simulation
             all_runs_for_metric = []
@@ -211,14 +219,15 @@ def plot_swarm_comparison(labeled_datasets):
         return
 
     # --- 1. Setup the Figure ---
-    fig, axes = plt.subplots(3, 1, figsize=(14, 18), sharex=True)
+    fig, axes = plt.subplots(4 ,1, figsize=(14, 18), sharex=True)
     fig.suptitle('Comparison of Swarm Performance Metrics', fontsize=18)
 
     # --- 2. Define Metrics and Colors for different datasets ---
     metrics = [
         {'title': 'Total Map Uncertainty', 'ylabel': 'Uncertainty Value'},
         {'title': 'Number of Unvisited Cells', 'ylabel': 'Cell Count'},
-        {'title': 'Accomulated Uncertainty', 'ylabel': 'Accomulated Uncertainty Value'}
+        {'title': 'Accomulated Uncertainty', 'ylabel': 'Accomulated Uncertainty Value'},
+        {'title': 'Accomulated Distance Traveled', 'ylabel': 'Distance (meters)'}
     ]
     # Define a list of colors to cycle through for each dataset
     dataset_colors = ['#1f77b4', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
@@ -362,39 +371,39 @@ def plot_swarm_uncertainty(labeled_datasets):
     plt.show()
 
 
-inteligent_protocol_3uav_GA_fitness_function = parse_and_average_logs_from_folder("/FuzzyGA/src/logs/test_ga")
-inteligent_protocol_3uav_fuzzy_hand_tunning = parse_and_average_logs_from_folder("/FuzzyGA/src/logs/fuzzy_hand_tunning")
-inteligent_protocol_3uav_fuzzy_ga_tunning = parse_and_average_logs_from_folder("/FuzzyGA/src/logs/fuzzy_ga_tunning")
-inteligent_protocol_3uav_fuzzy_hand_tunning_mom = parse_and_average_logs_from_folder("/FuzzyGA/src/logs/fuzzy_hand_tunning_mom")
+uav_GA_fitness_function_cell = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fitness/cell/test_ga_just_uncertainty")
 
+uav_GA_fitness_function_cell_distance_uncertainty = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fitness/cell/test_ga_distance_uncertainty")
+
+uav_GA_fitness_function_cell_distance_uncertainty2 = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fitness/cell/test_ga_distance_uncertainty2")
+
+uav_GA_fuzzy_function_cell_hand_tunning = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fuzzy/hand_tunning")
 
 labeled_datasets1 = {
-    "Cluster Fitness": inteligent_protocol_3uav_GA_fitness_function,
+    "Cluster Fitness": uav_GA_fitness_function_cell,
 }
 
 labeled_datasets2 = {
-    "Fuzzy Hand Tunning": inteligent_protocol_3uav_fuzzy_hand_tunning,
-}
+    "Distance & Uncertainty Fitness": uav_GA_fitness_function_cell_distance_uncertainty,
+}  
 
 labeled_datasets3 = {
-    "Fuzzy GA Tunning": inteligent_protocol_3uav_fuzzy_ga_tunning,
+    "Distance first & Uncertainty Fitness": uav_GA_fitness_function_cell_distance_uncertainty2,
 }
 
 labeled_datasets4 = {
-    "Fuzzy Hand Tunning MOM": inteligent_protocol_3uav_fuzzy_hand_tunning_mom,
+    "Hand Tunning Fuzzy": uav_GA_fuzzy_function_cell_hand_tunning,
 }
-
+"""
 plot_swarm_uncertainty(labeled_datasets1)
 plot_swarm_comparison(labeled_datasets1)
-#
+
 plot_swarm_uncertainty(labeled_datasets2)
 plot_swarm_comparison(labeled_datasets2)
-#
+
 plot_swarm_uncertainty(labeled_datasets3)
 plot_swarm_comparison(labeled_datasets3)
-#
-plot_swarm_uncertainty(labeled_datasets3)
-plot_swarm_comparison(labeled_datasets3)
+"""
 
 plot_swarm_uncertainty(labeled_datasets4)
 plot_swarm_comparison(labeled_datasets4)

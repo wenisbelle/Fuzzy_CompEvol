@@ -277,7 +277,7 @@ class Simulator:
         event loop or a termination condition is met. If not termination condition is set and events are generated
         infinitely this simulation will run forever.
         """
-        self._logger.info("[--------- Simulation started ---------]")
+        #self._logger.info("[--------- Simulation started ---------]")
         start_time = time.time()
 
         last_step_duration = 0
@@ -295,7 +295,7 @@ class Simulator:
             is_running = self.step_simulation()
             last_step_duration = time.time() - step_start
 
-        self._logger.info("[--------- Simulation finished ---------]")
+        #self._logger.info("[--------- Simulation finished ---------]")
         total_time = time.time() - start_time
 
         self._logger.info(f"Real time elapsed: {timedelta(seconds=total_time)}\t"

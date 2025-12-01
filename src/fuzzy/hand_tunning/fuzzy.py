@@ -39,12 +39,12 @@ class FuzzyEvaluator:
         self.one_cell_priority['very_high'] = fuzz.trimf(self.one_cell_priority.universe, [0.75, 1.0, 1.1])
 
         #####sanity checks
-        #uncertainty.view()
-        #plt.show() 
-        #distance.view()
-        #plt.show()
-        #one_cell_priority.view()
-        #plt.show()
+        self.uncertainty.view()
+        plt.show() 
+        self.distance.view()
+        plt.show()
+        self.one_cell_priority.view()
+        plt.show()
         # 
 
         #### Rules
@@ -251,10 +251,9 @@ class FuzzyEvaluator:
 
         return [[best_1, best_2], fitness_scores[0]]
     
-"""
+
 def main():
     evaluator = FuzzyEvaluator(map_width=10, map_height=10, camera_angle=np.radians(30))
     
 if __name__ == "__main__":
     main()
-"""
