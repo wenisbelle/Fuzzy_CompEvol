@@ -109,7 +109,11 @@ class Drone(IProtocol):
         self.accomulated_uncertainty = 0.0
              
         ##### Initial state #####
-        self.status = DroneStatus.MAPPING      
+        self.status = DroneStatus.MAPPING
+
+        #### Total distance traveled ####
+        self.total_distance_traveled = 0.0
+        self.last_drone_position = [0.0, 0.0, 0.0]        
         
         ##### Camera Configuration #####
         configuration = CameraConfiguration(20, 30, 180, 0)
@@ -132,6 +136,7 @@ class Drone(IProtocol):
         self.provider.schedule_timer("camera",self.provider.current_time() + 1)
         self.provider.schedule_timer("heartbeat",self.provider.current_time() + 1)
         self.provider.schedule_timer("vanishing_map", self.provider.current_time() + self.VANISHING_UPDATE_TIME)
+        self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
 
         ##### Camera Configuration #####
         configuration = CameraConfiguration(20,30,180,0)
@@ -300,6 +305,16 @@ class Drone(IProtocol):
         if timer == "vanishing_map":
             self.vanishing_map_routine()
             self.provider.schedule_timer("vanishing_map", self.provider.current_time() + self.VANISHING_UPDATE_TIME)
+
+        if timer == "traveled_distance":
+            if self.drone_position is not None:
+                current_pos_array = np.array(self.drone_position)    
+                distance_increment = np.linalg.norm(current_pos_array - self.last_drone_position)
+                self.total_distance_traveled += distance_increment
+                self.last_drone_position = current_pos_array
+                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} has traveled a total distance of {self.total_distance_traveled}")
+
+            self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
             
 
     def handle_packet(self, message: str) -> None:
@@ -354,14 +369,16 @@ class Drone(IProtocol):
         total_cells = self.MAP_WIDTH * self.MAP_HEIGHT
         visited_cells = np.sum(self.is_cell_visited)
         unvisited_cells = total_cells - visited_cells
-        print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
-        self._log.info(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters}")
+        #print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
+        #self._log.info(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters}")
+
         
         if self.results_aggregator is not None:
             self.results_aggregator[self.provider.get_id()] = {
                 "final_uncertainty": float(final_uncertainty),
                 "unvisited_cells": float(unvisited_cells),
-                "accomulated_uncertainty": float(self.accomulated_uncertainty)
+                "accomulated_uncertainty": float(self.accomulated_uncertainty),
+                "total_distance_traveled": float(self.total_distance_traveled)
             }
 
 

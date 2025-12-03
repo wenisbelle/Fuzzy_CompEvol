@@ -379,6 +379,12 @@ uav_GA_fitness_function_cell_distance_uncertainty2 = parse_and_average_logs_from
 
 uav_GA_fuzzy_function_cell_hand_tunning = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fuzzy/hand_tunning")
 
+uav_GA_fuzzy_function_cell_just_uncertainty = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fuzzy/test_ga_just_uncertainty")
+
+uav_GA_fuzzy_function_cell_uncertainty_distance = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fuzzy/test_ga_uncertainty_distance")
+
+uav_GA_fuzzy_funtion_cell_uncertainty_more_distance = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fuzzy/test_ga_uncertainty_distance2")
+
 labeled_datasets1 = {
     "Cluster Fitness": uav_GA_fitness_function_cell,
 }
@@ -394,6 +400,18 @@ labeled_datasets3 = {
 labeled_datasets4 = {
     "Hand Tunning Fuzzy": uav_GA_fuzzy_function_cell_hand_tunning,
 }
+
+labeled_datasets5 = {
+    "Fuzzy: Uncertainty only": uav_GA_fuzzy_function_cell_just_uncertainty,
+}
+
+labeled_datasets6 = {
+    "Fuzzy: Uncertainty & Distance": uav_GA_fuzzy_function_cell_uncertainty_distance,
+}
+
+labeled_datasets7 = {
+    "Fuzzy: More Distance & Uncertainty": uav_GA_fuzzy_funtion_cell_uncertainty_more_distance,
+}
 """
 plot_swarm_uncertainty(labeled_datasets1)
 plot_swarm_comparison(labeled_datasets1)
@@ -403,7 +421,17 @@ plot_swarm_comparison(labeled_datasets2)
 
 plot_swarm_uncertainty(labeled_datasets3)
 plot_swarm_comparison(labeled_datasets3)
-"""
+
 
 plot_swarm_uncertainty(labeled_datasets4)
 plot_swarm_comparison(labeled_datasets4)
+"""
+
+plot_swarm_uncertainty(labeled_datasets5)
+plot_swarm_comparison(labeled_datasets5)
+
+plot_swarm_uncertainty(labeled_datasets6)
+plot_swarm_comparison(labeled_datasets6)
+
+plot_swarm_uncertainty(labeled_datasets7)
+plot_swarm_comparison(labeled_datasets7)

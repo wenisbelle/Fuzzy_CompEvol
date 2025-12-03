@@ -156,11 +156,11 @@ class Drone(IProtocol):
                 ##### Checking the total uncertainty after camera update #####
                 self.total_uncertainty = self.map[:,:,0].sum()
                 self.accomulated_uncertainty += self.total_uncertainty
-                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
+                self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
                 ###### Printar isso aqui depois nos testes####
                 ##############################################
                 ##############################################                
-                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
+                self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
 
     ##### Map updating ##### 
     def vanishing_map_routine(self):
@@ -172,7 +172,7 @@ class Drone(IProtocol):
         ###### Printar isso aqui depois nos testes####
         ##############################################
         ############################################## 
-        #self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
+        self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
 
          
     ##### Self mobility command. When the drone reaches the destination, it calculates the next one #####

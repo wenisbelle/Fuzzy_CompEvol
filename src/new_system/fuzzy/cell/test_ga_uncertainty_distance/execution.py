@@ -70,12 +70,12 @@ def create_and_run_simulation(individual):
 def main():
     logging.basicConfig(
         level=logging.INFO,  
-        filename=f'new_system/logs/fuzzy/test_ga_just_uncertainty/simulation.log', 
+        filename=f'new_system/logs/fuzzy/test_ga_uncertainty_distance/simulation.log', 
         filemode='w', 
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    individual = [1.56, 4.93, 0.70, 47.50, 23.61, 40.30, 0.27, 0.43, 0.42, 0.107, 0.202, 0.0]
+    individual = [np.float64(0.3331359065404181), np.float64(0.46325323358712556), np.float64(0.21543197321589413), np.float64(50.82185770583339), np.float64(43.18586484268149), np.float64(37.986426833679715), np.float64(0.34834455384986424), np.float64(0.32526086711763424), np.float64(0.11454446738680132), np.float64(1.1324257280166667), np.float64(0.6384014314196633), np.float64(0.16296143681340658), np.float64(27.08046544519423), np.float64(32.95365510365726), np.float64(17.93905041878592), np.float64(0.22152091377499933), np.float64(0.3121848730886927), np.float64(0.15003336657283353)]
     
     for _ in range(10):
         create_and_run_simulation(individual)

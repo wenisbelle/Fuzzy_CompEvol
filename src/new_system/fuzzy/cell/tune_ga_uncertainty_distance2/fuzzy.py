@@ -52,14 +52,12 @@ class FuzzyEvaluator:
         one_cell_priority['very_high'] = fuzz.trimf(one_cell_priority.universe, [one_cell_priority_interval[0]+one_cell_priority_interval[1]+one_cell_priority_interval[2], 1.0, 1.1])
 
         #####sanity checks
-        #uncertainty.view()
-        #plt.show() 
-        #distance.view()
-        #plt.show()
-        #individual_cell_uncertainty.view()
-        #plt.show()
-        #one_cell_priority.view()
-        #plt.show()
+        uncertainty.view()
+        plt.show() 
+        distance.view()
+        plt.show()
+        one_cell_priority.view()
+        plt.show()
         # 
 
         #### Rules
@@ -104,12 +102,12 @@ class FuzzyEvaluator:
         pair_priority['very_high'] = fuzz.trimf(pair_priority.universe, [two_cells_priority_interval[0]+two_cells_priority_interval[1]+two_cells_priority_interval[2], 1.0, 1.1])
 
         #####sanity checks
-        #sum_priorities.view()
-        #plt.show()
-        #distance_between_targets.view()
-        #plt.show()   
-        #pair_priority.view()
-        #plt.show() 
+        sum_priorities.view()
+        plt.show()
+        distance_between_targets.view()
+        plt.show()   
+        pair_priority.view()
+        plt.show() 
 
         ### Fuzzy Rules
         FS2_rule1 = ctrl.Rule(sum_priorities['high'] & distance_between_targets['far'], pair_priority['very_high'])
@@ -337,17 +335,11 @@ class FuzzyEvaluator:
         best_2 = (fitness_scores[2])
 
         return [[best_1, best_2], fitness_scores[0]]
-    
-##### For sanaty checks purposes only #####
+
 """
+##### For sanaty checks purposes only #####
 def main():
-    sample_fuzzy_parameters_fixed = np.array([
-    3.0, 7.0, 12.0,     # uncertainty (3 values)
-    40.0, 80.0, 120.0,  # distance (3 values)
-    0.5, 1.0, 1.5,      # individual_cell_uncertainty (3 values)    
-    # one_cell_priority_interval (4 values: [A, B, C, D] from original code):
-    0.25, 0.5, 0.75     # This allows your current extraction fuzzy_parameters[9:13] to work.
-])
+    sample_fuzzy_parameters_fixed = [np.float64(0.21993720934244318), np.float64(0.41463881725319884), np.float64(0.33713808032073245), np.float64(31.434394755910724), np.float64(32.850273464509065), np.float64(32.96066484214472), np.float64(0.20255617118579325), np.float64(0.3348156255849202), np.float64(0.26840621054870106), np.float64(0.6235120747607585), np.float64(0.548921650741627), np.float64(0.5034265023541958), np.float64(39.19750152518405), np.float64(33.00739093438502), np.float64(21.46814332166222), np.float64(0.16645243125371706), np.float64(0.27495723128939953), np.float64(0.2998979740995638)]
     evaluator = FuzzyEvaluator(map_width=10, map_height=10, camera_angle=np.radians(30), fuzzy_parameters=sample_fuzzy_parameters_fixed)
     
 if __name__ == "__main__":

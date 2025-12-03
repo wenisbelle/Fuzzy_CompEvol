@@ -75,8 +75,8 @@ def main():
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    individual = [1.56, 4.93, 0.70, 47.50, 23.61, 40.30, 0.27, 0.43, 0.42, 0.107, 0.202, 0.0]
-    
+    individual = [np.float64(0.2452756117192072), np.float64(0.6314438801204216), np.float64(0.14896525889966167), np.float64(41.93558185495538), np.float64(48.555596666024314), np.float64(40.089918301854205), np.float64(0.1331198108939456), np.float64(0.1813704389233992), np.float64(0.40002804167464495), np.float64(0.8466360088718689), np.float64(0.0747009832397093), np.float64(0.1721806812773743), np.float64(35.50476953613601), np.float64(51.0127129434542), np.float64(55.34351234187098), np.float64(0.06657950052596032), np.float64(0.18701170141853954), np.float64(0.3796480632136605)]
+
     for _ in range(10):
         create_and_run_simulation(individual)
     
