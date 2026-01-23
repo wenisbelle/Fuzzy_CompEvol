@@ -11,7 +11,7 @@ from .fuzzy import FuzzyEvaluator
 
 from gradysim.protocol.interface import IProtocol
 from gradysim.protocol.messages.telemetry import Telemetry
-from gradysim.protocol.messages.mobility import GotoCoordsMobilityCommand
+from gradysim.protocol.messages.mobility import GotoCoordsMobilityCommand, SetSpeedMobilityCommand
 from gradysim.simulator.extension.camera import CameraHardware, CameraConfiguration
 from gradysim.protocol.messages.communication import SendMessageCommand, BroadcastMessageCommand
 

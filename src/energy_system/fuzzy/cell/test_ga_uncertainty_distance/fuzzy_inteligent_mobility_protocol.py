@@ -7,6 +7,7 @@ import json
 import random
 from .visualization import MapVisualizer
 from .fuzzy import FuzzyEvaluator
+from .energy import EnergyComsuption
 
 from gradysim.protocol.interface import IProtocol
 from gradysim.protocol.messages.telemetry import Telemetry
@@ -48,6 +49,10 @@ class SendGoToMessage(TypedDict):
     message_type: int 
     goto: list
     sender: int
+
+class MovementDirection(enum.Enum):
+    X = 0
+    Z = 1
 
 class PointOfInterest(IProtocol):
 
@@ -131,8 +136,8 @@ class Drone(IProtocol):
         command = GotoCoordsMobilityCommand(*self.goto_command)
         self.provider.send_mobility_command(command)
 
-        speed = SetSpeedMobilityCommand(10.0)
-        self.provider.send_mobility_command(speed)
+        self.speed = SetSpeedMobilityCommand(10.0)
+        self.provider.send_mobility_command(self.speed)
         
         ##### Starting the callbacks #####
         self.provider.schedule_timer("mobility",self.provider.current_time() + 1)
@@ -144,6 +149,12 @@ class Drone(IProtocol):
         ##### Camera Configuration #####
         configuration = CameraConfiguration(20,30,180,0)
         self.camera = CameraHardware(self, configuration)
+
+        #### Energy Parameters #####
+        self.energy = EnergyComsuption()
+        self._log.info(f"Current battery energy: {self.energy.get_current_battery_energy()}")
+        self.provider.schedule_timer("battery", self.provider.current_time() + 1)
+
 
     def camera_routine(self):
         detected_nodes = self.camera.take_picture()
@@ -159,11 +170,11 @@ class Drone(IProtocol):
                 ##### Checking the total uncertainty after camera update #####
                 self.total_uncertainty = self.map[:,:,0].sum()
                 self.accomulated_uncertainty += self.total_uncertainty
-                self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
+                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
                 ###### Printar isso aqui depois nos testes####
                 ##############################################
                 ##############################################                
-                self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
+                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
 
     ##### Map updating ##### 
     def vanishing_map_routine(self):
@@ -175,7 +186,7 @@ class Drone(IProtocol):
         ###### Printar isso aqui depois nos testes####
         ##############################################
         ############################################## 
-        self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
+        #self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
 
          
     ##### Self mobility command. When the drone reaches the destination, it calculates the next one #####
@@ -315,10 +326,17 @@ class Drone(IProtocol):
                 distance_increment = np.linalg.norm(current_pos_array - self.last_drone_position)
                 self.total_distance_traveled += distance_increment
                 self.last_drone_position = current_pos_array
-                self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} has traveled a total distance of {self.total_distance_traveled}")
+                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} has traveled a total distance of {self.total_distance_traveled}")
 
             self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
-            
+        
+        if timer == "battery":
+            movement_direction = MovementDirection.X.value
+            motor = self.energy.manage_battery_during_fly(movement_direction, 2.0, 10.0)
+            self._log.info(f"At time {self.provider.current_time()}. Current battery energy: {self.energy.get_current_battery_energy()}")
+            self._log.info(f"At time {self.provider.current_time()} the motor power consumption is {motor}")
+
+            self.provider.schedule_timer("battery", self.provider.current_time() + 2)
 
     def handle_packet(self, message: str) -> None:
         data: dict = json.loads(message)

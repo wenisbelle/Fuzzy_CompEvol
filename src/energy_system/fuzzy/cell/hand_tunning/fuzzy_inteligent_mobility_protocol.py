@@ -10,7 +10,7 @@ from .fuzzy import FuzzyEvaluator
 
 from gradysim.protocol.interface import IProtocol
 from gradysim.protocol.messages.telemetry import Telemetry
-from gradysim.protocol.messages.mobility import GotoCoordsMobilityCommand, SetSpeedMobilityCommand
+from gradysim.protocol.messages.mobility import GotoCoordsMobilityCommand
 from gradysim.simulator.extension.camera import CameraHardware, CameraConfiguration
 from gradysim.protocol.messages.communication import SendMessageCommand, BroadcastMessageCommand
 
@@ -81,8 +81,7 @@ class Drone(IProtocol):
         "vanishing_update_time": 10.0,
         "number_of_drones": 3,
         "map_width": 10,
-        "map_height": 10,
-        "fuzzy_parameters": np.array([])
+        "map_height": 10
     }
 
     def initialize(self) -> None:
@@ -97,7 +96,6 @@ class Drone(IProtocol):
         self.NUMBER_OF_DRONES = self._config["number_of_drones"]
         self.MAP_WIDTH = self._config["map_width"]
         self.MAP_HEIGHT = self._config["map_height"]
-        self.FUZZY_PARAMETERS = self._config["fuzzy_parameters"]
         self.results_aggregator = self._config.get("results_aggregator", {})        
 
         
@@ -113,7 +111,7 @@ class Drone(IProtocol):
 
         #### Total distance traveled ####
         self.total_distance_traveled = 0.0
-        self.last_drone_position = [0.0, 0.0, 0.0]          
+        self.last_drone_position = [0.0, 0.0, 0.0]         
         
         ##### Camera Configuration #####
         configuration = CameraConfiguration(20, 30, 180, 0)
@@ -121,7 +119,7 @@ class Drone(IProtocol):
 
         ### It's considered that the at any high the camera reach will be enough #####
         ##### Cluster plugins initialization #####
-        self.fitness = FuzzyEvaluator(map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells = 10, fuzzy_parameters=self.FUZZY_PARAMETERS, camera_angle=np.pi/6)
+        self.fitness = FuzzyEvaluator(map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells = 10, camera_angle=np.pi/6)
         
         ##### Communication tracking. Avoiding communications loops #####
         self.last_drone_interaction_time = np.zeros(self.NUMBER_OF_DRONES)  
@@ -130,12 +128,9 @@ class Drone(IProtocol):
         self.goto_command = np.array([random.uniform(-5*self.MAP_WIDTH, 5*self.MAP_WIDTH), random.uniform(-5*self.MAP_HEIGHT, 5*self.MAP_HEIGHT), 10])
         command = GotoCoordsMobilityCommand(*self.goto_command)
         self.provider.send_mobility_command(command)
-
-        speed = SetSpeedMobilityCommand(10.0)
-        self.provider.send_mobility_command(speed)
         
         ##### Starting the callbacks #####
-        self.provider.schedule_timer("mobility",self.provider.current_time() + 1)
+        self.provider.schedule_timer("mobility",self.provider.current_time() + 5)
         self.provider.schedule_timer("camera",self.provider.current_time() + 1)
         self.provider.schedule_timer("heartbeat",self.provider.current_time() + 1)
         self.provider.schedule_timer("vanishing_map", self.provider.current_time() + self.VANISHING_UPDATE_TIME)
@@ -210,7 +205,7 @@ class Drone(IProtocol):
             self.map[:, :, 0],
             first_drone_pos = self.drone_position, 
             second_drone_pos=another_drone_position,
-            map_center_offset=map_center_offset,
+            map_center_offset=map_center_offset
             )
 
         target_coords, value = self.fitness.choose_two_cells(cells_fitness_scores)
@@ -298,7 +293,7 @@ class Drone(IProtocol):
 
             self.provider.schedule_timer(
                 "mobility",
-                self.provider.current_time() + 1
+                self.provider.current_time() + 5
             )
 
         if timer == "heartbeat":
@@ -374,8 +369,6 @@ class Drone(IProtocol):
         unvisited_cells = total_cells - visited_cells
         print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
         self._log.info(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters}")
-        print(f"Drone {self.provider.get_id()} total distance traveled: {self.total_distance_traveled}")
-        print(f"Drone {self.provider.get_id()} accomulated uncertainty: {self.accomulated_uncertainty}")
 
         
         if self.results_aggregator is not None:
@@ -393,7 +386,6 @@ def drone_protocol_factory(
     number_of_drones: int,
     map_width: int,
     map_height: int,
-    fuzzy_parameters: np.array,
     results_aggregator: dict
 ) -> Type[Drone]:
     """
@@ -406,7 +398,6 @@ def drone_protocol_factory(
         "number_of_drones": number_of_drones,
         "map_width": map_width,
         "map_height": map_height,
-        "fuzzy_parameters": fuzzy_parameters,
         "results_aggregator": results_aggregator
     }
 

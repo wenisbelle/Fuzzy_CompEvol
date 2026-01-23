@@ -1,0 +1,34 @@
+server listening on 127.0.0.1:5678
+Current battery energy: 252000.0
+At time 1. Current battery energy: 251885.3489012111
+At time 1 the motor power consumption is 114.65109878888761
+At time 3. Current battery energy: 251770.69780242222
+At time 3 the motor power consumption is 114.65109878888761
+At time 5. Current battery energy: 251656.04670363333
+At time 5 the motor power consumption is 114.65109878888761
+At time 7. Current battery energy: 251541.39560484444
+At time 7 the motor power consumption is 114.65109878888761
+At time 9. Current battery energy: 251426.74450605555
+At time 9 the motor power consumption is 114.65109878888761
+At time 11. Current battery energy: 251312.09340726666
+At time 11 the motor power consumption is 114.65109878888761
+At time 13. Current battery energy: 251197.44230847777
+At time 13 the motor power consumption is 114.65109878888761
+At time 15. Current battery energy: 251082.79120968888
+At time 15 the motor power consumption is 114.65109878888761
+At time 17. Current battery energy: 250968.14011089999
+At time 17 the motor power consumption is 114.65109878888761
+At time 19. Current battery energy: 250853.4890121111
+At time 19 the motor power consumption is 114.65109878888761
+At time 21. Current battery energy: 250738.8379133222
+At time 21 the motor power consumption is 114.65109878888761
+At time 23. Current battery energy: 250624.1868145333
+At time 23 the motor power consumption is 114.65109878888761
+At time 25. Current battery energy: 250509.53571574442
+At time 25 the motor power consumption is 114.65109878888761
+At time 27. Current battery energy: 250394.88461695553
+At time 27 the motor power consumption is 114.65109878888761
+At time 29. Current battery energy: 250280.23351816664
+At time 29 the motor power consumption is 114.65109878888761
+server closing
+server closed

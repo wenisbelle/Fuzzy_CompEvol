@@ -11,20 +11,19 @@ from gradysim.simulator.handler.communication import CommunicationHandler, Commu
 from deap import algorithms, base, creator, tools
 import numpy as np
 
-
 #### Objective function using simulation execution ####
 #### GradySim function #######
-def create_and_run_simulation(individual):
+def create_and_run_simulation():
     # Configuring simulation
     config = SimulationConfiguration(
         duration=150, 
-        real_time=True,
+        real_time=False,
     )
     builder = SimulationBuilder(config)
 
     builder.add_handler(TimerHandler())
     builder.add_handler(MobilityHandler())
-    builder.add_handler(VisualizationHandler())
+    #builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
         transmission_range=30
     )))
@@ -37,11 +36,10 @@ def create_and_run_simulation(individual):
         number_of_drones=3,
         map_width=10,
         map_height=10,
-        fuzzy_parameters=np.array(individual),
         results_aggregator=results_aggregator
     )
 
-    for _ in range(3):
+    for _ in range(3): ## fix this for generalization
         builder.add_node(ConfiguredDrone, (0, 0, 0))
 
     map_width = 10
@@ -62,24 +60,30 @@ def create_and_run_simulation(individual):
     total_uncertainty_drone1 = results_aggregator[0]['accomulated_uncertainty']
     total_uncertainty_drone2 = results_aggregator[1]['accomulated_uncertainty']
     total_uncertainty_drone3 = results_aggregator[2]['accomulated_uncertainty']
-    medium_uncertainty = (total_uncertainty_drone1+total_uncertainty_drone2+total_uncertainty_drone3)/3
-    print(f"Variable to be minimized: {medium_uncertainty}")
-    return medium_uncertainty
+
+    total_distance_traveled_drone1 = results_aggregator[0]['total_distance_traveled']
+    total_distance_traveled_drone2 = results_aggregator[1]['total_distance_traveled']
+    total_distance_traveled_drone3 = results_aggregator[2]['total_distance_traveled']
+
+    averaged_uncertainty = (total_uncertainty_drone1 + total_uncertainty_drone2 + total_uncertainty_drone3) / 3
+    averaged_distance_traveled = (total_distance_traveled_drone1 + total_distance_traveled_drone2 + total_distance_traveled_drone3) / 3
+
+    total_cost = averaged_uncertainty*0.1 + averaged_distance_traveled
+
+    return total_cost
 
 
 def main():
-    #logging.basicConfig(
-    #    level=logging.INFO,  
-    #    filename=f'new_system/logs/fuzzy/test_ga_uncertainty_distance/simulation.log', 
-    #    filemode='w', 
-    #    #format='%(asctime)s - %(levelname)s - %(message)s'
-    #    format='%(message)s'  
-    #)
-    individual = [np.float64(0.3331359065404181), np.float64(0.46325323358712556), np.float64(0.21543197321589413), np.float64(50.82185770583339), np.float64(43.18586484268149), np.float64(37.986426833679715), np.float64(0.34834455384986424), np.float64(0.32526086711763424), np.float64(0.11454446738680132), np.float64(1.1324257280166667), np.float64(0.6384014314196633), np.float64(0.16296143681340658), np.float64(27.08046544519423), np.float64(32.95365510365726), np.float64(17.93905041878592), np.float64(0.22152091377499933), np.float64(0.3121848730886927), np.float64(0.15003336657283353)]
+    logging.basicConfig(
+        level=logging.INFO,  
+        filename=f'new_system/logs/fuzzy/hand_tunning/simulation.log', 
+        filemode='w', 
+        #format='%(asctime)s - %(levelname)s - %(message)s'
+        format='%(message)s'  
+    )
     
     for _ in range(10):
-        create_and_run_simulation(individual)
-    
+        create_and_run_simulation()
 
 
 if __name__ == "__main__":

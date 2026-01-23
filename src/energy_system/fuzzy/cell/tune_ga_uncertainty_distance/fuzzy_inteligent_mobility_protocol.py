@@ -5,8 +5,10 @@ import numpy as np
 from dataclasses import dataclass
 import json
 import random
+from scipy.interpolate import RegularGridInterpolator
 from .visualization import MapVisualizer
 from .fuzzy import FuzzyEvaluator
+from .energy import EnergyComsuption
 
 from gradysim.protocol.interface import IProtocol
 from gradysim.protocol.messages.telemetry import Telemetry
@@ -49,6 +51,10 @@ class SendGoToMessage(TypedDict):
     goto: list
     sender: int
 
+class MovementDirection(enum.Enum):
+    X = 0
+    Z = 1
+
 class PointOfInterest(IProtocol):
 
     def initialize(self) -> None:
@@ -82,7 +88,7 @@ class Drone(IProtocol):
         "number_of_drones": 3,
         "map_width": 10,
         "map_height": 10,
-        "fuzzy_parameters": np.array([])
+        "fuzzy_tables": list[RegularGridInterpolator],
     }
 
     def initialize(self) -> None:
@@ -97,7 +103,7 @@ class Drone(IProtocol):
         self.NUMBER_OF_DRONES = self._config["number_of_drones"]
         self.MAP_WIDTH = self._config["map_width"]
         self.MAP_HEIGHT = self._config["map_height"]
-        self.FUZZY_PARAMETERS = self._config["fuzzy_parameters"]
+        self.FUZZY_TABLES = self._config["fuzzy_tables"]
         self.results_aggregator = self._config.get("results_aggregator", {})        
 
         
@@ -113,7 +119,7 @@ class Drone(IProtocol):
 
         #### Total distance traveled ####
         self.total_distance_traveled = 0.0
-        self.last_drone_position = [0.0, 0.0, 0.0]          
+        self.last_drone_position = [0.0, 0.0, 0.0]        
         
         ##### Camera Configuration #####
         configuration = CameraConfiguration(20, 30, 180, 0)
@@ -121,7 +127,7 @@ class Drone(IProtocol):
 
         ### It's considered that the at any high the camera reach will be enough #####
         ##### Cluster plugins initialization #####
-        self.fitness = FuzzyEvaluator(map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells = 10, fuzzy_parameters=self.FUZZY_PARAMETERS, camera_angle=np.pi/6)
+        self.fitness = FuzzyEvaluator(map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells = 10, fuzzy_tables=self.FUZZY_TABLES, camera_angle=np.pi/6)
         
         ##### Communication tracking. Avoiding communications loops #####
         self.last_drone_interaction_time = np.zeros(self.NUMBER_OF_DRONES)  
@@ -130,12 +136,9 @@ class Drone(IProtocol):
         self.goto_command = np.array([random.uniform(-5*self.MAP_WIDTH, 5*self.MAP_WIDTH), random.uniform(-5*self.MAP_HEIGHT, 5*self.MAP_HEIGHT), 10])
         command = GotoCoordsMobilityCommand(*self.goto_command)
         self.provider.send_mobility_command(command)
-
-        speed = SetSpeedMobilityCommand(10.0)
-        self.provider.send_mobility_command(speed)
         
         ##### Starting the callbacks #####
-        self.provider.schedule_timer("mobility",self.provider.current_time() + 1)
+        self.provider.schedule_timer("mobility",self.provider.current_time() + 5)
         self.provider.schedule_timer("camera",self.provider.current_time() + 1)
         self.provider.schedule_timer("heartbeat",self.provider.current_time() + 1)
         self.provider.schedule_timer("vanishing_map", self.provider.current_time() + self.VANISHING_UPDATE_TIME)
@@ -144,6 +147,11 @@ class Drone(IProtocol):
         ##### Camera Configuration #####
         configuration = CameraConfiguration(20,30,180,0)
         self.camera = CameraHardware(self, configuration)
+
+        #### Energy Parameters #####
+        self.energy = EnergyComsuption(self)
+
+        self._log.info(f"Current battery energy: {self.energy.get_external_consumed_power()}")
 
     def camera_routine(self):
         detected_nodes = self.camera.take_picture()
@@ -159,11 +167,11 @@ class Drone(IProtocol):
                 ##### Checking the total uncertainty after camera update #####
                 self.total_uncertainty = self.map[:,:,0].sum()
                 self.accomulated_uncertainty += self.total_uncertainty
-                self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
+                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
                 ###### Printar isso aqui depois nos testes####
                 ##############################################
                 ##############################################                
-                self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
+                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
 
     ##### Map updating ##### 
     def vanishing_map_routine(self):
@@ -175,7 +183,7 @@ class Drone(IProtocol):
         ###### Printar isso aqui depois nos testes####
         ##############################################
         ############################################## 
-        self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
+        #self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
 
          
     ##### Self mobility command. When the drone reaches the destination, it calculates the next one #####
@@ -298,7 +306,7 @@ class Drone(IProtocol):
 
             self.provider.schedule_timer(
                 "mobility",
-                self.provider.current_time() + 1
+                self.provider.current_time() + 5
             )
 
         if timer == "heartbeat":
@@ -315,7 +323,7 @@ class Drone(IProtocol):
                 distance_increment = np.linalg.norm(current_pos_array - self.last_drone_position)
                 self.total_distance_traveled += distance_increment
                 self.last_drone_position = current_pos_array
-                self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} has traveled a total distance of {self.total_distance_traveled}")
+                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} has traveled a total distance of {self.total_distance_traveled}")
 
             self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
             
@@ -372,10 +380,8 @@ class Drone(IProtocol):
         total_cells = self.MAP_WIDTH * self.MAP_HEIGHT
         visited_cells = np.sum(self.is_cell_visited)
         unvisited_cells = total_cells - visited_cells
-        print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
-        self._log.info(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters}")
-        print(f"Drone {self.provider.get_id()} total distance traveled: {self.total_distance_traveled}")
-        print(f"Drone {self.provider.get_id()} accomulated uncertainty: {self.accomulated_uncertainty}")
+        #print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
+        #self._log.info(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters}")
 
         
         if self.results_aggregator is not None:
@@ -393,7 +399,7 @@ def drone_protocol_factory(
     number_of_drones: int,
     map_width: int,
     map_height: int,
-    fuzzy_parameters: np.array,
+    fuzzy_tables: list[RegularGridInterpolator],
     results_aggregator: dict
 ) -> Type[Drone]:
     """
@@ -406,7 +412,7 @@ def drone_protocol_factory(
         "number_of_drones": number_of_drones,
         "map_width": map_width,
         "map_height": map_height,
-        "fuzzy_parameters": fuzzy_parameters,
+        "fuzzy_tables": fuzzy_tables,
         "results_aggregator": results_aggregator
     }
 
