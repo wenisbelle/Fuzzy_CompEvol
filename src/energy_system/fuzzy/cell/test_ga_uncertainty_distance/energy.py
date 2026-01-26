@@ -5,129 +5,102 @@ class MovementDirection(enum.Enum):
     X = 0
     Z = 1
 
+class BatteryError(Exception):
+    """Battery without energy"""
+    pass
+
 class EnergyComsuption:
     def __init__(self, mass: float = 1.5, ## Kg
-                 prop_trust_coef: float = 1.753*10**(-5),
-                 X_drag_coef: float = 0.8,
-                 Z_drag_coef: float = 0.8,
-                 X_ref_area: float = 0.015, ## m^2
-                 Z_ref_area: float = 0.0335, ## m^2
-                 external_charge: float = 30.0, # Watts
-                 motor_torque_coefficient: float = 9.37*10**(-6),  ## N/RPM²,
-                 motor_rotation_friction: float = 0.17*10**(-3), ## N/RPM²
-                 motor_efficiency: float = 0.95,
-                 battery_charging_constant: float = 0.1,
-                 gravity: float=9.8,
-                 air_density: float=1.13,
+                 payload: float = 0.5, ## kg, battery more payload
+                 power_efficiency: float = 0.5, ### from the article
+                 lift_drag_ration: float = 3.0, ### benchmarket 
+                 external_power: float =10.0, # Watts
+                 battery_charging_constant: float = 0.01,
                  battery_capacity: float = 5000.0,  ## mAh
                  battery_voltage: float=14.0,  ## Volts)
-                 battery_initial_status: float = 100.0
+                 battery_initial_status: float = 1.0
                 ):
         self.mass = mass
-        self.prop_trust_coef = prop_trust_coef
-        self.X_drag_coef = X_drag_coef
-        self.X_ref_area = X_ref_area
-        self.Z_drag_coef = Z_drag_coef
-        self.Z_ref_area = Z_ref_area
-        self.external_charge = external_charge
-        self.air_density = air_density
-        self.MOTOR_EFFICIENCY = motor_efficiency
+        self.payload = payload
+        self.external_power = external_power
+
+        self.POWER_EFFICIENCY = power_efficiency
+        self.RATIO = lift_drag_ration
         self.BATTERY_CHARGING_CONSTANT = battery_charging_constant
-        self.MOTOR_TORQUE_COEFFICIENT = motor_torque_coefficient*(2*np.pi/60)**2 ## pass to rad/s 
-        self.MOTOR_ROTATION_FRICTION = motor_rotation_friction*(2*np.pi/60) ## pass to rad/s
         self.BATTERY_VOLTAGE = battery_voltage
-        self.battery_current_energy = battery_capacity*self.BATTERY_VOLTAGE*3.6 ## the energy in joules
-        self.GRAVITY = gravity
-        self.NUMBER_OF_PROPELLERS = 4
+        
+        self.GRAVITY = 9.18
+        self.AIR_DENSITY = 1.225
+        self.RADIUS_PROP = 0.127
+        self.NUMBER_ROTORS = 4
+        self.disk_area = self.NUMBER_ROTORS*np.pi*(self.RADIUS_PROP**2)
+
+        self.battery_total_energy = battery_capacity*self.BATTERY_VOLTAGE*3.6 ## the energy in joules
+        self.battery_current_energy = battery_initial_status*self.battery_total_energy
         self.battery_status = battery_initial_status
 
 
-    def air_resistence(self, movement_direction, drone_speed):
-        if movement_direction == MovementDirection.X.value:
-            area = self.X_ref_area
-            coef = self.X_drag_coef
-        elif movement_direction == MovementDirection.Z.value:
-            area = self.Z_ref_area
-            coef = self.Z_drag_coef
-        else: 
-            return ValueError
-        
-        return 0.5*self.air_density*coef*area*drone_speed**2
+    def get_hover_power(self):
 
-    def get_inclination_angle(self, drone_speed, movement_direction):
-        if movement_direction == MovementDirection.X.value:
-            drag = self.air_resistence(movement_direction, drone_speed)
-            theta = np.arctan(drag/(self.mass*self.GRAVITY))
-        elif movement_direction == MovementDirection.Z.value:
-            theta = 0               
-        else:
-            return ValueError
-        return theta
+        total_mass = self.mass + self.payload
+        thrust_needed = total_mass * self.GRAVITY
 
-    def propeller_trust_force(self, theta, speed, movement_direction):
+        ideal_hover_power = (thrust_needed**1.5) / np.sqrt(2 * self.AIR_DENSITY * self.disk_area)
 
-        if movement_direction == MovementDirection.X.value:
-            total_trust = (self.mass*self.GRAVITY)/(np.cos(theta))
-            propeller_trust = total_trust/self.NUMBER_OF_PROPELLERS
+        # This values is changed to match the information presented in the holybro site:
+        ### Flight time: ~18 minutes hover with no additional payload. Tested with 5000mAh Battery.
+        return ideal_hover_power / 0.6
 
-        elif movement_direction == MovementDirection.Z.value:
-            drag = self.air_resistence(movement_direction, speed)
-            total_trust = self.mass*self.GRAVITY + drag
-            propeller_trust = total_trust/self.NUMBER_OF_PROPELLERS
-
-        else: 
-            return ValueError
-
-        return propeller_trust
     
-    def get_prop_speed(self, propeller_trust):
-        return np.sqrt(propeller_trust/self.prop_trust_coef)
+    def get_power_consumed(self, drone_speed):
+        total_mass = self.mass + self.payload
+        hover_power = self.get_hover_power()
+        #print(f"THe hover power is: {hover_power}")
+        return total_mass*self.GRAVITY*drone_speed/(self.POWER_EFFICIENCY*self.RATIO) + self.external_power + hover_power
 
-    #### Assuming the drone and the proppelers to always keep a constant speed, 
-    #### so the time of accelaration is to small to count 
-    def get_motor_torque(self, propeller_speed):
-        return (self.MOTOR_TORQUE_COEFFICIENT*propeller_speed**2 + self.MOTOR_ROTATION_FRICTION*propeller_speed)
-        
-    def get_power_consumed_motor(self, propeller_speed, torque):
-        print(f"Propeller speed: {propeller_speed}")
-        print(f"Propeller torque: {torque}")
-        return (self.NUMBER_OF_PROPELLERS*torque*propeller_speed)/self.MOTOR_EFFICIENCY
-    
-    def change_external_charge(self, new_external_charge):
+   
+    def change_external_power(self, new_external_charge):
         self.external_charge = new_external_charge
-
-    def get_external_consumed_power(self):
-        return self.external_charge
 
     ###Assuming the battery voltage doesn't change with the time during discharging
 
-    def get_energy_consumed(self, motor_power, external_power, delta_time):
-        return (motor_power + external_power)*delta_time
+    def get_energy_consumed(self, power_consumed, delta_time):
+        return power_consumed*delta_time
 
     def discharge_battery(self, energy_consumed):
         self.battery_current_energy -= energy_consumed
 
+        if self.battery_current_energy <= 0.0:
+            self.battery_current_energy = 0.0 
+            self.update_battery_status()       
+            raise BatteryError("Drone has no energy.")
+
+
     def charge_battery(self, delta_time):
-        self.battery_current_energy += self.BATTERY_CHARGING_CONSTANT*delta_time
+        self.battery_status += self.BATTERY_CHARGING_CONSTANT*delta_time
+
+        self.battery_status = max(1.0, self.battery_status)
     
     def get_current_battery_energy(self):
         return self.battery_current_energy
     
-    def manage_battery_during_fly(self, movement_direction, duration, drone_speed):
-        theta = self.get_inclination_angle(drone_speed, movement_direction)
-        
-        propeller_trust = self.propeller_trust_force(theta, drone_speed, movement_direction)
-        
-        omega = self.get_prop_speed(propeller_trust)
-        motor_torque = self.get_motor_torque(omega)
+    def get_battery_status(self):
+        return self.battery_status
 
-        motor_power_consumption = self.get_power_consumed_motor(omega, motor_torque)
+    def update_battery_status(self):
+        self.battery_status = (self.battery_current_energy/self.battery_total_energy)
+    
+    
+    def manage_battery_during_fly(self, duration, drone_speed):
+        power = self.get_power_consumed(drone_speed)
 
-        energy_consumed = self.get_energy_consumed(motor_power_consumption, self.external_charge, duration)
+        energy_consumed = self.get_energy_consumed(power, duration)
 
         self.discharge_battery(energy_consumed)
 
-        return energy_consumed
+        self.update_battery_status()
+
+        return self.battery_status
     
 
 

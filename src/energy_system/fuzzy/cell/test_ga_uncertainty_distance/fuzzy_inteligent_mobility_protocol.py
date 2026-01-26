@@ -7,7 +7,7 @@ import json
 import random
 from .visualization import MapVisualizer
 from .fuzzy import FuzzyEvaluator
-from .energy import EnergyComsuption
+from .energy import EnergyComsuption, BatteryError
 
 from gradysim.protocol.interface import IProtocol
 from gradysim.protocol.messages.telemetry import Telemetry
@@ -49,10 +49,6 @@ class SendGoToMessage(TypedDict):
     message_type: int 
     goto: list
     sender: int
-
-class MovementDirection(enum.Enum):
-    X = 0
-    Z = 1
 
 class PointOfInterest(IProtocol):
 
@@ -152,7 +148,7 @@ class Drone(IProtocol):
 
         #### Energy Parameters #####
         self.energy = EnergyComsuption()
-        self._log.info(f"Current battery energy: {self.energy.get_current_battery_energy()}")
+        self._log.info(f"Current battery status: {self.energy.get_battery_status()}")
         self.provider.schedule_timer("battery", self.provider.current_time() + 1)
 
 
@@ -331,11 +327,14 @@ class Drone(IProtocol):
             self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
         
         if timer == "battery":
-            movement_direction = MovementDirection.X.value
-            motor = self.energy.manage_battery_during_fly(movement_direction, 2.0, 10.0)
-            self._log.info(f"At time {self.provider.current_time()}. Current battery energy: {self.energy.get_current_battery_energy()}")
-            self._log.info(f"At time {self.provider.current_time()} the motor power consumption is {motor}")
-
+            try:
+                battery_status = self.energy.manage_battery_during_fly(2.0, 20.0)
+                self._log.info(f"At time {self.provider.current_time()} the battery status is: {battery_status}")
+            except BatteryError:
+                self._log.error(f"Drone {self.provider.get_id()} has no battery. Stopping simulation...")
+                self.energy.battery_status = 0.0
+                ### The drone will stop moving and will have a larger penalty
+    
             self.provider.schedule_timer("battery", self.provider.current_time() + 2)
 
     def handle_packet(self, message: str) -> None:

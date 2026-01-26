@@ -1,34 +1,366 @@
 server listening on 127.0.0.1:5678
-Current battery energy: 252000.0
-At time 1. Current battery energy: 251885.3489012111
-At time 1 the motor power consumption is 114.65109878888761
-At time 3. Current battery energy: 251770.69780242222
-At time 3 the motor power consumption is 114.65109878888761
-At time 5. Current battery energy: 251656.04670363333
-At time 5 the motor power consumption is 114.65109878888761
-At time 7. Current battery energy: 251541.39560484444
-At time 7 the motor power consumption is 114.65109878888761
-At time 9. Current battery energy: 251426.74450605555
-At time 9 the motor power consumption is 114.65109878888761
-At time 11. Current battery energy: 251312.09340726666
-At time 11 the motor power consumption is 114.65109878888761
-At time 13. Current battery energy: 251197.44230847777
-At time 13 the motor power consumption is 114.65109878888761
-At time 15. Current battery energy: 251082.79120968888
-At time 15 the motor power consumption is 114.65109878888761
-At time 17. Current battery energy: 250968.14011089999
-At time 17 the motor power consumption is 114.65109878888761
-At time 19. Current battery energy: 250853.4890121111
-At time 19 the motor power consumption is 114.65109878888761
-At time 21. Current battery energy: 250738.8379133222
-At time 21 the motor power consumption is 114.65109878888761
-At time 23. Current battery energy: 250624.1868145333
-At time 23 the motor power consumption is 114.65109878888761
-At time 25. Current battery energy: 250509.53571574442
-At time 25 the motor power consumption is 114.65109878888761
-At time 27. Current battery energy: 250394.88461695553
-At time 27 the motor power consumption is 114.65109878888761
-At time 29. Current battery energy: 250280.23351816664
-At time 29 the motor power consumption is 114.65109878888761
+connection rejected (426 Upgrade Required)
+opening handshake failed
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/websockets/asyncio/server.py", line 356, in conn_handler
+    await connection.handshake(
+  File "/usr/local/lib/python3.10/dist-packages/websockets/asyncio/server.py", line 207, in handshake
+    raise self.protocol.handshake_exc
+  File "/usr/local/lib/python3.10/dist-packages/websockets/server.py", line 140, in accept
+    ) = self.process_request(request)
+  File "/usr/local/lib/python3.10/dist-packages/websockets/server.py", line 235, in process_request
+    raise InvalidUpgrade(
+websockets.exceptions.InvalidUpgrade: invalid Connection header: keep-alive
+connection open
+Current battery status: 1.0
+At time 1 the battery status is: 0.9965010667277882
+At time 3 the battery status is: 0.9930021334555763
+At time 5 the battery status is: 0.9895032001833645
+At time 7 the battery status is: 0.9860042669111525
+At time 9 the battery status is: 0.9825053336389407
+At time 11 the battery status is: 0.9790064003667288
+At time 13 the battery status is: 0.975507467094517
+At time 15 the battery status is: 0.9720085338223051
+At time 17 the battery status is: 0.9685096005500933
+At time 19 the battery status is: 0.9650106672778814
+At time 21 the battery status is: 0.9615117340056695
+At time 23 the battery status is: 0.9580128007334576
+At time 25 the battery status is: 0.9545138674612458
+At time 27 the battery status is: 0.9510149341890339
+At time 29 the battery status is: 0.9475160009168221
+At time 31 the battery status is: 0.9440170676446102
+At time 33 the battery status is: 0.9405181343723984
+At time 35 the battery status is: 0.9370192011001865
+At time 37 the battery status is: 0.9335202678279746
+At time 39 the battery status is: 0.9300213345557627
+At time 41 the battery status is: 0.9265224012835509
+At time 43 the battery status is: 0.923023468011339
+At time 45 the battery status is: 0.9195245347391272
+At time 47 the battery status is: 0.9160256014669154
+At time 49 the battery status is: 0.9125266681947035
+At time 51 the battery status is: 0.9090277349224916
+At time 53 the battery status is: 0.9055288016502797
+At time 55 the battery status is: 0.9020298683780679
+At time 57 the battery status is: 0.898530935105856
+At time 59 the battery status is: 0.8950320018336442
+At time 61 the battery status is: 0.8915330685614323
+At time 63 the battery status is: 0.8880341352892205
+At time 65 the battery status is: 0.8845352020170085
+At time 67 the battery status is: 0.8810362687447967
+At time 69 the battery status is: 0.8775373354725848
+At time 71 the battery status is: 0.874038402200373
+At time 73 the battery status is: 0.8705394689281611
+At time 75 the battery status is: 0.8670405356559493
+At time 77 the battery status is: 0.8635416023837374
+At time 79 the battery status is: 0.8600426691115255
+At time 81 the battery status is: 0.8565437358393136
+At time 83 the battery status is: 0.8530448025671018
+At time 85 the battery status is: 0.84954586929489
+At time 87 the battery status is: 0.8460469360226781
+At time 89 the battery status is: 0.8425480027504663
+At time 91 the battery status is: 0.8390490694782544
+At time 93 the battery status is: 0.8355501362060425
+At time 95 the battery status is: 0.8320512029338306
+At time 97 the battery status is: 0.8285522696616188
+At time 99 the battery status is: 0.8250533363894069
+At time 101 the battery status is: 0.8215544031171951
+At time 103 the battery status is: 0.8180554698449832
+At time 105 the battery status is: 0.8145565365727714
+At time 107 the battery status is: 0.8110576033005595
+At time 109 the battery status is: 0.8075586700283476
+At time 111 the battery status is: 0.8040597367561357
+At time 113 the battery status is: 0.8005608034839239
+At time 115 the battery status is: 0.797061870211712
+At time 117 the battery status is: 0.7935629369395002
+At time 119 the battery status is: 0.7900640036672884
+At time 121 the battery status is: 0.7865650703950765
+At time 123 the battery status is: 0.7830661371228645
+At time 125 the battery status is: 0.7795672038506527
+At time 127 the battery status is: 0.7760682705784409
+At time 129 the battery status is: 0.772569337306229
+At time 131 the battery status is: 0.7690704040340172
+At time 133 the battery status is: 0.7655714707618053
+At time 135 the battery status is: 0.7620725374895935
+At time 137 the battery status is: 0.7585736042173815
+At time 139 the battery status is: 0.7550746709451697
+At time 141 the battery status is: 0.7515757376729578
+At time 143 the battery status is: 0.748076804400746
+At time 145 the battery status is: 0.7445778711285341
+At time 147 the battery status is: 0.7410789378563223
+At time 149 the battery status is: 0.7375800045841104
+At time 151 the battery status is: 0.7340810713118985
+At time 153 the battery status is: 0.7305821380396866
+At time 155 the battery status is: 0.7270832047674748
+At time 157 the battery status is: 0.7235842714952629
+At time 159 the battery status is: 0.7200853382230511
+At time 161 the battery status is: 0.7165864049508393
+At time 163 the battery status is: 0.7130874716786274
+At time 165 the battery status is: 0.7095885384064156
+At time 167 the battery status is: 0.7060896051342036
+At time 169 the battery status is: 0.7025906718619918
+At time 171 the battery status is: 0.6990917385897799
+At time 173 the battery status is: 0.6955928053175681
+At time 175 the battery status is: 0.6920938720453562
+At time 177 the battery status is: 0.6885949387731444
+At time 179 the battery status is: 0.6850960055009325
+At time 181 the battery status is: 0.6815970722287206
+At time 183 the battery status is: 0.6780981389565087
+At time 185 the battery status is: 0.6745992056842969
+At time 187 the battery status is: 0.671100272412085
+At time 189 the battery status is: 0.6676013391398732
+At time 191 the battery status is: 0.6641024058676613
+At time 193 the battery status is: 0.6606034725954495
+At time 195 the battery status is: 0.6571045393232375
+At time 197 the battery status is: 0.6536056060510257
+At time 199 the battery status is: 0.6501066727788138
+At time 201 the battery status is: 0.646607739506602
+At time 203 the battery status is: 0.6431088062343902
+At time 205 the battery status is: 0.6396098729621783
+At time 207 the battery status is: 0.6361109396899665
+At time 209 the battery status is: 0.6326120064177545
+At time 211 the battery status is: 0.6291130731455427
+At time 213 the battery status is: 0.6256141398733308
+At time 215 the battery status is: 0.622115206601119
+At time 217 the battery status is: 0.6186162733289071
+At time 219 the battery status is: 0.6151173400566953
+At time 221 the battery status is: 0.6116184067844834
+At time 223 the battery status is: 0.6081194735122715
+At time 225 the battery status is: 0.6046205402400596
+At time 227 the battery status is: 0.6011216069678478
+At time 229 the battery status is: 0.5976226736956359
+At time 231 the battery status is: 0.5941237404234241
+At time 233 the battery status is: 0.5906248071512122
+At time 235 the battery status is: 0.5871258738790004
+At time 237 the battery status is: 0.5836269406067885
+At time 239 the battery status is: 0.5801280073345766
+At time 241 the battery status is: 0.5766290740623647
+At time 243 the battery status is: 0.5731301407901529
+At time 245 the battery status is: 0.569631207517941
+At time 247 the battery status is: 0.5661322742457292
+At time 249 the battery status is: 0.5626333409735174
+At time 251 the battery status is: 0.5591344077013055
+At time 253 the battery status is: 0.5556354744290936
+At time 255 the battery status is: 0.5521365411568817
+At time 257 the battery status is: 0.5486376078846699
+At time 259 the battery status is: 0.545138674612458
+At time 261 the battery status is: 0.5416397413402462
+At time 263 the battery status is: 0.5381408080680343
+At time 265 the battery status is: 0.5346418747958225
+At time 267 the battery status is: 0.5311429415236105
+At time 269 the battery status is: 0.5276440082513987
+At time 271 the battery status is: 0.5241450749791868
+At time 273 the battery status is: 0.520646141706975
+At time 275 the battery status is: 0.5171472084347631
+At time 277 the battery status is: 0.5136482751625514
+At time 279 the battery status is: 0.5101493418903396
+At time 281 the battery status is: 0.5066504086181278
+At time 283 the battery status is: 0.503151475345916
+At time 285 the battery status is: 0.4996525420737042
+At time 287 the battery status is: 0.49615360880149234
+At time 289 the battery status is: 0.49265467552928055
+At time 291 the battery status is: 0.48915574225706876
+At time 293 the battery status is: 0.48565680898485697
+At time 295 the battery status is: 0.4821578757126451
+At time 297 the battery status is: 0.47865894244043333
+At time 299 the battery status is: 0.47516000916822154
+At time 301 the battery status is: 0.47166107589600975
+At time 303 the battery status is: 0.4681621426237979
+At time 305 the battery status is: 0.4646632093515861
+At time 307 the battery status is: 0.4611642760793743
+At time 309 the battery status is: 0.45766534280716253
+At time 311 the battery status is: 0.45416640953495074
+At time 313 the battery status is: 0.4506674762627389
+At time 315 the battery status is: 0.4471685429905271
+At time 317 the battery status is: 0.4436696097183153
+At time 319 the battery status is: 0.4401706764461035
+At time 321 the battery status is: 0.4366717431738917
+At time 323 the battery status is: 0.4331728099016799
+At time 325 the battery status is: 0.4296738766294681
+At time 327 the battery status is: 0.4261749433572563
+At time 329 the battery status is: 0.42267601008504446
+At time 331 the battery status is: 0.41917707681283267
+At time 333 the battery status is: 0.4156781435406209
+At time 335 the battery status is: 0.4121792102684091
+At time 337 the battery status is: 0.40868027699619724
+At time 339 the battery status is: 0.40518134372398545
+At time 341 the battery status is: 0.40168241045177366
+At time 343 the battery status is: 0.3981834771795619
+At time 345 the battery status is: 0.3946845439073501
+At time 347 the battery status is: 0.39118561063513824
+At time 349 the battery status is: 0.38768667736292645
+At time 351 the battery status is: 0.38418774409071466
+At time 353 the battery status is: 0.38068881081850287
+At time 355 the battery status is: 0.377189877546291
+At time 357 the battery status is: 0.37369094427407923
+At time 359 the battery status is: 0.37019201100186744
+At time 361 the battery status is: 0.36669307772965565
+At time 363 the battery status is: 0.3631941444574438
+At time 365 the battery status is: 0.359695211185232
+At time 367 the battery status is: 0.3561962779130202
+At time 369 the battery status is: 0.35269734464080843
+At time 371 the battery status is: 0.3491984113685966
+At time 373 the battery status is: 0.3456994780963848
+At time 375 the battery status is: 0.342200544824173
+At time 377 the battery status is: 0.3387016115519612
+At time 379 the battery status is: 0.33520267827974937
+At time 381 the battery status is: 0.3317037450075376
+At time 383 the battery status is: 0.3282048117353258
+At time 385 the battery status is: 0.324705878463114
+At time 387 the battery status is: 0.3212069451909022
+At time 389 the battery status is: 0.31770801191869036
+At time 391 the battery status is: 0.31420907864647857
+At time 393 the battery status is: 0.3107101453742668
+At time 395 the battery status is: 0.307211212102055
+At time 397 the battery status is: 0.30371227882984314
+At time 399 the battery status is: 0.30021334555763135
+At time 401 the battery status is: 0.29671441228541956
+At time 403 the battery status is: 0.29321547901320777
+At time 405 the battery status is: 0.2897165457409959
+At time 407 the battery status is: 0.28621761246878413
+At time 409 the battery status is: 0.28271867919657234
+At time 411 the battery status is: 0.27921974592436055
+At time 413 the battery status is: 0.2757208126521487
+At time 415 the battery status is: 0.2722218793799369
+At time 417 the battery status is: 0.2687229461077251
+At time 419 the battery status is: 0.26522401283551333
+At time 421 the battery status is: 0.26172507956330154
+At time 423 the battery status is: 0.2582261462910897
+At time 425 the battery status is: 0.2547272130188779
+At time 427 the battery status is: 0.2512282797466661
+At time 429 the battery status is: 0.2477293464744543
+At time 431 the battery status is: 0.2442304132022425
+At time 433 the battery status is: 0.2407314799300307
+At time 435 the battery status is: 0.2372325466578189
+At time 437 the battery status is: 0.23373361338560708
+At time 439 the battery status is: 0.2302346801133953
+At time 441 the battery status is: 0.22673574684118347
+At time 443 the battery status is: 0.22323681356897168
+At time 445 the battery status is: 0.21973788029675986
+At time 447 the battery status is: 0.21623894702454807
+At time 449 the battery status is: 0.21274001375233625
+At time 451 the battery status is: 0.20924108048012446
+At time 453 the battery status is: 0.20574214720791265
+At time 455 the battery status is: 0.20224321393570086
+At time 457 the battery status is: 0.19874428066348906
+At time 459 the battery status is: 0.19524534739127725
+At time 461 the battery status is: 0.19174641411906546
+At time 463 the battery status is: 0.18824748084685364
+At time 465 the battery status is: 0.18474854757464185
+At time 467 the battery status is: 0.18124961430243003
+At time 469 the battery status is: 0.17775068103021824
+At time 471 the battery status is: 0.17425174775800642
+At time 473 the battery status is: 0.17075281448579463
+At time 475 the battery status is: 0.1672538812135828
+At time 477 the battery status is: 0.16375494794137102
+At time 479 the battery status is: 0.1602560146691592
+At time 481 the battery status is: 0.1567570813969474
+At time 483 the battery status is: 0.1532581481247356
+At time 485 the battery status is: 0.1497592148525238
+At time 487 the battery status is: 0.14626028158031198
+At time 489 the battery status is: 0.1427613483081002
+At time 491 the battery status is: 0.13926241503588838
+At time 493 the battery status is: 0.13576348176367659
+At time 495 the battery status is: 0.1322645484914648
+At time 497 the battery status is: 0.12876561521925298
+At time 499 the battery status is: 0.12526668194704116
+At time 501 the battery status is: 0.12176774867482933
+At time 503 the battery status is: 0.11826881540261751
+At time 505 the battery status is: 0.11476988213040569
+At time 507 the battery status is: 0.11127094885819387
+At time 509 the battery status is: 0.10777201558598205
+At time 511 the battery status is: 0.10427308231377024
+At time 513 the battery status is: 0.10077414904155842
+At time 515 the battery status is: 0.0972752157693466
+At time 517 the battery status is: 0.09377628249713478
+At time 519 the battery status is: 0.09027734922492296
+At time 521 the battery status is: 0.08677841595271114
+At time 523 the battery status is: 0.08327948268049933
+At time 525 the battery status is: 0.07978054940828751
+At time 527 the battery status is: 0.07628161613607569
+At time 529 the battery status is: 0.07278268286386387
+At time 531 the battery status is: 0.06928374959165205
+At time 533 the battery status is: 0.06578481631944023
+At time 535 the battery status is: 0.06228588304722842
+At time 537 the battery status is: 0.058786949775016605
+At time 539 the battery status is: 0.055288016502804786
+At time 541 the battery status is: 0.05178908323059297
+At time 543 the battery status is: 0.04829014995838115
+At time 545 the battery status is: 0.04479121668616933
+At time 547 the battery status is: 0.04129228341395751
+At time 549 the battery status is: 0.037793350141745695
+At time 551 the battery status is: 0.03429441686953388
+At time 553 the battery status is: 0.030795483597322055
+At time 555 the battery status is: 0.02729655032511024
+At time 557 the battery status is: 0.023797617052898422
+At time 559 the battery status is: 0.020298683780686604
+At time 561 the battery status is: 0.016799750508474785
+At time 563 the battery status is: 0.013300817236262965
+At time 565 the battery status is: 0.009801883964051149
+At time 567 the battery status is: 0.00630295069183933
+At time 569 the battery status is: 0.0028040174196275122
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
+Drone 0 has no battery. Stopping simulation...
+Drone 0 number of encounters: 0
 server closing
 server closed

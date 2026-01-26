@@ -17,8 +17,8 @@ import numpy as np
 def create_and_run_simulation(individual):
     # Configuring simulation
     config = SimulationConfiguration(
-        duration=1200, 
-        real_time=True,
+        duration=1080, 
+        real_time=False,
     )
     builder = SimulationBuilder(config)
 
