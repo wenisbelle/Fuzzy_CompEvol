@@ -28,7 +28,6 @@ class DroneStatus(enum.Enum):
     MAPPING = 0
     RECRUITING = 1
     ENGAGING = 2
-    DEAD = 3
 
 class MessageType(enum.Enum):
     HEARTBEAT_MESSAGE = 0
@@ -51,6 +50,10 @@ class SendGoToMessage(TypedDict):
     message_type: int 
     goto: list
     sender: int
+
+class MovementDirection(enum.Enum):
+    X = 0
+    Z = 1
 
 class PointOfInterest(IProtocol):
 
@@ -116,7 +119,7 @@ class Drone(IProtocol):
 
         #### Total distance traveled ####
         self.total_distance_traveled = 0.0
-        self.last_drone_position = [0.0, 0.0, 0.0]          
+        self.last_drone_position = [0.0, 0.0, 0.0]        
         
         ##### Camera Configuration #####
         configuration = CameraConfiguration(20, 30, 180, 0)
@@ -139,7 +142,7 @@ class Drone(IProtocol):
         self.provider.send_mobility_command(self.speed)
         
         ##### Starting the callbacks #####
-        self.provider.schedule_timer("mobility",self.provider.current_time() + 1)
+        self.provider.schedule_timer("mobility",self.provider.current_time() + 5)
         self.provider.schedule_timer("camera",self.provider.current_time() + 1)
         self.provider.schedule_timer("heartbeat",self.provider.current_time() + 1)
         self.provider.schedule_timer("vanishing_map", self.provider.current_time() + self.VANISHING_UPDATE_TIME)
@@ -151,7 +154,7 @@ class Drone(IProtocol):
 
         #### Energy Parameters #####
         self.energy = EnergyComsuption()
-        self._log.info(f"Current battery status: {self.energy.get_battery_status()}")
+        self.battery_status = self.energy.get_battery_status() 
         self.provider.schedule_timer("battery", self.provider.current_time() + 1)
 
 
@@ -303,21 +306,17 @@ class Drone(IProtocol):
             if self.drone_position is not None:
                 current_pos_array = np.array(self.drone_position)    
             
-            if self.status == DroneStatus.MAPPING:
-                if np.linalg.norm(current_pos_array - self.goto_command) < 1:
-                    self.internal_mobility_command()
-            elif self.status == DroneStatus.DEAD:
-                pass
+            if np.linalg.norm(current_pos_array - self.goto_command) < 1:
+                self.internal_mobility_command()
 
             self.provider.schedule_timer(
                 "mobility",
-                self.provider.current_time() + 1
+                self.provider.current_time() + 5
             )
 
         if timer == "heartbeat":
-            if self.status == DroneStatus.MAPPING:
-                self.send_heartbeat()
-                self.provider.schedule_timer("heartbeat", self.provider.current_time() + 1)
+            self.send_heartbeat()
+            self.provider.schedule_timer("heartbeat", self.provider.current_time() + 1)
 
         if timer == "vanishing_map":
             self.vanishing_map_routine()
@@ -332,15 +331,15 @@ class Drone(IProtocol):
                 #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} has traveled a total distance of {self.total_distance_traveled}")
 
             self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
-        
+            
         if timer == "battery":
             battery_timer = 1.0
             try:
-                battery_status = self.energy.manage_battery_during_fly(battery_timer, self.speed_command)
-                self._log.info(f"At time {self.provider.current_time()} the battery status is: {battery_status}")
+                self.battery_status = self.energy.manage_battery_during_fly(battery_timer, self.speed_command)
+                #self._log.info(f"At time {self.provider.current_time()} the battery status is: {self.battery_status}")
             except BatteryError:
                 self._log.error(f"Drone {self.provider.get_id()} has no battery.")
-                self.energy.battery_status = 0.0
+                self.battery_status = 0.0
 
                 ######################################
                 #Making the drone land
@@ -354,6 +353,8 @@ class Drone(IProtocol):
                 ### The drone will stop moving and will have a larger penalty
     
             self.provider.schedule_timer("battery", self.provider.current_time() + battery_timer)
+                
+
 
     def handle_packet(self, message: str) -> None:
         data: dict = json.loads(message)
@@ -362,10 +363,6 @@ class Drone(IProtocol):
            self._log.warning(f"Received message without a message_type: {data}")
            return
         
-        if self.status == DroneStatus.DEAD:
-            ### Do nothing if the drone has no battery
-            return
-
         msg_type = data['message_type']
 
         if msg_type == MessageType.HEARTBEAT_MESSAGE.value:
@@ -411,10 +408,8 @@ class Drone(IProtocol):
         total_cells = self.MAP_WIDTH * self.MAP_HEIGHT
         visited_cells = np.sum(self.is_cell_visited)
         unvisited_cells = total_cells - visited_cells
-        print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
-        self._log.info(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters}")
-        print(f"Drone {self.provider.get_id()} total distance traveled: {self.total_distance_traveled}")
-        print(f"Drone {self.provider.get_id()} accomulated uncertainty: {self.accomulated_uncertainty}")
+        #print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
+        #self._log.info(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters}")
 
         
         if self.results_aggregator is not None:
@@ -422,7 +417,8 @@ class Drone(IProtocol):
                 "final_uncertainty": float(final_uncertainty),
                 "unvisited_cells": float(unvisited_cells),
                 "accomulated_uncertainty": float(self.accomulated_uncertainty),
-                "total_distance_traveled": float(self.total_distance_traveled)
+                "total_distance_traveled": float(self.total_distance_traveled),
+                "final_battery_status": float(self.battery_status)
             }
 
 
