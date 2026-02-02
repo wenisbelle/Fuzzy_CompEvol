@@ -16,7 +16,9 @@ from gradysim.protocol.messages.mobility import GotoCoordsMobilityCommand, SetSp
 from gradysim.simulator.extension.camera import CameraHardware, CameraConfiguration
 from gradysim.protocol.messages.communication import SendMessageCommand, BroadcastMessageCommand
 
-
+class MovementDirection(enum.Enum):
+    X = 0
+    Z = 1
 
 @dataclass
 class Threat:
@@ -334,9 +336,10 @@ class Drone(IProtocol):
             self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
         
         if timer == "battery":
+            movement_direction = MovementDirection.X.value
             battery_timer = 1.0
             try:
-                battery_status = self.energy.manage_battery_during_fly(battery_timer, self.speed_command)
+                battery_status = self.energy.manage_battery_during_fly(battery_timer, 0.0, movement_direction)
                 self._log.info(f"At time {self.provider.current_time()} the battery status is: {battery_status}")
             except BatteryError:
                 self._log.error(f"Drone {self.provider.get_id()} has no battery.")

@@ -18,7 +18,11 @@ class EnergyComsuption:
                  battery_charging_constant: float = 0.01,
                  battery_capacity: float = 5000.0,  ## mAh
                  battery_voltage: float=14.0,  ## Volts)
-                 battery_initial_status: float = 1.0
+                 battery_initial_status: float = 1.0,
+                 X_ref_area: float = 0.015, ## m^2
+                 Z_ref_area: float = 0.0335, ## m^2
+                 X_drag_coef: float = 0.8,
+                 Z_drag_coef: float = 0.8,
                 ):
         self.mass = mass
         self.payload = payload
@@ -35,28 +39,84 @@ class EnergyComsuption:
         self.NUMBER_ROTORS = 4
         self.disk_area = self.NUMBER_ROTORS*np.pi*(self.RADIUS_PROP**2)
 
+        self.X_ref_area = X_ref_area
+        self.Z_ref_area = Z_ref_area
+        self.X_drag_coef = X_drag_coef
+        self.Z_drag_coef = Z_drag_coef
+
         self.battery_total_energy = battery_capacity*self.BATTERY_VOLTAGE*3.6 ## the energy in joules
         self.battery_current_energy = battery_initial_status*self.battery_total_energy
         self.battery_status = battery_initial_status
 
+    def air_resistence(self, movement_direction, drone_speed):
+        if movement_direction == MovementDirection.X.value:
+            area = self.X_ref_area
+            coef = self.X_drag_coef
+        elif movement_direction == MovementDirection.Z.value:
+            area = self.Z_ref_area
+            coef = self.Z_drag_coef
+        else: 
+            return ValueError
+        
+        drag = 0.5*self.AIR_DENSITY*coef*area*drone_speed**2
+        print(f"Drag: {drag}")
+        
+        return drag
 
-    def get_hover_power(self):
-
+    def get_inclination_angle(self, drone_speed, movement_direction):
         total_mass = self.mass + self.payload
-        thrust_needed = total_mass * self.GRAVITY
 
-        ideal_hover_power = (thrust_needed**1.5) / np.sqrt(2 * self.AIR_DENSITY * self.disk_area)
+        if movement_direction == MovementDirection.X.value:
+            drag = self.air_resistence(movement_direction, drone_speed)
+            theta = np.arctan(drag/(total_mass*self.GRAVITY))
+            print(f"Theta = {theta}")
+        elif movement_direction == MovementDirection.Z.value:
+            theta = 0               
+        else:
+            return ValueError
+        return theta
+
+    def get_trust_force(self, theta, drone_speed, movement_direction):
+        total_mass = self.mass + self.payload
+        
+        if movement_direction == MovementDirection.X.value:
+            hover_trust = (total_mass*self.GRAVITY)/(np.cos(theta))
+            
+            drag = self.air_resistence(movement_direction, drone_speed)
+
+            total_trust = hover_trust + drag
+
+        elif movement_direction == MovementDirection.Z.value:
+            drag = self.air_resistence(movement_direction, drone_speed)
+            
+            total_trust = total_mass*self.GRAVITY + drag
+        else: 
+            return ValueError
+
+        return total_trust 
+
+
+    def get_total_power(self, trust, drone_speed):
+        total_mass = self.mass + self.payload
+ 
+        ideal_hover_power = (trust**1.5) / np.sqrt(2 * self.AIR_DENSITY * self.disk_area)
+
+        parasite_power = trust*drone_speed
 
         # This values is changed to match the information presented in the holybro site:
         ### Flight time: ~18 minutes hover with no additional payload. Tested with 5000mAh Battery.
-        return ideal_hover_power / 0.6
+        return (ideal_hover_power + parasite_power) / 0.6
 
     
-    def get_power_consumed(self, drone_speed):
+    def get_power_consumed(self, drone_speed, movement_direction):
         total_mass = self.mass + self.payload
-        hover_power = self.get_hover_power()
+        
+        theta = self.get_inclination_angle(drone_speed, movement_direction)
+        trust = self.get_trust_force(theta, drone_speed, movement_direction)        
+        total_power = self.get_total_power(trust, drone_speed)
+        
         #print(f"THe hover power is: {hover_power}")
-        return total_mass*self.GRAVITY*drone_speed/(self.POWER_EFFICIENCY*self.RATIO) + self.external_power + hover_power
+        return self.external_power + total_power
 
    
     def change_external_power(self, new_external_charge):
@@ -91,8 +151,8 @@ class EnergyComsuption:
         self.battery_status = (self.battery_current_energy/self.battery_total_energy)
     
     
-    def manage_battery_during_fly(self, duration, drone_speed):
-        power = self.get_power_consumed(drone_speed)
+    def manage_battery_during_fly(self, duration, drone_speed, movement_direction):
+        power = self.get_power_consumed(drone_speed, movement_direction)
 
         energy_consumed = self.get_energy_consumed(power, duration)
 

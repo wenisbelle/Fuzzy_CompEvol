@@ -333,13 +333,14 @@ class Drone(IProtocol):
             self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
             
         if timer == "battery":
+            movement_direction = MovementDirection.X.value
             battery_timer = 1.0
             try:
-                self.battery_status = self.energy.manage_battery_during_fly(battery_timer, self.speed_command)
-                #self._log.info(f"At time {self.provider.current_time()} the battery status is: {self.battery_status}")
+                battery_status = self.energy.manage_battery_during_fly(battery_timer, 0.0, movement_direction)
+                self._log.info(f"At time {self.provider.current_time()} the battery status is: {battery_status}")
             except BatteryError:
                 self._log.error(f"Drone {self.provider.get_id()} has no battery.")
-                self.battery_status = 0.0
+                self.energy.battery_status = 0.0
 
                 ######################################
                 #Making the drone land
