@@ -33,7 +33,7 @@ class EnergyComsuption:
         self.BATTERY_CHARGING_CONSTANT = battery_charging_constant
         self.BATTERY_VOLTAGE = battery_voltage
         
-        self.GRAVITY = 9.18
+        self.GRAVITY = 9.81
         self.AIR_DENSITY = 1.225
         self.RADIUS_PROP = 0.127
         self.NUMBER_ROTORS = 4
@@ -59,7 +59,7 @@ class EnergyComsuption:
             return ValueError
         
         drag = 0.5*self.AIR_DENSITY*coef*area*drone_speed**2
-        print(f"Drag: {drag}")
+        #print(f"Drag: {drag}")
         
         return drag
 
@@ -69,7 +69,7 @@ class EnergyComsuption:
         if movement_direction == MovementDirection.X.value:
             drag = self.air_resistence(movement_direction, drone_speed)
             theta = np.arctan(drag/(total_mass*self.GRAVITY))
-            print(f"Theta = {theta}")
+            #print(f"Theta = {theta}")
         elif movement_direction == MovementDirection.Z.value:
             theta = 0               
         else:
@@ -82,9 +82,7 @@ class EnergyComsuption:
         if movement_direction == MovementDirection.X.value:
             hover_trust = (total_mass*self.GRAVITY)/(np.cos(theta))
             
-            drag = self.air_resistence(movement_direction, drone_speed)
-
-            total_trust = hover_trust + drag
+            total_trust = hover_trust
 
         elif movement_direction == MovementDirection.Z.value:
             drag = self.air_resistence(movement_direction, drone_speed)
@@ -96,16 +94,30 @@ class EnergyComsuption:
         return total_trust 
 
 
-    def get_total_power(self, trust, drone_speed):
+    def get_total_power(self, trust, drone_speed, movement_direction):
+        # Reference:
+        # Practical Endurance Estimation for Minimizing
+        # Energy Consumption of Multirotor Unmanned
+        # Aerial Vehicles
         total_mass = self.mass + self.payload
  
-        ideal_hover_power = (trust**1.5) / np.sqrt(2 * self.AIR_DENSITY * self.disk_area)
+        # 1. Induced Velocity at Hover
+        # Derived from T = 2 * rho * A * v_h^2
+        v_h = np.sqrt(trust / (2 * self.AIR_DENSITY * self.disk_area))
 
-        parasite_power = trust*drone_speed
+        # 2. Induced Velocity in Forward Flight (Glauert approximation)
+        v_i = trust / (2 * self.AIR_DENSITY * self.disk_area * np.sqrt(drone_speed**2 + v_h**2))
+
+        # 3. Induced Power (
+        induced_power = trust * v_i
+
+        # 4. Parasite Power
+        drag = self.air_resistence(movement_direction, drone_speed)
+        parasite_power = drag * drone_speed
 
         # This values is changed to match the information presented in the holybro site:
         ### Flight time: ~18 minutes hover with no additional payload. Tested with 5000mAh Battery.
-        return (ideal_hover_power + parasite_power) / 0.6
+        return (induced_power + parasite_power) / 0.6
 
     
     def get_power_consumed(self, drone_speed, movement_direction):
@@ -113,7 +125,7 @@ class EnergyComsuption:
         
         theta = self.get_inclination_angle(drone_speed, movement_direction)
         trust = self.get_trust_force(theta, drone_speed, movement_direction)        
-        total_power = self.get_total_power(trust, drone_speed)
+        total_power = self.get_total_power(trust, drone_speed, movement_direction)
         
         #print(f"THe hover power is: {hover_power}")
         return self.external_power + total_power
@@ -139,7 +151,7 @@ class EnergyComsuption:
     def charge_battery(self, delta_time):
         self.battery_status += self.BATTERY_CHARGING_CONSTANT*delta_time
 
-        self.battery_status = max(1.0, self.battery_status)
+        self.battery_status = min(1.0, self.battery_status)
     
     def get_current_battery_energy(self):
         return self.battery_current_energy

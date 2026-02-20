@@ -18,12 +18,12 @@ import numpy as np
 def create_and_run_simulation(individual):
     ##### Creating the fuzzy lookup tables
     fuzzy_lookup = FuzzyLookupTable(fuzzy_parameters= np.array(individual)) 
-    lookup_one_cell, lookup_two_cells = fuzzy_lookup.get_interpolators()
+    lookup_one_cell, lookup_two_cells, lookup_velocity_command = fuzzy_lookup.get_interpolators()
     
     # Configuring simulation
     config = SimulationConfiguration(
         duration=600, 
-        real_time=False,
+        real_time=True,
     )
     builder = SimulationBuilder(config)
 
@@ -44,7 +44,7 @@ def create_and_run_simulation(individual):
         number_of_drones=3,
         map_width=MAP_WIDTH,
         map_height=MAP_HEIGHT,
-        fuzzy_tables=[lookup_one_cell, lookup_two_cells],
+        fuzzy_tables=[lookup_one_cell, lookup_two_cells, lookup_velocity_command],
         results_aggregator=results_aggregator
     )
 
@@ -75,13 +75,12 @@ def create_and_run_simulation(individual):
 def main():
     logging.basicConfig(
         level=logging.INFO,  
-        filename=f'energy_system/logs/simulation.log', 
+        filename=f'speed_system/logs/simulation.log', 
         filemode='w', 
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    individual = [np.float64(0.3331359065404181), np.float64(0.46325323358712556), np.float64(0.21543197321589413), np.float64(50.82185770583339), np.float64(43.18586484268149), np.float64(37.986426833679715), np.float64(0.34834455384986424), np.float64(0.32526086711763424), np.float64(0.11454446738680132), np.float64(1.1324257280166667), np.float64(0.6384014314196633), np.float64(0.16296143681340658), np.float64(27.08046544519423), np.float64(32.95365510365726), np.float64(17.93905041878592), np.float64(0.22152091377499933), np.float64(0.3121848730886927), np.float64(0.15003336657283353)]
-    
+    individual =  [np.float64(0.1440649407269286), np.float64(0.21641969548096338), np.float64(0.29890579865235795), np.float64(26.105537532686153), np.float64(38.18495818334767), np.float64(34.01857399947521), np.float64(0.3002687008423602), np.float64(0.3107887710774788), np.float64(0.15979961222311245), np.float64(0.17241184562715162), np.float64(0.5078836540840643), np.float64(0.6585830974598943), np.float64(21.8317388375936), np.float64(42.64213912794975), np.float64(18.05825870767923), np.float64(0.2927583897307974), np.float64(0.37619404958239544), np.float64(0.23413715772407398), np.int64(0), np.int64(2), np.int64(2), np.int64(1), np.int64(4), np.int64(4), np.int64(3), np.int64(4), 0, np.int64(0), 2, np.int64(0), np.int64(3), np.int64(2), np.int64(3), np.int64(0), np.int64(2), np.int64(4), np.float64(0.1188375049502068), np.float64(0.23269834993543184), np.float64(0.10976761482804337), np.float64(3.5409660545177104), np.float64(13.285387501650238), np.float64(30.417628574907088), np.float64(0.1816046471117072), np.float64(0.3163560819216303), np.float64(0.2020002788302523), np.int64(0), np.int64(0), 4, np.int64(3), 0, np.int64(2), 1, np.int64(4), np.int64(4)]
     for _ in range(1):
         create_and_run_simulation(individual)
     

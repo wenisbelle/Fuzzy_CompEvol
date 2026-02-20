@@ -13,13 +13,18 @@ class FuzzyEvaluator:
                  camera_angle:float,
                  fuzzy_tables: List[RegularGridInterpolator],
                  distance_between_cells: int =10,
-                 speed_offset: float=10.0
+                 speed_offset: float=10.0,
                  speed_multiplier: float=20.0):
 
         self.map_width = map_width
         self.map_height = map_height
         self.camera_angle = camera_angle
-        self.distance_between_cells = distance_between_cells 
+        self.distance_between_cells = distance_between_cells
+
+        # Verify all fuzzy tables are not None
+        if any(t is None for t in fuzzy_tables):
+            raise ValueError("All fuzzy tables must be properly initialized")
+
         self.interp_one_cell = fuzzy_tables[0]
         self.interp_two_cells = fuzzy_tables[1] 
         self.interp_velocity_command = fuzzy_tables[2]

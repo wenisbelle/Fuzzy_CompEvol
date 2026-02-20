@@ -250,3 +250,5 @@ class FuzzyLookupTable:
                     # If inputs fall into a gap where no rules fire, 
                     # or the area is zero, default the priority to 0.
                     output_surface[i, j] = 0.0
+
+        return RegularGridInterpolator((priority_range, energy_range), output_surface, bounds_error=False, fill_value=None)

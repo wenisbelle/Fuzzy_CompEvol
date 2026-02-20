@@ -12,14 +12,24 @@ class FuzzyEvaluator:
                  map_height: int,
                  camera_angle:float,
                  fuzzy_tables: List[RegularGridInterpolator],
-                 distance_between_cells: int =10):
+                 distance_between_cells: int =10,
+                 speed_offset: float=10.0,
+                 speed_multiplier: float=20.0):
 
         self.map_width = map_width
         self.map_height = map_height
         self.camera_angle = camera_angle
-        self.distance_between_cells = distance_between_cells 
+        self.distance_between_cells = distance_between_cells
+
+        # Verify all fuzzy tables are not None
+        if any(t is None for t in fuzzy_tables):
+            raise ValueError("All fuzzy tables must be properly initialized")
+
         self.interp_one_cell = fuzzy_tables[0]
-        self.interp_two_cells = fuzzy_tables[1]         
+        self.interp_two_cells = fuzzy_tables[1] 
+        self.interp_velocity_command = fuzzy_tables[2]
+        self.SPEED_OFFSET = speed_offset
+        self.SPEED_MULTIPLIER = speed_multiplier        
 
     def get_cells_visited_in_trajectory(self, drone_altitude: float, initial_cell: Tuple[int, int], final_cell: Tuple[int, int]) -> list:
         
@@ -163,8 +173,16 @@ class FuzzyEvaluator:
         best_2 = (fitness_scores[2])
 
         return [[best_1, best_2], fitness_scores[0]]
+
+    def get_velocity_command(self, cell_priority_value: float, energy_status: float):
+        input_array = np.array([[cell_priority_value, energy_status]])
+        fuzzy_velocity = self.interp_velocity_command(input_array)
+
+        output_velocity = self.SPEED_OFFSET + fuzzy_velocity[0]*self.SPEED_MULTIPLIER
+
+        return output_velocity
     
-##### For sanaty checks purposes only #####
+##### For sanity checks purposes only #####
 """
 def main():
     sample_fuzzy_parameters_fixed = np.array([

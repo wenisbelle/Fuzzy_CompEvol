@@ -51,6 +51,11 @@ class SendGoToMessage(TypedDict):
     message_type: int 
     goto: list
     sender: int
+    priority_value: float
+
+class MovementDirection(enum.Enum):
+    X = 0
+    Z = 1
 
 class PointOfInterest(IProtocol):
 
@@ -116,7 +121,7 @@ class Drone(IProtocol):
 
         #### Total distance traveled ####
         self.total_distance_traveled = 0.0
-        self.last_drone_position = [0.0, 0.0, 0.0]          
+        self.last_drone_position = [0.0, 0.0, 0.0]        
         
         ##### Camera Configuration #####
         configuration = CameraConfiguration(20, 30, 180, 0)
@@ -135,11 +140,11 @@ class Drone(IProtocol):
         self.provider.send_mobility_command(command)
 
         self.speed_command = 10.0
-        self.speed = SetSpeedMobilityCommand(self.speed_command)
-        self.provider.send_mobility_command(self.speed)
+        speed = SetSpeedMobilityCommand(self.speed_command)
+        self.provider.send_mobility_command(speed)
         
         ##### Starting the callbacks #####
-        self.provider.schedule_timer("mobility",self.provider.current_time() + 1)
+        self.provider.schedule_timer("mobility",self.provider.current_time() + 5)
         self.provider.schedule_timer("camera",self.provider.current_time() + 1)
         self.provider.schedule_timer("heartbeat",self.provider.current_time() + 1)
         self.provider.schedule_timer("vanishing_map", self.provider.current_time() + self.VANISHING_UPDATE_TIME)
@@ -151,7 +156,7 @@ class Drone(IProtocol):
 
         #### Energy Parameters #####
         self.energy = EnergyComsuption()
-        self._log.info(f"Current battery status: {self.energy.get_battery_status()}")
+        self.battery_status = self.energy.get_battery_status() 
         self.provider.schedule_timer("battery", self.provider.current_time() + 1)
 
 
@@ -178,7 +183,7 @@ class Drone(IProtocol):
     ##### Map updating ##### 
     def vanishing_map_routine(self):
         self.map[:, :, 0] = self.map[:, :, 0] + self.UNCERTAINTY_RATE
-
+        
         ##### Checking if the cell was visited #####
         ##### Importante parameter. If there are unviseted cells, there will be penalizations in the algorithm #####
         self.is_cell_visited[self.map[:, :, 1] > 0.0] = 1
@@ -200,11 +205,20 @@ class Drone(IProtocol):
 
         target_coords, value = self.fitness.choose_one_cell(cells_fitness_scores)
         target_row, target_col = target_coords
+        
+        #### Setting the speed
+        self._log.info(f"Value: {value}")
+        self.speed_command = self.fitness.get_velocity_command(value, self.battery_status)
+        speed = SetSpeedMobilityCommand(self.speed_command)
+        self.provider.send_mobility_command(speed)
+        self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} updated the velocity to: {self.speed_command}")
+        
+        #### Setting the position to go to
         #print(f"Drone {self.provider.get_id()} going to cell ({target_row}, {target_col}). Fitness value: {value}")
         x_goto = target_row * 10 - map_center_offset
         y_goto = target_col * 10 - map_center_offset            
         self.goto_command = np.array([x_goto, y_goto, 10])        
-  
+
         command = GotoCoordsMobilityCommand(*self.goto_command)      
         self.provider.send_mobility_command(command)
 
@@ -226,16 +240,31 @@ class Drone(IProtocol):
         target_coords, value = self.fitness.choose_two_cells(cells_fitness_scores)
         target_row_1, target_col_1 = target_coords[0]
         target_row_2, target_col_2 = target_coords[1]
+        
+        self._log.info(f"Value: {value}")
+        #### Setting the speed
+        self.speed_command = self.fitness.get_velocity_command(value, self.battery_status)
+        self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} updated the velocity to: {self.speed_command}")
+        
+        #### Setting position to go to
         #print(f"Drone {self.provider.get_id()} going to cell ({target_row_1}, {target_col_1}) and sending drone to cell ({target_row_2}, {target_col_2}). Fitness value: {value}")
         x_goto = target_row_1 * 10 - map_center_offset
         y_goto = target_col_1 * 10 - map_center_offset            
         self.goto_command = np.array([x_goto, y_goto, 10])
 
+        ### Setting the speed
+        speed = SetSpeedMobilityCommand(self.speed_command)
+        self.provider.send_mobility_command(speed)
+        ### Going to the next point            
+        command = GotoCoordsMobilityCommand(*self.goto_command)
+        self.provider.send_mobility_command(command)
+
+        ### Returning the values for the second drone
         x_send_command = target_row_2 * 10 - map_center_offset
         y_send_command = target_col_2 * 10 - map_center_offset
         send_command = np.array([x_send_command, y_send_command, 10])
 
-        return send_command    
+        return send_command, value    
 
     
     def send_heartbeat(self):
@@ -248,11 +277,12 @@ class Drone(IProtocol):
         command = BroadcastMessageCommand(json.dumps(message))
         self.provider.send_communication_command(command)
 
-    def send_goto_command(self, send_command: np.array, destination_id: int):
+    def send_goto_command(self, send_command: np.array, destination_id: int, cell_priority: float):
         message: SendGoToMessage = {
             'message_type': MessageType.SHARE_GOTO_POSITION_MESSAGE.value,
             'goto': send_command.tolist(),
-            'sender': self.provider.get_id()
+            'sender': self.provider.get_id(),
+            'priority_value': cell_priority
         }
         command = SendMessageCommand(json.dumps(message), destination_id)
         self.provider.send_communication_command(command)
@@ -295,113 +325,121 @@ class Drone(IProtocol):
         return updated_map
         
     def handle_timer(self, timer: str) -> None:
-        if timer == "camera":
-            self.camera_routine()
-            self.provider.schedule_timer("camera", self.provider.current_time() + 0.5)
         
-        if timer == "mobility": 
-            if self.drone_position is not None:
-                current_pos_array = np.array(self.drone_position)    
-            
-            if self.status == DroneStatus.MAPPING:
+        if timer == "vanishing_map":
+                self.vanishing_map_routine()
+                
+                # Keep updating the uncertainty if the drone ran out of battery
+                if self.status == DroneStatus.DEAD:
+                    self.total_uncertainty = self.map[:,:,0].sum()
+                    self.accomulated_uncertainty += self.total_uncertainty
+                    self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
+                    self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")
+                self.provider.schedule_timer("vanishing_map", self.provider.current_time() + self.VANISHING_UPDATE_TIME)
+
+        if self.status == DroneStatus.MAPPING:
+            if timer == "camera":
+                self.camera_routine()
+                self.provider.schedule_timer("camera", self.provider.current_time() + 0.5)
+
+            if timer == "mobility": 
+                if self.drone_position is not None:
+                    current_pos_array = np.array(self.drone_position)    
+
                 if np.linalg.norm(current_pos_array - self.goto_command) < 1:
                     self.internal_mobility_command()
-            elif self.status == DroneStatus.DEAD:
-                pass
 
-            self.provider.schedule_timer(
-                "mobility",
-                self.provider.current_time() + 1
-            )
+                self.provider.schedule_timer(
+                    "mobility",
+                    self.provider.current_time() + 5
+                )
 
-        if timer == "heartbeat":
-            if self.status == DroneStatus.MAPPING:
+            if timer == "heartbeat":
                 self.send_heartbeat()
                 self.provider.schedule_timer("heartbeat", self.provider.current_time() + 1)
 
-        if timer == "vanishing_map":
-            self.vanishing_map_routine()
-            self.provider.schedule_timer("vanishing_map", self.provider.current_time() + self.VANISHING_UPDATE_TIME)
+            if timer == "traveled_distance":
+                if self.drone_position is not None:
+                    current_pos_array = np.array(self.drone_position)    
+                    distance_increment = np.linalg.norm(current_pos_array - self.last_drone_position)
+                    self.total_distance_traveled += distance_increment
+                    self.last_drone_position = current_pos_array
+                    #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} has traveled a total distance of {self.total_distance_traveled}")
 
-        if timer == "traveled_distance":
-            if self.drone_position is not None:
-                current_pos_array = np.array(self.drone_position)    
-                distance_increment = np.linalg.norm(current_pos_array - self.last_drone_position)
-                self.total_distance_traveled += distance_increment
-                self.last_drone_position = current_pos_array
-                #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} has traveled a total distance of {self.total_distance_traveled}")
+                self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
 
-            self.provider.schedule_timer("traveled_distance", self.provider.current_time() + 2)
-        
-        if timer == "battery":
-            movement_direction = MovementDirection.X.value
-            battery_timer = 1.0
-            try:
-                battery_status = self.energy.manage_battery_during_fly(battery_timer, 0.0, movement_direction)
-                self._log.info(f"At time {self.provider.current_time()} the battery status is: {battery_status}")
-            except BatteryError:
-                self._log.error(f"Drone {self.provider.get_id()} has no battery.")
-                self.energy.battery_status = 0.0
+            if timer == "battery":
+                movement_direction = MovementDirection.X.value
+                battery_timer = 1.0
+                try:
+                    self.battery_status = self.energy.manage_battery_during_fly(battery_timer, self.speed_command, movement_direction)
+                    self._log.info(f"At time {self.provider.current_time()} the battery status is: {self.battery_status}")
+                except BatteryError:
+                    self._log.error(f"Drone {self.provider.get_id()} has no battery.")
+                    self.energy.battery_status = 0.0
 
-                ######################################
-                #Making the drone land
-                self.goto_command = np.array(self.drone_position)
-                ### Altitude to zero
-                self.goto_command[2] = 0.0 
-                command = GotoCoordsMobilityCommand(*self.goto_command)      
-                self.provider.send_mobility_command(command)
-
-                self.status = DroneStatus.DEAD
-                ### The drone will stop moving and will have a larger penalty
-    
-            self.provider.schedule_timer("battery", self.provider.current_time() + battery_timer)
-
-    def handle_packet(self, message: str) -> None:
-        data: dict = json.loads(message)
-
-        if 'message_type' not in data:
-           self._log.warning(f"Received message without a message_type: {data}")
-           return
-        
-        if self.status == DroneStatus.DEAD:
-            ### Do nothing if the drone has no battery
-            return
-
-        msg_type = data['message_type']
-
-        if msg_type == MessageType.HEARTBEAT_MESSAGE.value:
-
-            self.received_heartbeat(data)
-
-        elif msg_type == MessageType.SHARE_MAP_MESSAGE.value:
-            self.map = self.updated_map(data)
-
-            if self.provider.current_time() - self.last_drone_interaction_time[data['sender']]  > self.TIMEOUT_TO_UPDATE_DESTINATION: # the drone id starts at 0
-                if self.provider.get_id() >= data['sender']:
-                    ### Update the number of interactions ###
-                    Drone.Number_of_Encounters += 1
-
-                    #self._log.info(f"Received map from drone {data['sender']}. My position: {self.drone_position}, other drone position: {another_drone_position}")
-                    
-                    #self._log.info(f"Node {self.provider.get_id()} is calculating the new destinations")
-                    send_command = self.external_mobility_command(data['drone_position'])
-
-                    #self._log.info(f"After updating map going to {self.goto_command} and sending {send_command} to drone {data['sender']}")
-                    command = GotoCoordsMobilityCommand(*self.goto_command)
+                    ######################################
+                    #Making the drone land
+                    self.goto_command = np.array(self.drone_position)
+                    ### Altitude to zero
+                    self.goto_command[2] = 0.0 
+                    command = GotoCoordsMobilityCommand(*self.goto_command)      
                     self.provider.send_mobility_command(command)
 
-                    self.send_goto_command(send_command, data['sender'])
-                self.last_drone_interaction_time[data['sender']] = self.provider.current_time() # the drone id starts at 0
-        
-        elif msg_type == MessageType.SHARE_GOTO_POSITION_MESSAGE.value:
-            goto_msg: SendGoToMessage = data
-            #self._log.info(f"Received goto command from {goto_msg['sender']}. Going to {goto_msg['goto']}")
-            self.goto_command = goto_msg['goto']
-            command = GotoCoordsMobilityCommand(*self.goto_command)      
-            self.provider.send_mobility_command(command)       
-        
-        else:
-            self._log.warning(f"Received message with unknown type: {msg_type}")
+                    self.status = DroneStatus.DEAD
+                    ### The drone will stop moving and will have a larger penalty
+
+                self.provider.schedule_timer("battery", self.provider.current_time() + battery_timer)
+                
+
+
+    def handle_packet(self, message: str) -> None:
+        if self.status == DroneStatus.MAPPING:
+            data: dict = json.loads(message)
+
+            if 'message_type' not in data:
+               self._log.warning(f"Received message without a message_type: {data}")
+               return
+
+            msg_type = data['message_type']
+
+            if msg_type == MessageType.HEARTBEAT_MESSAGE.value:
+
+                self.received_heartbeat(data)
+
+            elif msg_type == MessageType.SHARE_MAP_MESSAGE.value:
+                self.map = self.updated_map(data)
+
+                if self.provider.current_time() - self.last_drone_interaction_time[data['sender']]  > self.TIMEOUT_TO_UPDATE_DESTINATION: # the drone id starts at 0
+                    if self.provider.get_id() >= data['sender']:
+                        ### Update the number of interactions ###
+                        Drone.Number_of_Encounters += 1
+
+                        #self._log.info(f"Received map from drone {data['sender']}. My position: {self.drone_position}, other drone position: {another_drone_position}")
+
+                        #self._log.info(f"Node {self.provider.get_id()} is calculating the new destinations")
+                        send_command, cell_priority = self.external_mobility_command(data['drone_position'])
+
+                        #self._log.info(f"After updating map going to {self.goto_command} and sending {send_command} to drone {data['sender']}")
+                        self.send_goto_command(send_command, data['sender'], cell_priority)
+                    self.last_drone_interaction_time[data['sender']] = self.provider.current_time() # the drone id starts at 0
+
+            elif msg_type == MessageType.SHARE_GOTO_POSITION_MESSAGE.value:
+                goto_msg: SendGoToMessage = data
+                #self._log.info(f"Received goto command from {goto_msg['sender']}. Going to {goto_msg['goto']}")
+
+                #### Setting the speed
+                self.speed_command = self.fitness.get_velocity_command(data['priority_value'], self.battery_status)
+                speed = SetSpeedMobilityCommand(self.speed_command)
+                self.provider.send_mobility_command(speed)
+                self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} updated the velocity to: {self.speed_command}")
+
+                self.goto_command = goto_msg['goto']
+                command = GotoCoordsMobilityCommand(*self.goto_command)      
+                self.provider.send_mobility_command(command)       
+
+            else:
+                self._log.warning(f"Received message with unknown type: {msg_type}")
 
     def handle_telemetry(self, telemetry: Telemetry) -> None:
         self.drone_position = telemetry.current_position
@@ -412,18 +450,18 @@ class Drone(IProtocol):
         total_cells = self.MAP_WIDTH * self.MAP_HEIGHT
         visited_cells = np.sum(self.is_cell_visited)
         unvisited_cells = total_cells - visited_cells
-        print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
-        self._log.info(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters}")
-        print(f"Drone {self.provider.get_id()} total distance traveled: {self.total_distance_traveled}")
-        print(f"Drone {self.provider.get_id()} accomulated uncertainty: {self.accomulated_uncertainty}")
-
+        #print(f"Drone {self.provider.get_id()} final uncertainty: {final_uncertainty}, unvisited cells: {unvisited_cells}")
+        #self._log.info(f"Drone {self.provider.get_id()} number of encounters: {Drone.Number_of_Encounters}")
+        print(f"Final status: {self.status.value}")
         
         if self.results_aggregator is not None:
             self.results_aggregator[self.provider.get_id()] = {
                 "final_uncertainty": float(final_uncertainty),
                 "unvisited_cells": float(unvisited_cells),
                 "accomulated_uncertainty": float(self.accomulated_uncertainty),
-                "total_distance_traveled": float(self.total_distance_traveled)
+                "total_distance_traveled": float(self.total_distance_traveled),
+                "final_battery_status": float(self.battery_status),
+                "drone_status": int(self.status.value)
             }
 
 

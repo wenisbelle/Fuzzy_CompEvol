@@ -29,7 +29,7 @@ def create_and_run_simulation(individual):
     
     ##### Configuring the simulation
     config = SimulationConfiguration(
-        duration=500, 
+        duration=600, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
@@ -84,13 +84,25 @@ def create_and_run_simulation(individual):
     final_battery_status_drone1 = results_aggregator[0]['final_battery_status']
     final_battery_status_drone2 = results_aggregator[1]['final_battery_status']
     final_battery_status_drone3 = results_aggregator[2]['final_battery_status']
+    
     medium_battery_final_status = (final_battery_status_drone1+final_battery_status_drone2+final_battery_status_drone3)/3
+    medium_battery_consumption = 1.0 - medium_battery_final_status
 
-    total_cost = medium_uncertainty*0.1 + 10000*medium_battery_final_status
+    total_cost = medium_uncertainty*0.01 + 1000*medium_battery_consumption
+
+    penalty = 0
+    for drone_data in results_aggregator.values():
+        if drone_data['drone_status'] == 3:
+            penalty = 10000
+            print(f"Drone ran out of battery")
+            break
+    
+    total_cost += penalty
 
     print(f"Individual: {individual}")
     print(f"Variable to be minimized: {total_cost}")
     print(f"Avarege battery final status: {medium_battery_final_status}")
+    print(f"Medium uncertainty: {medium_uncertainty}")
     #print(f"Total number of simulations: {how_many_simulations}")
     return total_cost
 
@@ -108,6 +120,10 @@ def is_feasible(individual):
     sum_of_priorities_interval = individual[9:12]
     distance_between_targets_interval = individual[12:15]
     two_cells_priority_interval = individual[15:18]
+
+    velocity_system_priorities_interval = individual[36:39]
+    velocity_system_energy_status_interval = individual[39:42]
+    velocity_system_speed_command_interval = individual[42:45]
 
     if uncertainty_interval[0] < 0 or uncertainty_interval[1] < 0 or uncertainty_interval[2] < 0:
         return False
@@ -137,7 +153,22 @@ def is_feasible(individual):
     if two_cells_priority_interval[0] < 0 or two_cells_priority_interval[1] < 0 or two_cells_priority_interval[2] < 0:
         return False
     if two_cells_priority_interval[0] + two_cells_priority_interval[1] + two_cells_priority_interval[2] > 1:
-        return False    
+        return False
+
+    if velocity_system_priorities_interval[0] < 0 or velocity_system_priorities_interval[1] < 0 or velocity_system_priorities_interval[2] < 0:
+        return False
+    if velocity_system_priorities_interval[0] + velocity_system_priorities_interval[1] + velocity_system_priorities_interval[2] > 1:
+        return False
+
+    if velocity_system_energy_status_interval[0] < 0 or velocity_system_energy_status_interval[1] < 0 or velocity_system_energy_status_interval[2] < 0:
+        return False
+    if velocity_system_energy_status_interval[0] + velocity_system_energy_status_interval[1] + velocity_system_energy_status_interval[2] > 100:
+        return False
+
+    if velocity_system_speed_command_interval[0] < 0 or velocity_system_speed_command_interval[1] < 0 or velocity_system_speed_command_interval[2] < 0:
+        return False
+    if velocity_system_speed_command_interval[0] + velocity_system_speed_command_interval[1] + velocity_system_speed_command_interval[2] > 1:
+        return False   
 
     return True
 
@@ -149,15 +180,22 @@ def distance(individual):
     distance_between_targets_interval = individual[12:15]
     two_cells_priority_interval = individual[15:18]
 
+    velocity_system_priorities_interval = individual[36:39]
+    velocity_system_energy_status_interval = individual[39:42]
+    velocity_system_speed_command_interval = individual[42:45]
+
     dist1 = 0
     dist2 = 0
     dist3 = 0
     dist4 = 0
     dist5 = 0
     dist6 = 0
+    dist7 = 0
+    dist8 = 0
+    dist9 = 0
 
 
-    for i in range(2):
+    for i in range(3):
         if uncertainty_interval[i] < 0:
             dist1 += abs(uncertainty_interval[i])
         if distance_interval[i] < 0:
@@ -170,6 +208,12 @@ def distance(individual):
             dist5 += abs(distance_between_targets_interval[i])
         if two_cells_priority_interval[i] < 0:
             dist6 += abs(two_cells_priority_interval[i])
+        if velocity_system_priorities_interval[i] < 0:
+            dist7 += abs(velocity_system_priorities_interval[i])
+        if velocity_system_energy_status_interval[i] < 0:
+            dist8 += abs(velocity_system_energy_status_interval[i])
+        if velocity_system_speed_command_interval[i] < 0:
+            dist9 += abs(velocity_system_speed_command_interval[i])
     
     if uncertainty_interval[0] + uncertainty_interval[1] + uncertainty_interval[2] > 2:
         dist1 += (uncertainty_interval[0] + uncertainty_interval[1] + uncertainty_interval[2]) - 2
@@ -189,7 +233,16 @@ def distance(individual):
     if two_cells_priority_interval[0] + two_cells_priority_interval[1] + two_cells_priority_interval[2] > 1:
         dist6 += (two_cells_priority_interval[0] + two_cells_priority_interval[1] + two_cells_priority_interval[2]) - 1
 
-    return 1000*(dist1/2 + dist2/150 + dist3/1 + dist4/2 + dist5/150 + dist6/1)
+    if velocity_system_priorities_interval[0] + velocity_system_priorities_interval[1] + velocity_system_priorities_interval[2] > 2:
+        dist7 += (velocity_system_priorities_interval[0] + velocity_system_priorities_interval[1] + velocity_system_priorities_interval[2]) - 2
+
+    if velocity_system_energy_status_interval[0] + velocity_system_energy_status_interval[1] + velocity_system_energy_status_interval[2] > 100:
+        dist8 += (velocity_system_energy_status_interval[0] + velocity_system_energy_status_interval[1] + velocity_system_energy_status_interval[2]) - 100
+
+    if velocity_system_speed_command_interval[0] + velocity_system_speed_command_interval[1] + velocity_system_speed_command_interval[2] > 1:
+        dist9 += (velocity_system_speed_command_interval[0] + velocity_system_speed_command_interval[1] + velocity_system_speed_command_interval[2]) - 1
+    
+    return 1000*(dist1/2 + dist2/150 + dist3/1 + dist4/2 + dist5/150 + dist6/1 + dist7/2 + dist8/100 + dist9/1)
 
 def init_individual(icls, generators):
     """
@@ -234,20 +287,60 @@ def random_two_cells_priority_interval():
     return(np.random.normal(loc=hand_tunned, scale=sigma))
 
 def random_rules(size=18):
-    return np.random.randint(low=0, high=5, size=size) 
+    return np.random.randint(low=0, high=5, size=size)
+
+def random_velocity_priority_interval():
+    hand_tunned = [0.2, 0.2, 0.2]
+    sigma = 0.10
+    return(np.random.normal(loc=hand_tunned, scale=sigma))
+
+def random_battery_interval():
+    hand_tunned = [20, 20, 20]
+    sigma = 10
+    return(np.random.normal(loc=hand_tunned, scale=sigma))
+
+def random_speed_command_interval():
+    hand_tunned = [0.25, 0.25, 0.25]
+    sigma = 0.10
+    return(np.random.normal(loc=hand_tunned, scale=sigma))
+
+def random_velocity_rules(size=9):
+    return np.random.randint(low=0, high=5, size=size)
 
 def custom_mutation(individual, indpb):
     ## the cromossome has floats and also integers
-    ## so it's necessary a custom mutation function
-    SPLIT_POINT = 18
-
+    ## so it's necessary a custom mutation function that takes in account the type and the universe 
+    uncertainty_SPLIT = 3
+    distance_SPLIT = 4
+    one_cell_priority_SPLIT = 9
+    sum_of_priorities_SPLIT = 12
+    distance_between_targets_SPLIT = 15
+    two_cells_priority_SPLIT = 18
+    target_rules_SPLIT = 36
+    velocity_system_priorities_SPLIT = 39
+    velocity_system_energy_status_SPLIT = 42
+    velocity_system_speed_command_SPLIT = 45    
+        
     # if the number is below the split point
-    tools.mutGaussian(individual[:SPLIT_POINT], mu=0, sigma=0.1, indpb=indpb)
+    tools.mutGaussian(individual[:uncertainty_SPLIT], mu=0, sigma=0.1, indpb=indpb)
+    tools.mutGaussian(individual[uncertainty_SPLIT:distance_SPLIT], mu=0, sigma=20.0, indpb=indpb)
+    tools.mutGaussian(individual[distance_SPLIT:one_cell_priority_SPLIT], mu=0, sigma=0.10, indpb=indpb)
+    tools.mutGaussian(individual[one_cell_priority_SPLIT:sum_of_priorities_SPLIT], mu=0, sigma=0.25, indpb=indpb)
+    tools.mutGaussian(individual[sum_of_priorities_SPLIT:distance_between_targets_SPLIT], mu=0, sigma=20.0, indpb=indpb)
+    tools.mutGaussian(individual[distance_between_targets_SPLIT:two_cells_priority_SPLIT], mu=0, sigma=0.10, indpb=indpb)
 
-    for i in range(SPLIT_POINT, len(individual)):
+    for i in range(two_cells_priority_SPLIT, target_rules_SPLIT):
         if np.random.random() < indpb:
-            individual[i] = np.random.randint(0, 5) # Novo valor inteiro
-            
+            individual[i] = np.random.randint(0, 5)
+
+    tools.mutGaussian(individual[target_rules_SPLIT:velocity_system_priorities_SPLIT], mu=0, sigma=0.1, indpb=indpb)     
+    tools.mutGaussian(individual[velocity_system_priorities_SPLIT:velocity_system_energy_status_SPLIT], mu=0, sigma=10.0, indpb=indpb)     
+    tools.mutGaussian(individual[velocity_system_energy_status_SPLIT:velocity_system_speed_command_SPLIT], mu=0, sigma=0.10, indpb=indpb)     
+    
+    for i in range(velocity_system_speed_command_SPLIT, len(individual)):
+        if np.random.random() < indpb:
+            individual[i] = np.random.randint(0,5)
+
     return (individual,)
 
 def main():
@@ -262,7 +355,11 @@ def main():
         random_sum_of_priotities_interval,
         random_distance_between_targets_interval,
         random_two_cells_priority_interval,
-        random_rules
+        random_rules,
+        random_velocity_priority_interval,
+        random_battery_interval,
+        random_speed_command_interval,
+        random_velocity_rules
     ]
     
     toolbox = base.Toolbox()
