@@ -23,7 +23,7 @@ def create_and_run_simulation(individual):
     # Configuring simulation
     config = SimulationConfiguration(
         duration=600, 
-        real_time=False,
+        real_time=True,
     )
     builder = SimulationBuilder(config)
 
@@ -31,24 +31,25 @@ def create_and_run_simulation(individual):
     builder.add_handler(MobilityHandler())
     builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
-        transmission_range=100
+        transmission_range=30
     )))
 
-    MAP_WIDTH = 100
-    MAP_HEIGHT = 100
+    MAP_WIDTH = 20
+    MAP_HEIGHT = 20
+    NUMBER_OF_DRONES = 3
 
     results_aggregator = {}
     ConfiguredDrone = drone_protocol_factory(
         uncertainty_rate=0.001,
         vanishing_update_time=10.0,
-        number_of_drones=10,
+        number_of_drones=NUMBER_OF_DRONES,
         map_width=MAP_WIDTH,
         map_height=MAP_HEIGHT,
         fuzzy_tables=[lookup_one_cell, lookup_two_cells],
         results_aggregator=results_aggregator
     )
 
-    for _ in range(10):
+    for _ in range(NUMBER_OF_DRONES):
         builder.add_node(ConfiguredDrone, (0, 0, 0))
 
     #for i in range(MAP_WIDTH):

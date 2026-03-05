@@ -160,6 +160,16 @@ class Drone(IProtocol):
         self.battery_status = self.energy.get_battery_status() 
         self.provider.schedule_timer("battery", self.provider.current_time() + 1)
 
+        ##### Visualizing the MAP #####
+        if Drone.visualizer is None:
+            # We have 3 drones in the simulation.
+            # I have to think a better way to do this.
+            Drone.visualizer = MapVisualizer(num_drones=self.NUMBER_OF_DRONES, map_size=self.MAP_HEIGHT*self.MAP_WIDTH)
+        
+        if self.visualizer:
+            self.visualizer.update_map(self.provider.get_id(), self.map.reshape(-1, 2))
+        
+
 
     def camera_routine(self):      
         ##### New Camera Routine is needed. The previous approach was too slow for running large maps.
@@ -216,6 +226,10 @@ class Drone(IProtocol):
         ##### Checking if the cell was visited #####
         ##### Importante parameter. If there are unviseted cells, there will be penalizations in the algorithm #####
         self.is_cell_visited[self.map[:, :, 1] > 0.0] = 1
+
+        ##### Update the map #####
+        if self.visualizer:
+            self.visualizer.update_map(self.provider.get_id(), self.map.reshape(-1, 2))
         ###### Printar isso aqui depois nos testes####
         ##############################################
         ############################################## 
