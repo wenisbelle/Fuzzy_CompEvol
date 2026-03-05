@@ -34,8 +34,8 @@ def create_and_run_simulation(individual):
         transmission_range=30
     )))
 
-    MAP_WIDTH = 20
-    MAP_HEIGHT = 20
+    MAP_WIDTH = 10
+    MAP_HEIGHT = 10
     NUMBER_OF_DRONES = 3
 
     results_aggregator = {}

@@ -167,7 +167,7 @@ class Drone(IProtocol):
             Drone.visualizer = MapVisualizer(num_drones=self.NUMBER_OF_DRONES, map_size=self.MAP_HEIGHT*self.MAP_WIDTH)
         
         if self.visualizer:
-            self.visualizer.update_map(self.provider.get_id(), self.map.reshape(-1, 2))
+            self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
         
 
 
@@ -229,7 +229,7 @@ class Drone(IProtocol):
 
         ##### Update the map #####
         if self.visualizer:
-            self.visualizer.update_map(self.provider.get_id(), self.map.reshape(-1, 2))
+            self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
         ###### Printar isso aqui depois nos testes####
         ##############################################
         ############################################## 

@@ -42,16 +42,10 @@ class MapVisualizer:
         try:
             plot_index = drone_id
             
-            # 1. Extract ONLY the first column (your actual map pixel data)
-            pixel_data = map_data[:, 0]
+            map_view = map_data.copy()
             
-            # 2. Safely clip the values between 0 and 1 (replaces your old for-loop)
-            pixel_data = np.clip(pixel_data, 0, 1)
+            map = np.clip(map_view, 0, 1)
             
-            # 3. Reshape the 1D array back into the 2D grid (e.g., 100x100)
-            map_view = pixel_data.reshape(self.map_shape)
-            
-            # 4. Update the plot with the correctly shaped 2D array
             self.images[plot_index].set_data(map_view)
             self.fig.canvas.draw()
             self.fig.canvas.flush_events()

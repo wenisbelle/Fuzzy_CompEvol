@@ -1,4 +1,121 @@
 server listening on 127.0.0.1:5678
+At time 1 the battery status is: 0.9973942973868692
+At time 1 the battery status is: 0.9973942973868692
+At time: 1, node 1 map has a accomulated uncertainty of 98.0
+At time: 1, node 1 map has total uncertainty of 98.0
+At time: 1, node 0 map has a accomulated uncertainty of 94.0
+At time: 1, node 0 map has total uncertainty of 94.0
+At time 1 the battery status is: 0.9973942973868692
+At time: 1, node 2 map has a accomulated uncertainty of 99.0
+At time: 1, node 2 map has total uncertainty of 99.0
+At time: 2.0, node 2 map has a accomulated uncertainty of 193.0
+At time: 2.0, node 2 map has total uncertainty of 94.0
+At time: 2.0, node 0 map has a accomulated uncertainty of 187.0
+At time: 2.0, node 0 map has total uncertainty of 93.0
+At time: 2.0, node 1 map has a accomulated uncertainty of 192.0
+At time: 2.0, node 1 map has total uncertainty of 94.0
+At time: 3.0, node 0 map has a accomulated uncertainty of 278.0
+At time: 3.0, node 0 map has total uncertainty of 91.0
+At time: 3.0, node 1 map has a accomulated uncertainty of 286.0
+At time: 3.0, node 1 map has total uncertainty of 94.0
+At time: 3.0, node 2 map has a accomulated uncertainty of 287.0
+At time: 3.0, node 2 map has total uncertainty of 94.0
+At time: 4.0, node 0 map has a accomulated uncertainty of 368.0
+At time: 4.0, node 0 map has total uncertainty of 90.0
+Value: 0.879445735275163
+At time: 4, the node 1 updated the velocity to: 15.0
+Value: 0.9608701441295509
+At time: 4, the node 2 updated the velocity to: 15.0
+At time: 4.0, node 2 map has a accomulated uncertainty of 381.0
+At time: 4.0, node 2 map has total uncertainty of 94.0
+At time: 4, the node 1 updated the velocity to: 15.0
+At time: 4.0, node 1 map has a accomulated uncertainty of 380.0
+At time: 4.0, node 1 map has total uncertainty of 94.0
+Value: 0.8400053770759239
+At time: 5, the node 0 updated the velocity to: 15.0
+At time: 5.0, node 0 map has a accomulated uncertainty of 458.0
+At time: 5.0, node 0 map has total uncertainty of 90.0
+At time: 5.0, node 1 map has a accomulated uncertainty of 474.0
+At time: 5.0, node 1 map has total uncertainty of 94.0
+At time: 5.0, node 2 map has a accomulated uncertainty of 475.0
+At time: 5.0, node 2 map has total uncertainty of 94.0
+At time: 6.0, node 2 map has a accomulated uncertainty of 569.0
+At time: 6.0, node 2 map has total uncertainty of 94.0
+At time 6.0 the battery status is: 0.9947885947737384
+At time 6.0 the battery status is: 0.9947885947737384
+At time: 6.0, node 0 map has a accomulated uncertainty of 541.0
+At time: 6.0, node 0 map has total uncertainty of 83.0
+At time: 6.0, node 1 map has a accomulated uncertainty of 568.0
+At time: 6.0, node 1 map has total uncertainty of 94.0
+At time 6.0 the battery status is: 0.9947885947737384
+At time: 7.0, node 2 map has a accomulated uncertainty of 663.0
+At time: 7.0, node 2 map has total uncertainty of 94.0
+At time: 7.0, node 0 map has a accomulated uncertainty of 617.0
+At time: 7.0, node 0 map has total uncertainty of 76.0
+At time: 7.0, node 1 map has a accomulated uncertainty of 662.0
+At time: 7.0, node 1 map has total uncertainty of 94.0
+At time: 8.0, node 0 map has a accomulated uncertainty of 692.0
+At time: 8.0, node 0 map has total uncertainty of 75.0
+At time: 8.0, node 1 map has a accomulated uncertainty of 756.0
+At time: 8.0, node 1 map has total uncertainty of 94.0
+Value: 0.8699049944058845
+At time: 8, the node 2 updated the velocity to: 15.0
+Value: 0.8699049944058844
+At time: 8, the node 1 updated the velocity to: 15.0
+At time: 8.0, node 2 map has a accomulated uncertainty of 757.0
+At time: 8.0, node 2 map has total uncertainty of 94.0
+At time: 9.0, node 0 map has a accomulated uncertainty of 767.0
+At time: 9.0, node 0 map has total uncertainty of 75.0
+At time: 9.0, node 2 map has a accomulated uncertainty of 849.0
+At time: 9.0, node 2 map has total uncertainty of 92.0
+At time: 9.0, node 1 map has a accomulated uncertainty of 850.0
+At time: 9.0, node 1 map has total uncertainty of 94.0
+Value: 0.5890663385490132
+At time: 9, the node 0 updated the velocity to: 15.0
+At time: 10.0, node 0 map has a accomulated uncertainty of 842.0
+At time: 10.0, node 0 map has total uncertainty of 75.0
+At time: 10.0, node 2 map has a accomulated uncertainty of 939.0
+At time: 10.0, node 2 map has total uncertainty of 90.0
+Value: 0.9608701441295506
+At time: 10, the node 2 updated the velocity to: 15.0
+At time: 10, the node 0 updated the velocity to: 15.0
+At time: 10.0, node 1 map has a accomulated uncertainty of 944.097
+At time: 10.0, node 1 map has total uncertainty of 94.09699999999998
+At time: 11.0, node 1 map has a accomulated uncertainty of 1038.192
+At time: 11.0, node 1 map has total uncertainty of 94.09499999999998
+At time 11.0 the battery status is: 0.9921828921606076
+At time 11.0 the battery status is: 0.9921828921606076
+At time: 11.0, node 0 map has a accomulated uncertainty of 917.087
+At time: 11.0, node 0 map has total uncertainty of 75.08699999999999
+At time 11.0 the battery status is: 0.9921828921606076
+Value: 0.9608701441295507
+At time: 11, the node 2 updated the velocity to: 15.0
+At time: 11.0, node 2 map has a accomulated uncertainty of 1014.095
+At time: 11.0, node 2 map has total uncertainty of 75.095
+At time: 11, the node 1 updated the velocity to: 15.0
+At time: 12.0, node 0 map has a accomulated uncertainty of 992.174
+At time: 12.0, node 0 map has total uncertainty of 75.08699999999999
+At time: 12.0, node 1 map has a accomulated uncertainty of 1113.302
+At time: 12.0, node 1 map has total uncertainty of 75.10999999999999
+At time: 12.0, node 2 map has a accomulated uncertainty of 1089.184
+At time: 12.0, node 2 map has total uncertainty of 75.089
+At time: 13.0, node 0 map has a accomulated uncertainty of 1067.261
+At time: 13.0, node 0 map has total uncertainty of 75.08699999999999
+Value: 0.8645507619037391
+At time: 13, the node 0 updated the velocity to: 15.0
+At time: 13.0, node 1 map has a accomulated uncertainty of 1188.3909999999998
+At time: 13.0, node 1 map has total uncertainty of 75.089
+At time: 13.0, node 2 map has a accomulated uncertainty of 1164.269
+At time: 13.0, node 2 map has total uncertainty of 75.085
+At time: 14.0, node 2 map has a accomulated uncertainty of 1239.354
+At time: 14.0, node 2 map has total uncertainty of 75.085
+At time: 14.0, node 0 map has a accomulated uncertainty of 1142.348
+At time: 14.0, node 0 map has total uncertainty of 75.08699999999999
+Value: 0.9608701441295507
+At time: 14, the node 1 updated the velocity to: 15.0
+At time: 14.0, node 1 map has a accomulated uncertainty of 1263.4799999999998
+At time: 14.0, node 1 map has total uncertainty of 75.089
+At time: 14, the node 0 updated the velocity to: 15.0
 connection rejected (426 Upgrade Required)
 opening handshake failed
 Traceback (most recent call last):
@@ -12,655 +129,233 @@ Traceback (most recent call last):
     raise InvalidUpgrade(
 websockets.exceptions.InvalidUpgrade: invalid Connection header: keep-alive
 connection open
-At time 1 the battery status is: 0.9973942973868692
-At time 1 the battery status is: 0.9973942973868692
-At time: 1, node 1 map has a accomulated uncertainty of 393.0
-At time: 1, node 1 map has total uncertainty of 393.0
-Could not update map for drone 0: cannot reshape array of size 20 into shape (20,20)
-Could not update map for drone 0: cannot reshape array of size 20 into shape (20,20)
-At time: 1, node 0 map has a accomulated uncertainty of 391.0
-At time: 1, node 0 map has total uncertainty of 391.0
-Could not update map for drone 1: cannot reshape array of size 20 into shape (20,20)
-Could not update map for drone 1: cannot reshape array of size 20 into shape (20,20)
-At time 1 the battery status is: 0.9973942973868692
-At time: 1, node 2 map has a accomulated uncertainty of 399.0
-At time: 1, node 2 map has total uncertainty of 399.0
-Could not update map for drone 2: cannot reshape array of size 20 into shape (20,20)
-Could not update map for drone 2: cannot reshape array of size 20 into shape (20,20)
-At time: 2.0, node 2 map has a accomulated uncertainty of 790.0
-At time: 2.0, node 2 map has total uncertainty of 391.0
-Could not update map for drone 1: cannot reshape array of size 20 into shape (20,20)
-Could not update map for drone 0: cannot reshape array of size 20 into shape (20,20)
-At time: 2.0, node 0 map has a accomulated uncertainty of 774.0
-At time: 2.0, node 0 map has total uncertainty of 383.0
-At time: 2.0, node 1 map has a accomulated uncertainty of 782.0
-At time: 2.0, node 1 map has total uncertainty of 389.0
-At time: 3.0, node 0 map has a accomulated uncertainty of 1149.0
-At time: 3.0, node 0 map has total uncertainty of 375.0
-At time: 3.0, node 1 map has a accomulated uncertainty of 1167.0
-At time: 3.0, node 1 map has total uncertainty of 385.0
-At time: 3.0, node 2 map has a accomulated uncertainty of 1181.0
-At time: 3.0, node 2 map has total uncertainty of 391.0
-At time: 4.0, node 0 map has a accomulated uncertainty of 1518.0
-At time: 4.0, node 0 map has total uncertainty of 369.0
-At time: 4.0, node 2 map has a accomulated uncertainty of 1572.0
-At time: 4.0, node 2 map has total uncertainty of 391.0
-At time: 4.0, node 1 map has a accomulated uncertainty of 1549.0
-At time: 4.0, node 1 map has total uncertainty of 382.0
-Value: 0.8781745753924317
-At time: 5, the node 1 updated the velocity to: 15.0
-Value: 0.8773610591218587
-At time: 5, the node 2 updated the velocity to: 15.0
-At time: 5.0, node 1 map has a accomulated uncertainty of 1931.0
-At time: 5.0, node 1 map has total uncertainty of 382.0
-At time: 5.0, node 0 map has a accomulated uncertainty of 1878.0
-At time: 5.0, node 0 map has total uncertainty of 360.0
-At time: 5.0, node 2 map has a accomulated uncertainty of 1963.0
-At time: 5.0, node 2 map has total uncertainty of 391.0
-At time: 6.0, node 2 map has a accomulated uncertainty of 2354.0
-At time: 6.0, node 2 map has total uncertainty of 391.0
-At time 6.0 the battery status is: 0.9947885947737384
-At time 6.0 the battery status is: 0.9947885947737384
-At time: 6.0, node 0 map has a accomulated uncertainty of 2230.0
-At time: 6.0, node 0 map has total uncertainty of 352.0
-At time: 6.0, node 1 map has a accomulated uncertainty of 2309.0
-At time: 6.0, node 1 map has total uncertainty of 378.0
-At time 6.0 the battery status is: 0.9947885947737384
-At time: 7.0, node 1 map has a accomulated uncertainty of 2685.0
-At time: 7.0, node 1 map has total uncertainty of 376.0
-At time: 7.0, node 2 map has a accomulated uncertainty of 2745.0
-At time: 7.0, node 2 map has total uncertainty of 391.0
-At time: 7.0, node 0 map has a accomulated uncertainty of 2576.0
-At time: 7.0, node 0 map has total uncertainty of 346.0
-At time: 8.0, node 0 map has a accomulated uncertainty of 2920.0
-At time: 8.0, node 0 map has total uncertainty of 344.0
-At time: 8.0, node 1 map has a accomulated uncertainty of 3059.0
-At time: 8.0, node 1 map has total uncertainty of 374.0
-At time: 8.0, node 2 map has a accomulated uncertainty of 3136.0
-At time: 8.0, node 2 map has total uncertainty of 391.0
-At time: 9.0, node 2 map has a accomulated uncertainty of 3527.0
-At time: 9.0, node 2 map has total uncertainty of 391.0
-Value: 0.8290894626160886
-At time: 9, the node 0 updated the velocity to: 15.0
-At time: 9.0, node 0 map has a accomulated uncertainty of 3262.0
-At time: 9.0, node 0 map has total uncertainty of 342.0
-At time: 9.0, node 1 map has a accomulated uncertainty of 3433.0
-At time: 9.0, node 1 map has total uncertainty of 374.0
-Value: 0.8699049944058844
-At time: 10, the node 1 updated the velocity to: 15.0
-At time: 10.0, node 1 map has a accomulated uncertainty of 3807.0
-At time: 10.0, node 1 map has total uncertainty of 374.0
-Value: 0.8699049944058844
-At time: 10, the node 2 updated the velocity to: 15.0
-At time: 10.0, node 2 map has a accomulated uncertainty of 3918.0
-At time: 10.0, node 2 map has total uncertainty of 391.0
-At time: 10.0, node 0 map has a accomulated uncertainty of 3603.375
-At time: 10.0, node 0 map has total uncertainty of 341.3749999999999
-At time: 11.0, node 1 map has a accomulated uncertainty of 4178.389999999999
-At time: 11.0, node 1 map has total uncertainty of 371.3899999999999
-At time 11.0 the battery status is: 0.9921828921606076
-At time 11.0 the battery status is: 0.9921828921606076
-At time: 11.0, node 0 map has a accomulated uncertainty of 3943.7419999999997
-At time: 11.0, node 0 map has total uncertainty of 340.36699999999985
-At time 11.0 the battery status is: 0.9921828921606076
-At time: 11.0, node 2 map has a accomulated uncertainty of 4309.4
-At time: 11.0, node 2 map has total uncertainty of 391.39999999999986
-At time: 12.0, node 1 map has a accomulated uncertainty of 4543.770999999999
-At time: 12.0, node 1 map has total uncertainty of 365.38099999999986
-At time: 12.0, node 2 map has a accomulated uncertainty of 4700.799999999999
-At time: 12.0, node 2 map has total uncertainty of 391.39999999999986
-At time: 12.0, node 0 map has a accomulated uncertainty of 4282.099999999999
-At time: 12.0, node 0 map has total uncertainty of 338.3579999999999
-Value: 0.8645507619037393
-At time: 13, the node 0 updated the velocity to: 15.0
-At time: 13.0, node 0 map has a accomulated uncertainty of 4620.456999999999
-At time: 13.0, node 0 map has total uncertainty of 338.35699999999986
-At time: 13.0, node 1 map has a accomulated uncertainty of 4904.144999999999
-At time: 13.0, node 1 map has total uncertainty of 360.3739999999999
-At time: 13.0, node 2 map has a accomulated uncertainty of 5092.199999999999
-At time: 13.0, node 2 map has total uncertainty of 391.39999999999986
-At time: 14.0, node 1 map has a accomulated uncertainty of 5257.511999999999
-At time: 14.0, node 1 map has total uncertainty of 353.36699999999985
-Value: 0.8699049944058845
-At time: 14, the node 2 updated the velocity to: 15.0
-At time: 14.0, node 2 map has a accomulated uncertainty of 5483.5999999999985
-At time: 14.0, node 2 map has total uncertainty of 391.39999999999986
-At time: 14.0, node 0 map has a accomulated uncertainty of 4958.812999999999
-At time: 14.0, node 0 map has total uncertainty of 338.3559999999999
-Value: 0.8699049944058845
-At time: 14, the node 1 updated the velocity to: 15.0
-At time: 15.0, node 1 map has a accomulated uncertainty of 5601.869999999999
-At time: 15.0, node 1 map has total uncertainty of 344.3579999999999
-At time: 15.0, node 2 map has a accomulated uncertainty of 5874.999999999998
-At time: 15.0, node 2 map has total uncertainty of 391.39999999999986
-At time: 15.0, node 0 map has a accomulated uncertainty of 5297.167999999999
-At time: 15.0, node 0 map has total uncertainty of 338.3549999999999
-At time: 16.0, node 0 map has a accomulated uncertainty of 5634.519999999999
-At time: 16.0, node 0 map has total uncertainty of 337.3519999999999
-At time: 16.0, node 1 map has a accomulated uncertainty of 5940.221999999999
-At time: 16.0, node 1 map has total uncertainty of 338.35199999999986
+Value: 0.8359127971361724
+At time: 15, the node 2 updated the velocity to: 15.0
+At time: 15.0, node 2 map has a accomulated uncertainty of 1314.439
+At time: 15.0, node 2 map has total uncertainty of 75.085
+At time: 15.0, node 1 map has a accomulated uncertainty of 1338.5689999999997
+At time: 15.0, node 1 map has total uncertainty of 75.089
+At time: 15.0, node 0 map has a accomulated uncertainty of 1217.4299999999998
+At time: 15.0, node 0 map has total uncertainty of 75.082
+At time: 16.0, node 2 map has a accomulated uncertainty of 1389.5240000000001
+At time: 16.0, node 2 map has total uncertainty of 75.085
+At time: 16.0, node 0 map has a accomulated uncertainty of 1292.5109999999997
+At time: 16.0, node 0 map has total uncertainty of 75.08099999999999
+Value: 0.8763795080567849
+At time: 16, the node 1 updated the velocity to: 15.0
+At time: 16.0, node 1 map has a accomulated uncertainty of 1413.6579999999997
+At time: 16.0, node 1 map has total uncertainty of 75.089
 At time 16.0 the battery status is: 0.9895771895474769
 At time 16.0 the battery status is: 0.9895771895474769
-At time: 16.0, node 2 map has a accomulated uncertainty of 6266.399999999998
-At time: 16.0, node 2 map has total uncertainty of 391.39999999999986
 At time 16.0 the battery status is: 0.9895771895474769
-Value: 0.8645507619037393
-At time: 17, the node 0 updated the velocity to: 15.0
-At time: 17.0, node 0 map has a accomulated uncertainty of 5970.869999999999
-At time: 17.0, node 0 map has total uncertainty of 336.3499999999999
-At time: 17.0, node 1 map has a accomulated uncertainty of 6275.570999999999
-At time: 17.0, node 1 map has total uncertainty of 335.3489999999999
-At time: 17.0, node 2 map has a accomulated uncertainty of 6653.795999999998
-At time: 17.0, node 2 map has total uncertainty of 387.39599999999984
+At time: 17.0, node 2 map has a accomulated uncertainty of 1464.6090000000002
+At time: 17.0, node 2 map has total uncertainty of 75.085
+At time: 17.0, node 1 map has a accomulated uncertainty of 1488.7469999999996
+At time: 17.0, node 1 map has total uncertainty of 75.089
+At time: 17.0, node 0 map has a accomulated uncertainty of 1367.5879999999997
+At time: 17.0, node 0 map has total uncertainty of 75.077
+At time: 18.0, node 2 map has a accomulated uncertainty of 1539.6940000000002
+At time: 18.0, node 2 map has total uncertainty of 75.085
+At time: 18.0, node 1 map has a accomulated uncertainty of 1563.8359999999996
+At time: 18.0, node 1 map has total uncertainty of 75.089
+At time: 18.0, node 0 map has a accomulated uncertainty of 1442.6649999999997
+At time: 18.0, node 0 map has total uncertainty of 75.077
+At time: 19.0, node 2 map has a accomulated uncertainty of 1614.7790000000002
+At time: 19.0, node 2 map has total uncertainty of 75.085
+At time: 19.0, node 0 map has a accomulated uncertainty of 1517.7419999999997
+At time: 19.0, node 0 map has total uncertainty of 75.077
+Value: 0.8645507619037391
+At time: 19, the node 0 updated the velocity to: 15.0
+At time: 19.0, node 1 map has a accomulated uncertainty of 1638.9249999999995
+At time: 19.0, node 1 map has total uncertainty of 75.089
 Value: 0.8699049944058845
-At time: 18, the node 2 updated the velocity to: 15.0
-At time: 18.0, node 0 map has a accomulated uncertainty of 6307.219999999999
-At time: 18.0, node 0 map has total uncertainty of 336.3499999999999
-At time: 18.0, node 2 map has a accomulated uncertainty of 7037.185999999998
-At time: 18.0, node 2 map has total uncertainty of 383.3899999999999
-Value: 0.8073949207154676
-At time: 18, the node 1 updated the velocity to: 15.0
-At time: 18.0, node 1 map has a accomulated uncertainty of 6610.919999999999
-At time: 18.0, node 1 map has total uncertainty of 335.3489999999999
-At time: 19.0, node 1 map has a accomulated uncertainty of 6946.268999999999
-At time: 19.0, node 1 map has total uncertainty of 335.3489999999999
-At time: 19.0, node 0 map has a accomulated uncertainty of 6643.57
-At time: 19.0, node 0 map has total uncertainty of 336.3499999999999
-At time: 19.0, node 2 map has a accomulated uncertainty of 7413.568999999998
-At time: 19.0, node 2 map has total uncertainty of 376.38299999999987
-At time: 20.0, node 2 map has a accomulated uncertainty of 7781.943999999998
-At time: 20.0, node 2 map has total uncertainty of 368.3749999999999
-At time: 20.0, node 1 map has a accomulated uncertainty of 7281.6179999999995
-At time: 20.0, node 1 map has total uncertainty of 335.3489999999999
-At time: 20.0, node 0 map has a accomulated uncertainty of 6980.294
-At time: 20.0, node 0 map has total uncertainty of 336.7239999999998
+At time: 19, the node 2 updated the velocity to: 15.0
+At time: 20.0, node 0 map has a accomulated uncertainty of 1592.8189999999997
+At time: 20.0, node 0 map has total uncertainty of 75.077
+Value: 0.8684086887990032
+At time: 20, the node 1 updated the velocity to: 15.0
+Value: 0.9608701441295509
+At time: 20, the node 2 updated the velocity to: 15.0
+At time: 20.0, node 2 map has a accomulated uncertainty of 1689.8640000000003
+At time: 20.0, node 2 map has total uncertainty of 75.085
+At time: 20, the node 1 updated the velocity to: 15.0
+Value: 0.9608701441295509
+At time: 20, the node 1 updated the velocity to: 15.0
+At time: 20, the node 0 updated the velocity to: 15.0
+At time: 20.0, node 1 map has a accomulated uncertainty of 1714.0999999999995
+At time: 20.0, node 1 map has total uncertainty of 75.17499999999995
 At time 21.0 the battery status is: 0.986971486934346
-Value: 0.8645507619037393
-At time: 21, the node 1 updated the velocity to: 15.0
-At time: 21.0, node 2 map has a accomulated uncertainty of 8147.696999999997
-At time: 21.0, node 2 map has total uncertainty of 365.7529999999998
-At time: 21.0, node 1 map has a accomulated uncertainty of 7617.351999999999
-At time: 21.0, node 1 map has total uncertainty of 335.7339999999998
-Value: 0.8645507619037393
-At time: 21, the node 0 updated the velocity to: 15.0
+At time: 21.0, node 1 map has a accomulated uncertainty of 1789.2699999999995
+At time: 21.0, node 1 map has total uncertainty of 75.16999999999996
 At time 21.0 the battery status is: 0.986971486934346
-At time: 21.0, node 0 map has a accomulated uncertainty of 7317.0109999999995
-At time: 21.0, node 0 map has total uncertainty of 336.71699999999987
+At time: 21.0, node 2 map has a accomulated uncertainty of 1765.0490000000002
+At time: 21.0, node 2 map has total uncertainty of 75.18499999999996
 At time 21.0 the battery status is: 0.986971486934346
-Could not update map for drone 2: cannot reshape array of size 20 into shape (20,20)
 Value: 0.9608701441295507
 At time: 21, the node 2 updated the velocity to: 15.0
-At time: 21, the node 1 updated the velocity to: 15.0
-Could not update map for drone 1: cannot reshape array of size 20 into shape (20,20)
-At time: 22.0, node 2 map has a accomulated uncertainty of 8483.414999999997
-At time: 22.0, node 2 map has total uncertainty of 335.71799999999985
-At time: 22.0, node 1 map has a accomulated uncertainty of 7953.064999999999
-At time: 22.0, node 1 map has total uncertainty of 335.71299999999985
-At time: 22.0, node 0 map has a accomulated uncertainty of 7652.726
-At time: 22.0, node 0 map has total uncertainty of 335.7149999999998
+At time: 21.0, node 0 map has a accomulated uncertainty of 1667.9929999999997
+At time: 21.0, node 0 map has total uncertainty of 75.17399999999995
+At time: 21, the node 0 updated the velocity to: 15.0
+At time: 22.0, node 0 map has a accomulated uncertainty of 1743.1629999999996
+At time: 22.0, node 0 map has total uncertainty of 75.16999999999996
+At time: 22.0, node 2 map has a accomulated uncertainty of 1840.228
+At time: 22.0, node 2 map has total uncertainty of 75.17899999999996
+At time: 22.0, node 1 map has a accomulated uncertainty of 1864.4379999999994
+At time: 22.0, node 1 map has total uncertainty of 75.16799999999996
+At time: 23.0, node 2 map has a accomulated uncertainty of 1915.407
+At time: 23.0, node 2 map has total uncertainty of 75.17899999999996
+At time: 23.0, node 0 map has a accomulated uncertainty of 1818.3249999999996
+At time: 23.0, node 0 map has total uncertainty of 75.16199999999996
+At time: 23.0, node 1 map has a accomulated uncertainty of 1939.6049999999993
+At time: 23.0, node 1 map has total uncertainty of 75.16699999999996
 Value: 0.8699049944058844
-At time: 23, the node 2 updated the velocity to: 15.0
-At time: 23.0, node 0 map has a accomulated uncertainty of 7986.436
-At time: 23.0, node 0 map has total uncertainty of 333.7099999999998
-At time: 23.0, node 1 map has a accomulated uncertainty of 8288.773999999998
-At time: 23.0, node 1 map has total uncertainty of 335.70899999999983
-At time: 23.0, node 2 map has a accomulated uncertainty of 8819.132999999998
-At time: 23.0, node 2 map has total uncertainty of 335.71799999999985
-At time: 24.0, node 2 map has a accomulated uncertainty of 9154.850999999999
-At time: 24.0, node 2 map has total uncertainty of 335.71799999999985
-At time: 24.0, node 1 map has a accomulated uncertainty of 8624.482999999997
-At time: 24.0, node 1 map has total uncertainty of 335.70899999999983
-At time: 24.0, node 0 map has a accomulated uncertainty of 8320.145999999999
-At time: 24.0, node 0 map has total uncertainty of 333.7099999999998
-Value: 0.8699049944058844
-At time: 25, the node 0 updated the velocity to: 15.0
-At time: 25.0, node 0 map has a accomulated uncertainty of 8653.855999999998
-At time: 25.0, node 0 map has total uncertainty of 333.7099999999998
-Value: 0.5035362383620201
-At time: 25, the node 1 updated the velocity to: 15.0
-At time: 25.0, node 2 map has a accomulated uncertainty of 9490.565999999999
-At time: 25.0, node 2 map has total uncertainty of 335.7149999999998
-At time: 25.0, node 1 map has a accomulated uncertainty of 8960.191999999995
-At time: 25.0, node 1 map has total uncertainty of 335.70899999999983
-At time 26.0 the battery status is: 0.9843657843212152
-At time 26.0 the battery status is: 0.9843657843212152
-At time: 26.0, node 1 map has a accomulated uncertainty of 9295.900999999994
-At time: 26.0, node 1 map has total uncertainty of 335.70899999999983
-At time: 26.0, node 0 map has a accomulated uncertainty of 8987.565999999997
-At time: 26.0, node 0 map has total uncertainty of 333.7099999999998
-At time: 26.0, node 2 map has a accomulated uncertainty of 9826.275999999998
-At time: 26.0, node 2 map has total uncertainty of 335.7099999999998
-At time 26.0 the battery status is: 0.9843657843212152
-Value: 0.8380280299325329
-At time: 27, the node 2 updated the velocity to: 15.0
-At time: 27.0, node 1 map has a accomulated uncertainty of 9631.609999999993
-At time: 27.0, node 1 map has total uncertainty of 335.70899999999983
-At time: 27.0, node 2 map has a accomulated uncertainty of 10160.979999999998
-At time: 27.0, node 2 map has total uncertainty of 334.70399999999984
-At time: 27.0, node 0 map has a accomulated uncertainty of 9321.274999999998
-At time: 27.0, node 0 map has total uncertainty of 333.70899999999983
-At time: 28.0, node 0 map has a accomulated uncertainty of 9654.983999999997
-At time: 28.0, node 0 map has total uncertainty of 333.70899999999983
-Value: 0.8645507619037394
-At time: 28, the node 1 updated the velocity to: 15.0
-At time: 28.0, node 2 map has a accomulated uncertainty of 10492.673999999997
-At time: 28.0, node 2 map has total uncertainty of 331.69399999999985
-At time: 28.0, node 1 map has a accomulated uncertainty of 9967.318999999992
-At time: 28.0, node 1 map has total uncertainty of 335.70899999999983
-At time: 29.0, node 0 map has a accomulated uncertainty of 9988.691999999997
-At time: 29.0, node 0 map has total uncertainty of 333.70799999999986
+At time: 24, the node 2 updated the velocity to: 15.0
+At time: 24.0, node 2 map has a accomulated uncertainty of 1990.5859999999998
+At time: 24.0, node 2 map has total uncertainty of 75.17899999999996
 Value: 0.8359127971361723
-At time: 29, the node 0 updated the velocity to: 15.0
-At time: 29.0, node 2 map has a accomulated uncertainty of 10822.354999999998
-At time: 29.0, node 2 map has total uncertainty of 329.6809999999998
-At time: 29.0, node 1 map has a accomulated uncertainty of 10303.024999999992
-At time: 29.0, node 1 map has total uncertainty of 335.7059999999999
-At time: 30.0, node 1 map has a accomulated uncertainty of 10639.099999999993
-At time: 30.0, node 1 map has total uncertainty of 336.07499999999993
-At time: 30.0, node 0 map has a accomulated uncertainty of 10322.391999999996
-At time: 30.0, node 0 map has total uncertainty of 333.6999999999998
-At time: 30.0, node 2 map has a accomulated uncertainty of 11151.407999999998
-At time: 30.0, node 2 map has total uncertainty of 329.053
-At time: 31.0, node 0 map has a accomulated uncertainty of 10656.461999999996
-At time: 31.0, node 0 map has total uncertainty of 334.06999999999994
-At time: 31.0, node 1 map has a accomulated uncertainty of 10975.159999999993
-At time: 31.0, node 1 map has total uncertainty of 336.05999999999995
-Value: 0.8699049944058845
-At time: 31, the node 2 updated the velocity to: 15.0
-At time 31.0 the battery status is: 0.9817600817080844
-At time 31.0 the battery status is: 0.9817600817080844
-At time 31.0 the battery status is: 0.9817600817080844
-At time: 31.0, node 2 map has a accomulated uncertainty of 11480.454999999998
-At time: 31.0, node 2 map has total uncertainty of 329.0469999999999
-At time: 32.0, node 0 map has a accomulated uncertainty of 10988.525999999996
-At time: 32.0, node 0 map has total uncertainty of 332.06399999999996
-At time: 32.0, node 1 map has a accomulated uncertainty of 11310.212999999992
-At time: 32.0, node 1 map has total uncertainty of 335.053
-At time: 32.0, node 2 map has a accomulated uncertainty of 11809.500999999998
-At time: 32.0, node 2 map has total uncertainty of 329.04599999999994
-Could not update map for drone 2: cannot reshape array of size 20 into shape (20,20)
+At time: 24, the node 1 updated the velocity to: 15.0
+At time: 24.0, node 1 map has a accomulated uncertainty of 2014.7719999999993
+At time: 24.0, node 1 map has total uncertainty of 75.16699999999996
+At time: 24.0, node 0 map has a accomulated uncertainty of 1893.4799999999996
+At time: 24.0, node 0 map has total uncertainty of 75.15499999999996
+At time: 25.0, node 2 map has a accomulated uncertainty of 2065.765
+At time: 25.0, node 2 map has total uncertainty of 75.17899999999996
+Value: 0.6069822119100414
+At time: 25, the node 0 updated the velocity to: 15.0
+At time: 25.0, node 1 map has a accomulated uncertainty of 2089.9389999999994
+At time: 25.0, node 1 map has total uncertainty of 75.16699999999996
+At time: 25.0, node 0 map has a accomulated uncertainty of 1968.6349999999995
+At time: 25.0, node 0 map has total uncertainty of 75.15499999999996
+At time: 26.0, node 1 map has a accomulated uncertainty of 2165.1049999999996
+At time: 26.0, node 1 map has total uncertainty of 75.16599999999997
+At time: 26.0, node 0 map has a accomulated uncertainty of 2043.7849999999994
+At time: 26.0, node 0 map has total uncertainty of 75.14999999999995
+At time: 26.0, node 2 map has a accomulated uncertainty of 2140.944
+At time: 26.0, node 2 map has total uncertainty of 75.17899999999996
+At time 26.0 the battery status is: 0.9843657843212152
+At time 26.0 the battery status is: 0.9843657843212152
+Value: 0.9592629984648934
+At time: 26, the node 1 updated the velocity to: 15.0
+At time: 26, the node 0 updated the velocity to: 15.0
+At time 26.0 the battery status is: 0.9843657843212152
+At time: 27.0, node 1 map has a accomulated uncertainty of 2240.2549999999997
+At time: 27.0, node 1 map has total uncertainty of 75.14999999999995
+At time: 27.0, node 2 map has a accomulated uncertainty of 2216.121
+At time: 27.0, node 2 map has total uncertainty of 75.17699999999996
+At time: 27.0, node 0 map has a accomulated uncertainty of 2118.9349999999995
+At time: 27.0, node 0 map has total uncertainty of 75.14999999999995
 Value: 0.9608701441295509
-At time: 32, the node 2 updated the velocity to: 15.0
-Value: 0.8699049944058844
-At time: 32, the node 1 updated the velocity to: 15.0
-Could not update map for drone 1: cannot reshape array of size 20 into shape (20,20)
-At time: 32, the node 1 updated the velocity to: 15.0
-At time: 33.0, node 0 map has a accomulated uncertainty of 11319.586999999996
-At time: 33.0, node 0 map has total uncertainty of 331.0609999999999
-At time: 33.0, node 1 map has a accomulated uncertainty of 11639.221999999992
-At time: 33.0, node 1 map has total uncertainty of 329.00899999999996
-At time: 33.0, node 2 map has a accomulated uncertainty of 12138.512999999999
-At time: 33.0, node 2 map has total uncertainty of 329.01199999999994
+At time: 27, the node 2 updated the velocity to: 15.0
+At time: 27, the node 1 updated the velocity to: 15.0
+At time: 28.0, node 1 map has a accomulated uncertainty of 2315.4049999999997
+At time: 28.0, node 1 map has total uncertainty of 75.14999999999995
+At time: 28.0, node 2 map has a accomulated uncertainty of 2291.271
+At time: 28.0, node 2 map has total uncertainty of 75.14999999999995
+At time: 28.0, node 0 map has a accomulated uncertainty of 2194.0849999999996
+At time: 28.0, node 0 map has total uncertainty of 75.14999999999995
 Value: 0.8359127971361722
-At time: 33, the node 0 updated the velocity to: 15.0
-Could not update map for drone 1: cannot reshape array of size 20 into shape (20,20)
-Could not update map for drone 2: cannot reshape array of size 20 into shape (20,20)
-At time: 34.0, node 0 map has a accomulated uncertainty of 11650.647999999996
-At time: 34.0, node 0 map has total uncertainty of 331.0609999999999
-At time: 34.0, node 1 map has a accomulated uncertainty of 11963.213999999993
-At time: 34.0, node 1 map has total uncertainty of 323.99199999999996
-At time: 34.0, node 2 map has a accomulated uncertainty of 12467.520999999999
-At time: 34.0, node 2 map has total uncertainty of 329.0079999999999
-At time: 35.0, node 2 map has a accomulated uncertainty of 12796.528999999999
-At time: 35.0, node 2 map has total uncertainty of 329.0079999999999
-At time: 35.0, node 1 map has a accomulated uncertainty of 12280.181999999993
-At time: 35.0, node 1 map has total uncertainty of 316.96799999999996
-At time: 35.0, node 0 map has a accomulated uncertainty of 11981.702999999996
-At time: 35.0, node 0 map has total uncertainty of 331.05499999999995
-At time: 36.0, node 1 map has a accomulated uncertainty of 12593.137999999994
-At time: 36.0, node 1 map has total uncertainty of 312.95599999999996
-At time 36.0 the battery status is: 0.9791543790949536
+At time: 29, the node 0 updated the velocity to: 15.0
+At time: 29.0, node 1 map has a accomulated uncertainty of 2390.555
+At time: 29.0, node 1 map has total uncertainty of 75.14999999999995
+At time: 29.0, node 2 map has a accomulated uncertainty of 2366.4210000000003
+At time: 29.0, node 2 map has total uncertainty of 75.14999999999995
+At time: 29.0, node 0 map has a accomulated uncertainty of 2269.2349999999997
+At time: 29.0, node 0 map has total uncertainty of 75.14999999999995
+Value: 0.8359127971361722
+At time: 29, the node 2 updated the velocity to: 15.0
+At time: 30.0, node 1 map has a accomulated uncertainty of 2465.705
+At time: 30.0, node 1 map has total uncertainty of 75.14999999999995
+At time: 30.0, node 0 map has a accomulated uncertainty of 2344.3849999999998
+At time: 30.0, node 0 map has total uncertainty of 75.14999999999995
+At time: 30.0, node 2 map has a accomulated uncertainty of 2441.6710000000003
+At time: 30.0, node 2 map has total uncertainty of 75.25
+Value: 0.9608701441295507
+At time: 30, the node 1 updated the velocity to: 15.0
+At time: 30, the node 0 updated the velocity to: 15.0
+At time: 31.0, node 1 map has a accomulated uncertainty of 2540.955
+At time: 31.0, node 1 map has total uncertainty of 75.25
+At time 31.0 the battery status is: 0.9817600817080844
+At time 31.0 the battery status is: 0.9817600817080844
+At time: 31.0, node 0 map has a accomulated uncertainty of 2419.627
+At time: 31.0, node 0 map has total uncertainty of 75.24199999999999
+At time 31.0 the battery status is: 0.9817600817080844
+At time: 31.0, node 2 map has a accomulated uncertainty of 2516.9210000000003
+At time: 31.0, node 2 map has total uncertainty of 75.25
+At time: 32.0, node 1 map has a accomulated uncertainty of 2616.197
+At time: 32.0, node 1 map has total uncertainty of 75.24199999999999
+At time: 32.0, node 2 map has a accomulated uncertainty of 2592.1710000000003
+At time: 32.0, node 2 map has total uncertainty of 75.25
+At time: 32.0, node 0 map has a accomulated uncertainty of 2494.863
+At time: 32.0, node 0 map has total uncertainty of 75.23599999999999
 Value: 0.8699049944058845
-At time: 36, the node 2 updated the velocity to: 15.0
+At time: 33, the node 1 updated the velocity to: 15.0
+At time: 33.0, node 0 map has a accomulated uncertainty of 2570.094
+At time: 33.0, node 0 map has total uncertainty of 75.231
+At time: 33.0, node 1 map has a accomulated uncertainty of 2691.4390000000003
+At time: 33.0, node 1 map has total uncertainty of 75.24199999999999
+At time: 33.0, node 2 map has a accomulated uncertainty of 2667.4210000000003
+At time: 33.0, node 2 map has total uncertainty of 75.25
+Value: 0.8699049944058845
+At time: 33, the node 2 updated the velocity to: 15.0
+At time: 34.0, node 0 map has a accomulated uncertainty of 2645.323
+At time: 34.0, node 0 map has total uncertainty of 75.22899999999998
+At time: 34.0, node 2 map has a accomulated uncertainty of 2742.6710000000003
+At time: 34.0, node 2 map has total uncertainty of 75.25
+At time: 34.0, node 1 map has a accomulated uncertainty of 2766.6810000000005
+At time: 34.0, node 1 map has total uncertainty of 75.24199999999999
+Value: 0.8645507619037393
+At time: 35, the node 0 updated the velocity to: 15.0
+At time: 35.0, node 0 map has a accomulated uncertainty of 2720.5519999999997
+At time: 35.0, node 0 map has total uncertainty of 75.22899999999998
+At time: 35.0, node 1 map has a accomulated uncertainty of 2841.9230000000007
+At time: 35.0, node 1 map has total uncertainty of 75.24199999999999
+At time: 35.0, node 2 map has a accomulated uncertainty of 2817.9170000000004
+At time: 35.0, node 2 map has total uncertainty of 75.24599999999998
+Value: 0.9608701441295506
+At time: 35, the node 2 updated the velocity to: 15.0
+At time: 35, the node 0 updated the velocity to: 15.0
 At time 36.0 the battery status is: 0.9791543790949536
-At time: 36.0, node 2 map has a accomulated uncertainty of 13125.536999999998
-At time: 36.0, node 2 map has total uncertainty of 329.0079999999999
+At time: 36.0, node 0 map has a accomulated uncertainty of 2795.7809999999995
+At time: 36.0, node 0 map has total uncertainty of 75.22899999999998
+At time: 36.0, node 2 map has a accomulated uncertainty of 2893.146
+At time: 36.0, node 2 map has total uncertainty of 75.22899999999998
 At time 36.0 the battery status is: 0.9791543790949536
-Could not update map for drone 0: cannot reshape array of size 20 into shape (20,20)
-Could not update map for drone 1: cannot reshape array of size 20 into shape (20,20)
-Value: 0.8598438154931652
-At time: 36, the node 1 updated the velocity to: 15.0
-At time: 36, the node 0 updated the velocity to: 15.0
-At time: 36.0, node 0 map has a accomulated uncertainty of 12282.609999999995
-At time: 36.0, node 0 map has total uncertainty of 300.907
-At time: 37.0, node 1 map has a accomulated uncertainty of 12894.044999999993
-At time: 37.0, node 1 map has total uncertainty of 300.907
-At time: 37.0, node 0 map has a accomulated uncertainty of 12583.516999999994
-At time: 37.0, node 0 map has total uncertainty of 300.907
-At time: 37.0, node 2 map has a accomulated uncertainty of 13454.543999999998
-At time: 37.0, node 2 map has total uncertainty of 329.00699999999995
-At time: 38.0, node 2 map has a accomulated uncertainty of 13783.546999999999
-At time: 38.0, node 2 map has total uncertainty of 329.00299999999993
-At time: 38.0, node 1 map has a accomulated uncertainty of 13194.951999999992
-At time: 38.0, node 1 map has total uncertainty of 300.907
-At time: 38.0, node 0 map has a accomulated uncertainty of 12884.422999999995
-At time: 38.0, node 0 map has total uncertainty of 300.90599999999995
-Could not update map for drone 0: cannot reshape array of size 20 into shape (20,20)
-Could not update map for drone 2: cannot reshape array of size 20 into shape (20,20)
-Value: 0.8567390043815983
-At time: 38, the node 2 updated the velocity to: 15.0
+At time: 36.0, node 1 map has a accomulated uncertainty of 2917.1640000000007
+At time: 36.0, node 1 map has total uncertainty of 75.24099999999999
+At time 36.0 the battery status is: 0.9791543790949536
+At time: 37.0, node 1 map has a accomulated uncertainty of 2992.4010000000007
+At time: 37.0, node 1 map has total uncertainty of 75.237
+Value: 0.8645507619037393
+At time: 37, the node 1 updated the velocity to: 15.0
+At time: 37.0, node 2 map has a accomulated uncertainty of 2968.375
+At time: 37.0, node 2 map has total uncertainty of 75.22899999999998
+At time: 37.0, node 0 map has a accomulated uncertainty of 2871.0099999999993
+At time: 37.0, node 0 map has total uncertainty of 75.22899999999998
+Value: 0.9608701441295509
+At time: 37, the node 2 updated the velocity to: 15.0
+At time: 37, the node 1 updated the velocity to: 15.0
+At time: 38.0, node 0 map has a accomulated uncertainty of 2946.238999999999
+At time: 38.0, node 0 map has total uncertainty of 75.22899999999998
+At time: 38.0, node 1 map has a accomulated uncertainty of 3067.6300000000006
+At time: 38.0, node 1 map has total uncertainty of 75.22899999999998
+At time: 38.0, node 2 map has a accomulated uncertainty of 3043.604
+At time: 38.0, node 2 map has total uncertainty of 75.22899999999998
+Value: 0.8699049944058844
 At time: 38, the node 0 updated the velocity to: 15.0
-At time: 39.0, node 2 map has a accomulated uncertainty of 14084.449999999999
-At time: 39.0, node 2 map has total uncertainty of 300.90299999999996
-At time: 39.0, node 1 map has a accomulated uncertainty of 13495.858999999991
-At time: 39.0, node 1 map has total uncertainty of 300.907
-At time: 39.0, node 0 map has a accomulated uncertainty of 13185.325999999995
-At time: 39.0, node 0 map has total uncertainty of 300.90299999999996
-At time: 40.0, node 0 map has a accomulated uncertainty of 13486.228999999996
-At time: 40.0, node 0 map has total uncertainty of 300.90299999999996
-At time: 40.0, node 1 map has a accomulated uncertainty of 13796.76599999999
-At time: 40.0, node 1 map has total uncertainty of 300.907
-At time: 40.0, node 2 map has a accomulated uncertainty of 14385.353
-At time: 40.0, node 2 map has total uncertainty of 300.90299999999996
-Value: 0.8699049944058845
-At time: 40, the node 1 updated the velocity to: 15.0
-Value: 0.8645507619037393
-At time: 41, the node 2 updated the velocity to: 15.0
-At time: 41.0, node 1 map has a accomulated uncertainty of 14098.07099999999
-At time: 41.0, node 1 map has total uncertainty of 301.30499999999984
-At time: 41.0, node 0 map has a accomulated uncertainty of 13787.514999999996
-At time: 41.0, node 0 map has total uncertainty of 301.28599999999983
-At time 41.0 the battery status is: 0.9765486764818229
-At time: 41.0, node 2 map has a accomulated uncertainty of 14686.646999999999
-At time: 41.0, node 2 map has total uncertainty of 301.29399999999987
-At time 41.0 the battery status is: 0.9765486764818229
-At time 41.0 the battery status is: 0.9765486764818229
-At time: 42.0, node 1 map has a accomulated uncertainty of 14399.375999999991
-At time: 42.0, node 1 map has total uncertainty of 301.30499999999984
-Value: 0.5409782453120868
-At time: 42, the node 0 updated the velocity to: 15.0
-At time: 42.0, node 0 map has a accomulated uncertainty of 14088.800999999996
-At time: 42.0, node 0 map has total uncertainty of 301.28599999999983
-At time: 42.0, node 2 map has a accomulated uncertainty of 14987.938999999998
-At time: 42.0, node 2 map has total uncertainty of 301.29199999999986
-At time: 43.0, node 1 map has a accomulated uncertainty of 14700.680999999991
-At time: 43.0, node 1 map has total uncertainty of 301.30499999999984
-At time: 43.0, node 2 map has a accomulated uncertainty of 15289.229999999998
-At time: 43.0, node 2 map has total uncertainty of 301.2909999999998
-At time: 43.0, node 0 map has a accomulated uncertainty of 14390.079999999996
-At time: 43.0, node 0 map has total uncertainty of 301.2789999999999
-Value: 0.8699049944058845
-At time: 44, the node 1 updated the velocity to: 15.0
-At time: 44.0, node 1 map has a accomulated uncertainty of 15001.985999999992
-At time: 44.0, node 1 map has total uncertainty of 301.30499999999984
-At time: 44.0, node 0 map has a accomulated uncertainty of 14691.348999999997
-At time: 44.0, node 0 map has total uncertainty of 301.2689999999999
-At time: 44.0, node 2 map has a accomulated uncertainty of 15590.520999999997
-At time: 44.0, node 2 map has total uncertainty of 301.2909999999998
-At time: 45.0, node 1 map has a accomulated uncertainty of 15303.290999999992
-At time: 45.0, node 1 map has total uncertainty of 301.30499999999984
-Value: 0.8699049944058845
-At time: 45, the node 2 updated the velocity to: 15.0
-At time: 45.0, node 2 map has a accomulated uncertainty of 15891.811999999996
-At time: 45.0, node 2 map has total uncertainty of 301.2909999999998
-At time: 45.0, node 0 map has a accomulated uncertainty of 14992.612999999996
-At time: 45.0, node 0 map has total uncertainty of 301.26399999999984
-At time: 46.0, node 2 map has a accomulated uncertainty of 16193.102999999996
-At time: 46.0, node 2 map has total uncertainty of 301.2909999999998
-At time: 46.0, node 0 map has a accomulated uncertainty of 15293.873999999996
-At time: 46.0, node 0 map has total uncertainty of 301.26099999999985
-At time 46.0 the battery status is: 0.973942973868692
-At time 46.0 the battery status is: 0.973942973868692
-At time 46.0 the battery status is: 0.973942973868692
-At time: 46.0, node 1 map has a accomulated uncertainty of 15604.592999999992
-At time: 46.0, node 1 map has total uncertainty of 301.30199999999985
-At time: 47.0, node 0 map has a accomulated uncertainty of 15595.134999999997
-At time: 47.0, node 0 map has total uncertainty of 301.26099999999985
-At time: 47.0, node 2 map has a accomulated uncertainty of 16494.392999999996
-At time: 47.0, node 2 map has total uncertainty of 301.28999999999985
-Value: 0.47673842166137176
-At time: 47, the node 0 updated the velocity to: 15.0
-At time: 47.0, node 1 map has a accomulated uncertainty of 15905.890999999992
-At time: 47.0, node 1 map has total uncertainty of 301.2979999999999
-Value: 0.8699049944058845
-At time: 48, the node 1 updated the velocity to: 15.0
-At time: 48.0, node 0 map has a accomulated uncertainty of 15896.395999999997
-At time: 48.0, node 0 map has total uncertainty of 301.26099999999985
-At time: 48.0, node 2 map has a accomulated uncertainty of 16795.681999999997
-At time: 48.0, node 2 map has total uncertainty of 301.2889999999999
-At time: 48.0, node 1 map has a accomulated uncertainty of 16207.181999999992
-At time: 48.0, node 1 map has total uncertainty of 301.2909999999998
-At time: 49.0, node 1 map has a accomulated uncertainty of 16508.47099999999
-At time: 49.0, node 1 map has total uncertainty of 301.2889999999999
-At time: 49.0, node 2 map has a accomulated uncertainty of 17096.966999999997
-At time: 49.0, node 2 map has total uncertainty of 301.28499999999985
-Value: 0.8645507619037391
-At time: 49, the node 2 updated the velocity to: 15.0
-At time: 49.0, node 0 map has a accomulated uncertainty of 16197.655999999997
-At time: 49.0, node 0 map has total uncertainty of 301.2599999999999
-At time: 50.0, node 0 map has a accomulated uncertainty of 16498.915999999997
-At time: 50.0, node 0 map has total uncertainty of 301.2599999999999
-At time: 50.0, node 2 map has a accomulated uncertainty of 17398.250999999997
-At time: 50.0, node 2 map has total uncertainty of 301.2839999999999
-At time: 50.0, node 1 map has a accomulated uncertainty of 16809.75799999999
-At time: 50.0, node 1 map has total uncertainty of 301.28699999999986
-At time: 51.0, node 2 map has a accomulated uncertainty of 17699.923999999995
-At time: 51.0, node 2 map has total uncertainty of 301.6729999999998
-At time 51.0 the battery status is: 0.9713372712555612
-At time: 51.0, node 0 map has a accomulated uncertainty of 16800.560999999998
-At time: 51.0, node 0 map has total uncertainty of 301.64499999999975
-At time: 51.0, node 1 map has a accomulated uncertainty of 17111.441999999992
-At time: 51.0, node 1 map has total uncertainty of 301.68399999999974
-At time 51.0 the battery status is: 0.9713372712555612
-Value: 0.47673842166137176
-At time: 51, the node 0 updated the velocity to: 15.0
-At time 51.0 the battery status is: 0.9713372712555612
-Value: 0.8645507619037394
-At time: 52, the node 1 updated the velocity to: 15.0
-At time: 52.0, node 2 map has a accomulated uncertainty of 18001.594999999994
-At time: 52.0, node 2 map has total uncertainty of 301.67099999999976
-At time: 52.0, node 0 map has a accomulated uncertainty of 17102.197999999997
-At time: 52.0, node 0 map has total uncertainty of 301.6369999999998
-At time: 52.0, node 1 map has a accomulated uncertainty of 17413.125999999993
-At time: 52.0, node 1 map has total uncertainty of 301.68399999999974
-At time: 53.0, node 1 map has a accomulated uncertainty of 17714.808999999994
-At time: 53.0, node 1 map has total uncertainty of 301.68299999999977
-At time: 53.0, node 2 map has a accomulated uncertainty of 18303.265999999992
-At time: 53.0, node 2 map has total uncertainty of 301.67099999999976
-Value: 0.8699049944058845
-At time: 53, the node 2 updated the velocity to: 15.0
-At time: 53.0, node 0 map has a accomulated uncertainty of 17403.824999999997
-At time: 53.0, node 0 map has total uncertainty of 301.6269999999997
-At time: 54.0, node 1 map has a accomulated uncertainty of 18016.480999999992
-At time: 54.0, node 1 map has total uncertainty of 301.6719999999998
-At time: 54.0, node 0 map has a accomulated uncertainty of 17705.447999999997
-At time: 54.0, node 0 map has total uncertainty of 301.62299999999976
-At time: 54.0, node 2 map has a accomulated uncertainty of 18604.93699999999
-At time: 54.0, node 2 map has total uncertainty of 301.67099999999976
-At time: 55.0, node 1 map has a accomulated uncertainty of 18318.142999999993
-At time: 55.0, node 1 map has total uncertainty of 301.66199999999975
-Value: 0.47673842166137176
-At time: 55, the node 0 updated the velocity to: 15.0
-At time: 55.0, node 0 map has a accomulated uncertainty of 18007.068999999996
-At time: 55.0, node 0 map has total uncertainty of 301.62099999999975
-At time: 55.0, node 2 map has a accomulated uncertainty of 18906.60599999999
-At time: 55.0, node 2 map has total uncertainty of 301.66899999999976
-At time: 56.0, node 2 map has a accomulated uncertainty of 19208.27199999999
-At time: 56.0, node 2 map has total uncertainty of 301.66599999999977
-At time 56.0 the battery status is: 0.9687315686424305
-At time 56.0 the battery status is: 0.9687315686424305
-Value: 0.8645507619037394
-At time: 56, the node 1 updated the velocity to: 15.0
-At time 56.0 the battery status is: 0.9687315686424305
-At time: 56.0, node 0 map has a accomulated uncertainty of 18308.689999999995
-At time: 56.0, node 0 map has total uncertainty of 301.62099999999975
-At time: 56.0, node 1 map has a accomulated uncertainty of 18619.79499999999
-At time: 56.0, node 1 map has total uncertainty of 301.65199999999976
-Value: 0.8645507619037391
-At time: 57, the node 2 updated the velocity to: 15.0
-At time: 57.0, node 1 map has a accomulated uncertainty of 18921.44699999999
-At time: 57.0, node 1 map has total uncertainty of 301.65199999999976
-At time: 57.0, node 2 map has a accomulated uncertainty of 19509.93699999999
-At time: 57.0, node 2 map has total uncertainty of 301.66499999999974
-At time: 57.0, node 0 map has a accomulated uncertainty of 18610.310999999994
-At time: 57.0, node 0 map has total uncertainty of 301.62099999999975
-At time: 58.0, node 1 map has a accomulated uncertainty of 19223.098999999987
-At time: 58.0, node 1 map has total uncertainty of 301.65199999999976
-At time: 58.0, node 0 map has a accomulated uncertainty of 18911.931999999993
-At time: 58.0, node 0 map has total uncertainty of 301.62099999999975
-At time: 58.0, node 2 map has a accomulated uncertainty of 19811.60199999999
-At time: 58.0, node 2 map has total uncertainty of 301.66499999999974
-At time: 59.0, node 1 map has a accomulated uncertainty of 19524.750999999986
-At time: 59.0, node 1 map has total uncertainty of 301.65199999999976
-At time: 59.0, node 0 map has a accomulated uncertainty of 19213.552999999993
-At time: 59.0, node 0 map has total uncertainty of 301.62099999999975
-Value: 0.47673842166137176
-At time: 59, the node 0 updated the velocity to: 15.0
-At time: 59.0, node 2 map has a accomulated uncertainty of 20113.266999999993
-At time: 59.0, node 2 map has total uncertainty of 301.66499999999974
-At time: 60.0, node 2 map has a accomulated uncertainty of 20414.931999999993
-At time: 60.0, node 2 map has total uncertainty of 301.66499999999974
-Value: 0.8645507619037394
-At time: 60, the node 1 updated the velocity to: 15.0
-At time: 60.0, node 1 map has a accomulated uncertainty of 19826.402999999984
-At time: 60.0, node 1 map has total uncertainty of 301.65199999999976
-At time: 60.0, node 0 map has a accomulated uncertainty of 19515.553999999993
-At time: 60.0, node 0 map has total uncertainty of 302.00099999999986
-At time: 61.0, node 2 map has a accomulated uncertainty of 20716.996999999992
-At time: 61.0, node 2 map has total uncertainty of 302.0649999999999
-At time: 61.0, node 0 map has a accomulated uncertainty of 19817.54499999999
-At time: 61.0, node 0 map has total uncertainty of 301.9909999999999
-At time 61.0 the battery status is: 0.9661258660292996
-At time: 61.0, node 1 map has a accomulated uncertainty of 20128.450999999983
-At time: 61.0, node 1 map has total uncertainty of 302.0479999999999
-At time 61.0 the battery status is: 0.9661258660292996
-Value: 0.8699049944058844
-At time: 61, the node 2 updated the velocity to: 15.0
-At time 61.0 the battery status is: 0.9661258660292996
-At time: 62.0, node 0 map has a accomulated uncertainty of 20119.531999999992
-At time: 62.0, node 0 map has total uncertainty of 301.98699999999985
-At time: 62.0, node 2 map has a accomulated uncertainty of 21019.05999999999
-At time: 62.0, node 2 map has total uncertainty of 302.0629999999999
-At time: 62.0, node 1 map has a accomulated uncertainty of 20430.491999999984
-At time: 62.0, node 1 map has total uncertainty of 302.0409999999999
-At time: 63.0, node 1 map has a accomulated uncertainty of 20732.524999999983
-At time: 63.0, node 1 map has total uncertainty of 302.0329999999999
-Value: 0.47673842166137176
-At time: 63, the node 0 updated the velocity to: 15.0
-At time: 63.0, node 0 map has a accomulated uncertainty of 20421.516999999993
-At time: 63.0, node 0 map has total uncertainty of 301.9849999999999
-At time: 63.0, node 2 map has a accomulated uncertainty of 21321.11599999999
-At time: 63.0, node 2 map has total uncertainty of 302.05599999999987
-At time: 64.0, node 0 map has a accomulated uncertainty of 20723.501999999993
-At time: 64.0, node 0 map has total uncertainty of 301.9849999999999
-At time: 64.0, node 1 map has a accomulated uncertainty of 21034.55199999998
-At time: 64.0, node 1 map has total uncertainty of 302.0269999999999
-At time: 64.0, node 2 map has a accomulated uncertainty of 21623.16599999999
-At time: 64.0, node 2 map has total uncertainty of 302.04999999999984
-Value: 0.8645507619037391
-At time: 64, the node 1 updated the velocity to: 15.0
-At time: 65.0, node 0 map has a accomulated uncertainty of 21025.486999999994
-At time: 65.0, node 0 map has total uncertainty of 301.9849999999999
-At time: 65.0, node 1 map has a accomulated uncertainty of 21336.57899999998
-At time: 65.0, node 1 map has total uncertainty of 302.0269999999999
-At time: 65.0, node 2 map has a accomulated uncertainty of 21925.20799999999
-At time: 65.0, node 2 map has total uncertainty of 302.04199999999986
-Value: 0.8645507619037391
-At time: 65, the node 2 updated the velocity to: 15.0
-At time: 66.0, node 0 map has a accomulated uncertainty of 21327.470999999994
-At time: 66.0, node 0 map has total uncertainty of 301.98399999999987
-At time 66.0 the battery status is: 0.9635201634161689
-At time: 66.0, node 1 map has a accomulated uncertainty of 21638.605999999978
-At time: 66.0, node 1 map has total uncertainty of 302.0269999999999
-At time 66.0 the battery status is: 0.9635201634161689
-At time 66.0 the battery status is: 0.9635201634161689
-At time: 66.0, node 2 map has a accomulated uncertainty of 22227.247999999992
-At time: 66.0, node 2 map has total uncertainty of 302.03999999999985
-Value: 0.47673842166137176
-At time: 67, the node 0 updated the velocity to: 15.0
-At time: 67.0, node 2 map has a accomulated uncertainty of 22529.285999999993
-At time: 67.0, node 2 map has total uncertainty of 302.0379999999999
-At time: 67.0, node 0 map has a accomulated uncertainty of 21629.452999999994
-At time: 67.0, node 0 map has total uncertainty of 301.98199999999986
-At time: 67.0, node 1 map has a accomulated uncertainty of 21940.632999999976
-At time: 67.0, node 1 map has total uncertainty of 302.0269999999999
-At time: 68.0, node 1 map has a accomulated uncertainty of 22242.659999999974
-At time: 68.0, node 1 map has total uncertainty of 302.0269999999999
-Value: 0.8645507619037393
-At time: 68, the node 1 updated the velocity to: 15.0
-At time: 68.0, node 2 map has a accomulated uncertainty of 22831.322999999993
-At time: 68.0, node 2 map has total uncertainty of 302.03699999999986
-At time: 68.0, node 0 map has a accomulated uncertainty of 21931.434999999994
-At time: 68.0, node 0 map has total uncertainty of 301.98199999999986
-At time: 69.0, node 1 map has a accomulated uncertainty of 22544.686999999973
-At time: 69.0, node 1 map has total uncertainty of 302.0269999999999
-Value: 0.8699049944058844
-At time: 69, the node 2 updated the velocity to: 15.0
-At time: 69.0, node 2 map has a accomulated uncertainty of 23133.359999999993
-At time: 69.0, node 2 map has total uncertainty of 302.03699999999986
-At time: 69.0, node 0 map has a accomulated uncertainty of 22233.416999999994
-At time: 69.0, node 0 map has total uncertainty of 301.98199999999986
-At time: 70.0, node 0 map has a accomulated uncertainty of 22535.398999999994
-At time: 70.0, node 0 map has total uncertainty of 301.98199999999986
-At time: 70.0, node 2 map has a accomulated uncertainty of 23435.396999999994
-At time: 70.0, node 2 map has total uncertainty of 302.03699999999986
-At time: 70.0, node 1 map has a accomulated uncertainty of 22847.113999999972
-At time: 70.0, node 1 map has total uncertainty of 302.42699999999985
-Value: 0.4767384216613718
-At time: 71, the node 0 updated the velocity to: 15.0
-At time: 71.0, node 0 map has a accomulated uncertainty of 22837.765999999992
-At time: 71.0, node 0 map has total uncertainty of 302.36699999999985
-At time 71.0 the battery status is: 0.960914460803038
-At time 71.0 the battery status is: 0.960914460803038
-At time: 71.0, node 2 map has a accomulated uncertainty of 23737.825999999994
-At time: 71.0, node 2 map has total uncertainty of 302.42899999999986
-At time: 71.0, node 1 map has a accomulated uncertainty of 23149.540999999972
-At time: 71.0, node 1 map has total uncertainty of 302.42699999999985
-At time 71.0 the battery status is: 0.960914460803038
-At time: 72.0, node 1 map has a accomulated uncertainty of 23451.96799999997
-At time: 72.0, node 1 map has total uncertainty of 302.42699999999985
-Value: 0.8699049944058845
-At time: 72, the node 1 updated the velocity to: 15.0
-At time: 72.0, node 2 map has a accomulated uncertainty of 24040.251999999993
-At time: 72.0, node 2 map has total uncertainty of 302.4259999999998
-At time: 72.0, node 0 map has a accomulated uncertainty of 23140.124999999993
-At time: 72.0, node 0 map has total uncertainty of 302.3589999999998
-At time: 73.0, node 1 map has a accomulated uncertainty of 23754.39499999997
-At time: 73.0, node 1 map has total uncertainty of 302.42699999999985
-At time: 73.0, node 0 map has a accomulated uncertainty of 23442.47499999999
-At time: 73.0, node 0 map has total uncertainty of 302.34999999999985
-At time: 73.0, node 2 map has a accomulated uncertainty of 24342.676999999992
-At time: 73.0, node 2 map has total uncertainty of 302.42499999999984
-Value: 0.8645507619037393
-At time: 73, the node 2 updated the velocity to: 15.0
-At time: 74.0, node 1 map has a accomulated uncertainty of 24056.82199999997
-At time: 74.0, node 1 map has total uncertainty of 302.42699999999985
-At time: 74.0, node 2 map has a accomulated uncertainty of 24645.10199999999
-At time: 74.0, node 2 map has total uncertainty of 302.42499999999984
-At time: 74.0, node 0 map has a accomulated uncertainty of 23744.819999999992
-At time: 74.0, node 0 map has total uncertainty of 302.34499999999986
-Value: 0.47673842166137176
-At time: 75, the node 0 updated the velocity to: 15.0
-At time: 75.0, node 1 map has a accomulated uncertainty of 24359.24899999997
-At time: 75.0, node 1 map has total uncertainty of 302.42699999999985
-At time: 75.0, node 2 map has a accomulated uncertainty of 24947.52699999999
-At time: 75.0, node 2 map has total uncertainty of 302.42499999999984
-At time: 75.0, node 0 map has a accomulated uncertainty of 24047.162999999993
-At time: 75.0, node 0 map has total uncertainty of 302.34299999999985
-At time: 76.0, node 2 map has a accomulated uncertainty of 25249.95199999999
-At time: 76.0, node 2 map has total uncertainty of 302.42499999999984
-At time: 76.0, node 0 map has a accomulated uncertainty of 24349.505999999994
-At time: 76.0, node 0 map has total uncertainty of 302.34299999999985
-Value: 0.8645507619037393
-At time: 76, the node 1 updated the velocity to: 15.0
-At time: 76.0, node 1 map has a accomulated uncertainty of 24661.67199999997
-At time: 76.0, node 1 map has total uncertainty of 302.42299999999983
-At time 76.0 the battery status is: 0.9583087581899072
-At time 76.0 the battery status is: 0.9583087581899072
-At time 76.0 the battery status is: 0.9583087581899072
-At time: 77.0, node 2 map has a accomulated uncertainty of 25552.37699999999
-At time: 77.0, node 2 map has total uncertainty of 302.42499999999984
-At time: 77.0, node 0 map has a accomulated uncertainty of 24651.848999999995
-At time: 77.0, node 0 map has total uncertainty of 302.34299999999985
-At time: 77.0, node 1 map has a accomulated uncertainty of 24964.09499999997
-At time: 77.0, node 1 map has total uncertainty of 302.42299999999983
-Value: 0.8699049944058844
-At time: 77, the node 2 updated the velocity to: 15.0
-At time: 78.0, node 0 map has a accomulated uncertainty of 24954.191999999995
-At time: 78.0, node 0 map has total uncertainty of 302.34299999999985
-At time: 78.0, node 2 map has a accomulated uncertainty of 25854.80199999999
-At time: 78.0, node 2 map has total uncertainty of 302.42499999999984
-At time: 78.0, node 1 map has a accomulated uncertainty of 25266.517999999967
-At time: 78.0, node 1 map has total uncertainty of 302.42299999999983
+At time: 39.0, node 0 map has a accomulated uncertainty of 3021.467999999999
+At time: 39.0, node 0 map has total uncertainty of 75.22899999999998
+At time: 39.0, node 1 map has a accomulated uncertainty of 3142.8590000000004
+At time: 39.0, node 1 map has total uncertainty of 75.22899999999998
+At time: 39.0, node 2 map has a accomulated uncertainty of 3118.8329999999996
+At time: 39.0, node 2 map has total uncertainty of 75.22899999999998
+Value: 0.9608701441295507
+At time: 39, the node 1 updated the velocity to: 15.0
+At time: 39, the node 0 updated the velocity to: 15.0
+At time: 40.0, node 0 map has a accomulated uncertainty of 3096.6969999999988
+At time: 40.0, node 0 map has total uncertainty of 75.22899999999998
+At time: 40.0, node 2 map has a accomulated uncertainty of 3194.162
+At time: 40.0, node 2 map has total uncertainty of 75.32899999999998
+At time: 40.0, node 1 map has a accomulated uncertainty of 3218.1910000000003
+At time: 40.0, node 1 map has total uncertainty of 75.33199999999998
 server closing
 server closed
