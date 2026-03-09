@@ -86,7 +86,7 @@ class Drone(IProtocol):
 
     ##### Configuration for drone inheritance #####
     _config = {
-        "uncertainty_rate": 10,
+        "uncertainty_rate": 0.01,
         "vanishing_update_time": 10.0,
         "number_of_drones": 3,
         "map_width": 10,
@@ -99,7 +99,7 @@ class Drone(IProtocol):
         self.drone_position = None
         self.goto_command = np.zeros(3)
 
-        self.TIMEOUT_TO_UPDATE_DESTINATION = 3.0
+        self.TIMEOUT_TO_UPDATE_DESTINATION = 10.0
 
         self.UNCERTAINTY_RATE = self._config["uncertainty_rate"]
         self.VANISHING_UPDATE_TIME = self._config["vanishing_update_time"]
@@ -110,15 +110,16 @@ class Drone(IProtocol):
         self.results_aggregator = self._config.get("results_aggregator", {})
         
         self.DRONE_ALTITUDE = 50.0
-        self.DISTANCE_BETWEEN_CELLS = 10.0
+        self.DISTANCE_BETWEEN_CELLS = 20
         self.CAMERA_ANGLE = np.pi/6
+        self.CELLS_EVALUETED_FOR_PRIORITY = 20
 
         
         ##### Initialize map #####
-        self.map = np.zeros((self.MAP_HEIGHT, self.MAP_WIDTH, 2))
+        self.map = np.zeros((self.MAP_WIDTH, self.MAP_HEIGHT, 2))
         self.map[:,:,0] = 1
         self.total_uncertainty = self.map[:,:,0].sum()
-        self.is_cell_visited = np.zeros((self.MAP_HEIGHT, self.MAP_WIDTH))
+        self.is_cell_visited = np.zeros((self.MAP_WIDTH, self.MAP_HEIGHT))
         self.accomulated_uncertainty = 0.0
              
         ##### Initial state #####
@@ -134,13 +135,13 @@ class Drone(IProtocol):
 
         ### It's considered that the at any high the camera reach will be enough #####
         ##### Cluster plugins initialization #####
-        self.fitness = FuzzyEvaluator(map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells = self.DISTANCE_BETWEEN_CELLS, fuzzy_tables=self.FUZZY_TABLES, camera_angle=np.pi/6)
+        self.fitness = FuzzyEvaluator(map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells = self.DISTANCE_BETWEEN_CELLS, fuzzy_tables=self.FUZZY_TABLES, camera_angle=self.CAMERA_ANGLE, number_of_cells_x_y = self.CELLS_EVALUETED_FOR_PRIORITY)
         
         ##### Communication tracking. Avoiding communications loops #####
         self.last_drone_interaction_time = np.zeros(self.NUMBER_OF_DRONES)  
 
         ##### Initial random position #####
-        self.goto_command = np.array([random.uniform(-5*self.MAP_WIDTH, 5*self.MAP_WIDTH), random.uniform(-5*self.MAP_HEIGHT, 5*self.MAP_HEIGHT), self.DRONE_ALTITUDE])
+        self.goto_command = np.array([random.uniform(-self.DISTANCE_BETWEEN_CELLS*self.MAP_WIDTH/2, self.DISTANCE_BETWEEN_CELLS*self.MAP_WIDTH/2), random.uniform(-self.DISTANCE_BETWEEN_CELLS*self.MAP_HEIGHT/2, self.DISTANCE_BETWEEN_CELLS*self.MAP_HEIGHT/2), self.DRONE_ALTITUDE])
         command = GotoCoordsMobilityCommand(*self.goto_command)
         self.provider.send_mobility_command(command)
 
@@ -160,6 +161,16 @@ class Drone(IProtocol):
         self.battery_status = self.energy.get_battery_status() 
         self.provider.schedule_timer("battery", self.provider.current_time() + 1)
 
+        ##### Visualizing the MAP #####
+        if Drone.visualizer is None:
+            # We have 3 drones in the simulation.
+            # I have to think a better way to do this.
+            Drone.visualizer = MapVisualizer(num_drones=self.NUMBER_OF_DRONES, map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells=self.DISTANCE_BETWEEN_CELLS)
+        
+        #if self.visualizer:
+        #    self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
+        #
+
 
     def camera_routine(self):      
         ##### New Camera Routine is needed. The previous approach was too slow for running large maps.
@@ -177,9 +188,9 @@ class Drone(IProtocol):
 
         ### Calculating the range of cells to update based on the observation radius. The range in index, so it needs to be converted to the map coordinates. 
         x_min = max(0, math.floor(current_x - cells_to_check))
-        x_max = min(self.MAP_WIDTH // 2, math.floor(current_x + cells_to_check) + 1)
+        x_max = min(self.MAP_WIDTH, math.floor(current_x + cells_to_check) + 1)
         y_min = max(0, math.floor(current_y - cells_to_check))
-        y_max = min(self.MAP_HEIGHT // 2, math.floor(current_y + cells_to_check) + 1)
+        y_max = min(self.MAP_HEIGHT, math.floor(current_y + cells_to_check) + 1)
 
         #self._log.info(f"Drone {self.provider.get_id()} is updating cells in range x: [{x_min}, {x_max}), y: [{y_min}, {y_max}) based on its position {self.drone_position} and observation radius {observation_radius}")
 
@@ -193,20 +204,21 @@ class Drone(IProtocol):
                 # Check if the cell is within the observation radius
                 distance_to_cell = np.sqrt((cell_center_x - self.drone_position[0])**2 + (cell_center_y - self.drone_position[1])**2)
                 if distance_to_cell <= observation_radius:
-                    self.map[y, x, 0] = 0.0 
-                    self.map[y, x, 1] = self.provider.current_time()
-                    self.is_cell_visited[y, x] = 1
+                    self.map[x, y, 0] = 0.0 
+                    self.map[x, y, 1] = self.provider.current_time()
+                    self.is_cell_visited[x, y] = 1
         
         self.total_uncertainty = self.map[:,:,0].sum()
         self.accomulated_uncertainty += self.total_uncertainty
-        self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
+        #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
+        
+        if self.visualizer:
+            self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0], [current_x, current_y])
         
         ###### Printar isso aqui depois nos testes####
         ##############################################
         ##############################################                
-        self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
-
-
+        #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
 
 
     ##### Map updating ##### 
@@ -216,6 +228,10 @@ class Drone(IProtocol):
         ##### Checking if the cell was visited #####
         ##### Importante parameter. If there are unviseted cells, there will be penalizations in the algorithm #####
         self.is_cell_visited[self.map[:, :, 1] > 0.0] = 1
+
+        ##### Update the map #####
+        #if self.visualizer:
+        #    self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
         ###### Printar isso aqui depois nos testes####
         ##############################################
         ############################################## 
@@ -236,16 +252,17 @@ class Drone(IProtocol):
         target_row, target_col = target_coords
         
         #### Setting the speed
-        self._log.info(f"Value: {value}")
+        self._log.info(f"Target cell: ({target_row}, {target_col}), fitness value: {value}")
         speed = SetSpeedMobilityCommand(self.speed_command)
         self.provider.send_mobility_command(speed)
-        self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} updated the velocity to: {self.speed_command}")
         
         #### Setting the position to go to
         #print(f"Drone {self.provider.get_id()} going to cell ({target_row}, {target_col}). Fitness value: {value}")
         x_goto = target_row * self.DISTANCE_BETWEEN_CELLS - map_center_offset
         y_goto = target_col * self.DISTANCE_BETWEEN_CELLS - map_center_offset            
-        self.goto_command = np.array([x_goto, y_goto, self.DRONE_ALTITUDE])        
+        self.goto_command = np.array([x_goto, y_goto, self.DRONE_ALTITUDE])
+        
+        self._log.info(f"Drone {self.provider.get_id()} going to position ({x_goto}, {y_goto}).")        
 
         command = GotoCoordsMobilityCommand(*self.goto_command)      
         self.provider.send_mobility_command(command)
@@ -269,15 +286,14 @@ class Drone(IProtocol):
         target_row_1, target_col_1 = target_coords[0]
         target_row_2, target_col_2 = target_coords[1]
         
-        self._log.info(f"Value: {value}")
-        #### Setting the speed
-        self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} updated the velocity to: {self.speed_command}")
-        
+
+
         #### Setting position to go to
         #print(f"Drone {self.provider.get_id()} going to cell ({target_row_1}, {target_col_1}) and sending drone to cell ({target_row_2}, {target_col_2}). Fitness value: {value}")
         x_goto = target_row_1 * self.DISTANCE_BETWEEN_CELLS - map_center_offset
         y_goto = target_col_1 * self.DISTANCE_BETWEEN_CELLS - map_center_offset            
         self.goto_command = np.array([x_goto, y_goto, self.DRONE_ALTITUDE])
+
 
         ### Setting the speed
         speed = SetSpeedMobilityCommand(self.speed_command)
@@ -290,7 +306,11 @@ class Drone(IProtocol):
         x_send_command = target_row_2 * self.DISTANCE_BETWEEN_CELLS - map_center_offset
         y_send_command = target_col_2 * self.DISTANCE_BETWEEN_CELLS - map_center_offset
         send_command = np.array([x_send_command, y_send_command, self.DRONE_ALTITUDE])
-
+        
+        self._log.info(f"Target cells: ({target_row_1}, {target_col_1}) and ({target_row_2}, {target_col_2}), fitness value: {value}")
+        self._log.info(f"Drone {self.provider.get_id()} going to position ({x_goto}, {y_goto}).")
+        self._log.info(f"Drone {self.provider.get_id()} sending drone to position ({x_send_command}, {y_send_command}).")
+        
         return send_command, value    
 
     
@@ -341,8 +361,8 @@ class Drone(IProtocol):
         share_map_msg: ShareMapMessage = data
         updated_map = self.compare_maps(np.array(share_map_msg['map']))
         
-        if self.visualizer:
-            self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
+        #if self.visualizer:
+        #    self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
 
         return updated_map
         
@@ -395,7 +415,7 @@ class Drone(IProtocol):
                 battery_timer = 5.0
                 try:
                     self.battery_status = self.energy.manage_battery_during_fly(battery_timer, self.speed_command, movement_direction)
-                    self._log.info(f"At time {self.provider.current_time()} the battery status is: {self.battery_status}")
+                    #self._log.info(f"At time {self.provider.current_time()} the battery status is: {self.battery_status}")
                 except BatteryError:
                     self._log.error(f"Drone {self.provider.get_id()} has no battery.")
                     self.energy.battery_status = 0.0
@@ -453,7 +473,6 @@ class Drone(IProtocol):
                 #### Setting the speed
                 speed = SetSpeedMobilityCommand(self.speed_command)
                 self.provider.send_mobility_command(speed)
-                self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} updated the velocity to: {self.speed_command}")
 
                 self.goto_command = goto_msg['goto']
                 command = GotoCoordsMobilityCommand(*self.goto_command)      

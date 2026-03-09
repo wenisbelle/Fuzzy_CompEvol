@@ -12,40 +12,66 @@ class FuzzyEvaluator:
                  map_height: int,
                  camera_angle:float,
                  fuzzy_tables: List[RegularGridInterpolator],
+                 number_of_cells_x_y: int = 10, 
                  distance_between_cells: int =10):
 
         self.map_width = map_width
         self.map_height = map_height
         self.camera_angle = camera_angle
-        self.distance_between_cells = distance_between_cells 
+        self.distance_between_cells = distance_between_cells
+
+        self.NUMBER_OF_CELLS_X_Y = number_of_cells_x_y
+
+        # Verify all fuzzy tables are not None
+        if any(t is None for t in fuzzy_tables):
+            raise ValueError("All fuzzy tables must be properly initialized")
+
         self.interp_one_cell = fuzzy_tables[0]
-        self.interp_two_cells = fuzzy_tables[1]         
+        self.interp_two_cells = fuzzy_tables[1] 
+     
 
     def get_cells_visited_in_trajectory(self, drone_altitude: float, initial_cell: Tuple[int, int], final_cell: Tuple[int, int]) -> list:
         
-        cells_within_trajectory = []
+        x0, y0 = initial_cell
+        x1, y1 = final_cell
+
         radius_coverage = drone_altitude * np.tan(self.camera_angle)
+
+        padding = int(np.ceil((radius_coverage / self.distance_between_cells)))
+        x_min, x_max = min(x0, x1) - padding, max(x0, x1) + padding
+        y_min, y_max = min(y0, y1) - padding, max(y0, y1) + padding
+
+        X, Y = np.meshgrid(np.arange(x_min, x_max + 1), np.arange(y_min, y_max + 1))
+
+        ### Equation distance between point and line
+        A = y1 - y0
+        B = x0 - x1
+        C = x1 * y0 - y1 * x0
+        denominator = np.sqrt(A**2 + B**2)
+
+        if denominator == 0:
+            # Drone is evaluating its exact current cell
+            return [(x0, y0)]
         
-        if final_cell[0] == initial_cell[0]:  # Vertical line case
-            for y in range(min(initial_cell[1], final_cell[1])+1, max(initial_cell[1], final_cell[1])+1):
-                cells_within_trajectory.append((initial_cell[0], y))
-            return cells_within_trajectory    
-        elif final_cell[1] == initial_cell[1]:  # Horizontal line case
-            for x in range(min(initial_cell[0], final_cell[0])+1, max(initial_cell[0], final_cell[0])+1):
-                cells_within_trajectory.append((x, initial_cell[1]))
-            return cells_within_trajectory
-        else:
-            line_slop = (final_cell[1] - initial_cell[1])/(final_cell[0] - initial_cell[0] + 1e-6)
+        distances = np.abs(A * X + B * Y + C) / denominator
+        map_size_d = distances * self.distance_between_cells
 
-            for y in range(min(initial_cell[1], final_cell[1])+1, max(initial_cell[1], final_cell[1])+1):
-                for x in range(min(initial_cell[0], final_cell[0])+1, max(initial_cell[0], final_cell[0])+1):
-                    ## distance from point to line formula ##
-                    d = abs(line_slop*x - y + (initial_cell[1] -line_slop*initial_cell[0]))/np.sqrt(line_slop**2 + 1)
-                    map_size_d = d * self.distance_between_cells
-                    if map_size_d <= radius_coverage:
-                        cells_within_trajectory.append((x, y))
+        # Filter cells within the camera radius
+        mask = map_size_d <= radius_coverage
+        
+        # Extract the valid coordinates
+        valid_x = X[mask]
+        valid_y = Y[mask]
+        
+        # Filter out coordinates that fall outside the actual map boundaries
+        bounds_mask = (valid_x >= -self.map_width/2) & (valid_x <= self.map_width/2) & (valid_y >= -self.map_height/2) & (valid_y <= self.map_height/2)
+        valid_x = valid_x[bounds_mask]
+        valid_y = valid_y[bounds_mask]
+        
+        # Create the final list of absolute coordinates
+        cells_within_trajectory = list(zip(valid_x, valid_y))
 
-            return cells_within_trajectory       
+        return cells_within_trajectory       
 
     def cells_priority(self, map_data: np.array, drone_position: Tuple[float, float, float], map_center_offset: float) -> list:
         """
@@ -57,15 +83,18 @@ class FuzzyEvaluator:
         current_i = int((drone_x + map_center_offset)/self.distance_between_cells)
         current_j = int((drone_y + map_center_offset)/self.distance_between_cells)
 
-        # 1. Collect inputs in lists (Geometric part is still a loop, but lightweight)
         input_data = [] # Will hold tuples of (uncertainty, distance, ind_uncertainty)
         coords_tracker = []
 
-        # Iterate map
-        # Note: If map is huge, we should vectorize distance calculation too.
         rows, cols = map_data.shape
-        for i in range(rows):
-            for j in range(cols):
+
+        min_x_cell = max(0, current_i - self.NUMBER_OF_CELLS_X_Y//2)
+        max_x_cell = min(cols, current_i + self.NUMBER_OF_CELLS_X_Y//2)
+        min_y_cell = max(0, current_j - self.NUMBER_OF_CELLS_X_Y//2)
+        max_y_cell = min(rows, current_j + self.NUMBER_OF_CELLS_X_Y//2)
+        
+        for i in range(min_x_cell, max_x_cell):
+            for j in range(min_y_cell, max_y_cell):
                 # Distance
                 x_cell = self.distance_between_cells*i - map_center_offset
                 y_cell = self.distance_between_cells*j - map_center_offset
@@ -163,19 +192,6 @@ class FuzzyEvaluator:
         best_2 = (fitness_scores[2])
 
         return [[best_1, best_2], fitness_scores[0]]
+
     
-##### For sanaty checks purposes only #####
-"""
-def main():
-    sample_fuzzy_parameters_fixed = np.array([
-    3.0, 7.0, 12.0,     # uncertainty (3 values)
-    40.0, 80.0, 120.0,  # distance (3 values)
-    0.5, 1.0, 1.5,      # individual_cell_uncertainty (3 values)    
-    # one_cell_priority_interval (4 values: [A, B, C, D] from original code):
-    0.25, 0.5, 0.75     # This allows your current extraction fuzzy_parameters[9:13] to work.
-])
-    evaluator = FuzzyEvaluator(map_width=10, map_height=10, camera_angle=np.radians(30), fuzzy_parameters=sample_fuzzy_parameters_fixed)
-    
-if __name__ == "__main__":
-    main()
-"""
+

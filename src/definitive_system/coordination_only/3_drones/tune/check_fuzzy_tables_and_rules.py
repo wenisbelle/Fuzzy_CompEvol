@@ -7,15 +7,12 @@ import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 from scipy.interpolate import RegularGridInterpolator
 
-class FuzzyLookupTable:
+
+class SanityCheck():
     def __init__(self,fuzzy_parameters: np.array):
 
         self.create_fuzzy_controller(fuzzy_parameters)
-        print(f"Starting the lookup generation...")
-        # 2. GENERATE LOOKUP TABLES (The Optimization)
-        self.interp_one_cell = self._precompute_one_cell_surface()
-        self.interp_two_cells = self._precompute_two_cells_surface()
-        print(f"Finished the lookup generation...")
+
     
     def get_interpolators(self):
         return self.interp_one_cell, self.interp_two_cells
@@ -38,7 +35,7 @@ class FuzzyLookupTable:
         #############################
         #############################
         uncertainty = ctrl.Antecedent(np.arange(0, 2, 0.05), 'uncertainty')
-        distance = ctrl.Antecedent(np.arange(0, 20*10, 5.0), 'distance')
+        distance = ctrl.Antecedent(np.arange(0, 150, 5.0), 'distance')
         one_cell_priority = ctrl.Consequent(np.arange(0, 1.0, 0.01), 'one_cell_priority', defuzzify_method = 'centroid')
 
         uncertainty['low'] = fuzz.trapmf(uncertainty.universe, [-1, 0, uncertainty_interval[0], uncertainty_interval[0]+uncertainty_interval[1]])
@@ -56,15 +53,13 @@ class FuzzyLookupTable:
         one_cell_priority['very_high'] = fuzz.trimf(one_cell_priority.universe, [one_cell_priority_interval[0]+one_cell_priority_interval[1]+one_cell_priority_interval[2], 1.0, 1.1])
 
         #####sanity checks
-        #uncertainty.view()
-        #plt.show() 
-        #distance.view()
-        #plt.show()
-        #individual_cell_uncertainty.view()
-        #plt.show()
-        #one_cell_priority.view()
-        #plt.show()
-        # 
+        uncertainty.view()
+        plt.show() 
+        distance.view()
+        plt.show()
+        one_cell_priority.view()
+        plt.show()
+        
 
         uncertainty_sets = ['low', 'medium', 'high']
         distance_sets = ['close', 'medium', 'far']
@@ -83,6 +78,9 @@ class FuzzyLookupTable:
 
                 rule = ctrl.Rule(antecedent=(uncertainty[u] & distance[d]), 
                                 consequent=one_cell_priority[selected_priority])
+                
+
+                print(f"Rule: IF uncertainty is {u} AND distance is {d} THEN one_cell_priority is {selected_priority}")
                 first_system_active_rules.append(rule)
                 idx += 1
         
@@ -97,7 +95,7 @@ class FuzzyLookupTable:
         #############################
         #############################
         sum_priorities = ctrl.Antecedent(np.arange(0, 2.0, 0.01), 'sum_priorities')
-        distance_between_targets = ctrl.Antecedent(np.arange(0, 20*10, 1.0), 'distance_between_targets')
+        distance_between_targets = ctrl.Antecedent(np.arange(0, 150, 1.0), 'distance_between_targets')
         pair_priority = ctrl.Consequent(np.arange(0, 1.0, 0.01), 'pair_priority', defuzzify_method = 'centroid')
 
         sum_priorities['low'] = fuzz.trapmf(sum_priorities.universe, [-0.1, 0.0, sum_of_priorities_interval[0], sum_of_priorities_interval[0]+sum_of_priorities_interval[1]])
@@ -114,7 +112,12 @@ class FuzzyLookupTable:
         pair_priority['high'] = fuzz.trimf(pair_priority.universe, [two_cells_priority_interval[0]+two_cells_priority_interval[1], two_cells_priority_interval[0]+two_cells_priority_interval[1]+two_cells_priority_interval[2], 1.0])
         pair_priority['very_high'] = fuzz.trimf(pair_priority.universe, [two_cells_priority_interval[0]+two_cells_priority_interval[1]+two_cells_priority_interval[2], 1.0, 1.1])
 
-
+        sum_priorities.view()
+        plt.show() 
+        distance_between_targets.view()
+        plt.show()
+        pair_priority.view()
+        plt.show()
         ### Fuzzy Rules
         # Sets
         sum_of_uncertainty_sets = ['low', 'medium', 'high']
@@ -131,52 +134,28 @@ class FuzzyLookupTable:
                                 consequent=pair_priority[selected_priority])
                 second_system_active_rules.append(rule)
                 idx += 1
+
+                print(f"Rule: IF sum_priorities is {u} AND distance_between_targets is {d} THEN pair_priority is {selected_priority}")
         
         two_cells_fuzzy = ctrl.ControlSystem(second_system_active_rules)
         self.two_cells_priority = ctrl.ControlSystemSimulation(two_cells_fuzzy)
 
-        
-    def _precompute_one_cell_surface(self):
-        """Generates a 3D Lookup Table for the first fuzzy system."""
-        u_range = np.linspace(0, 2, 40) 
-        d_range = np.linspace(0, 20*10, 30)
-        
-        # Create a grid
-        output_surface = np.zeros((len(u_range), len(d_range)))
 
-        # Fill the grid (This part is slow, but only runs ONCE at startup)
-        for i, u_val in enumerate(u_range):
-            for j, d_val in enumerate(d_range):
-                self.one_cell_priority.input['uncertainty'] = u_val
-                self.one_cell_priority.input['distance'] = d_val
-                try:
-                    self.one_cell_priority.compute()
-                    output_surface[i, j] = self.one_cell_priority.output['one_cell_priority']
-                except (KeyError, ValueError):
-                    output_surface[i, j] = 0.0
-        
-        # Create the interpolator function
-        return RegularGridInterpolator((u_range, d_range), output_surface, bounds_error=False, fill_value=None)
+
+def main():
+    individual =  [np.float64(0.1440649407269286), np.float64(0.21641969548096338), np.float64(0.29890579865235795),
+                   np.float64(26.105537532686153), np.float64(38.18495818334767), np.float64(34.01857399947521),
+                   np.float64(0.3002687008423602), np.float64(0.3107887710774788), np.float64(0.15979961222311245),
+                   np.float64(0.17241184562715162), np.float64(0.5078836540840643), np.float64(0.6585830974598943),
+                   np.float64(21.8317388375936), np.float64(42.64213912794975), np.float64(18.05825870767923),
+                   np.float64(0.2927583897307974), np.float64(0.37619404958239544), np.float64(0.23413715772407398),
+                   np.int64(0), np.int64(0), np.int64(0),
+                   np.int64(2), np.int64(1), np.int64(0),
+                   np.int64(4), np.int64(3), 3,
+                   np.int64(0),0, np.int64(1),
+                   np.int64(1),np.int64(2), np.int64(3),
+                   np.int64(1),np.int64(3), np.int64(4)]
+    evaluator = SanityCheck(fuzzy_parameters=individual)
     
-    def _precompute_two_cells_surface(self):
-        """Generates a 2D Lookup Table for the second fuzzy system."""
-        s_range = np.linspace(0, 2.0, 40)
-        d_range = np.linspace(0, 10*20, 30)
-        
-        output_surface = np.zeros((len(s_range), len(d_range)))
-
-        for i, s_val in enumerate(s_range):
-            for j, d_val in enumerate(d_range):
-                self.two_cells_priority.input['sum_priorities'] = s_val
-                self.two_cells_priority.input['distance_between_targets'] = d_val
-                try:
-                    self.two_cells_priority.compute()
-                    output_surface[i, j] = self.two_cells_priority.output['pair_priority']
-                except (KeyError, ValueError):
-                    # If inputs fall into a gap where no rules fire, 
-                    # or the area is zero, default the priority to 0.
-                    output_surface[i, j] = 0.0
-
-        return RegularGridInterpolator((s_range, d_range), output_surface, bounds_error=False, fill_value=None)
-
-    
+if __name__ == "__main__":
+    main()

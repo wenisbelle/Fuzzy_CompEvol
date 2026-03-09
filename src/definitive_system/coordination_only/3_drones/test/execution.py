@@ -31,24 +31,25 @@ def create_and_run_simulation(individual):
     builder.add_handler(MobilityHandler())
     builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
-        transmission_range=100
+        transmission_range=200
     )))
 
-    MAP_WIDTH = 100
-    MAP_HEIGHT = 100
+    MAP_WIDTH = 50
+    MAP_HEIGHT = 50
+    NUMBER_OF_DRONES = 3
 
     results_aggregator = {}
     ConfiguredDrone = drone_protocol_factory(
-        uncertainty_rate=0.001,
+        uncertainty_rate=0.01,
         vanishing_update_time=10.0,
-        number_of_drones=10,
+        number_of_drones=NUMBER_OF_DRONES,
         map_width=MAP_WIDTH,
         map_height=MAP_HEIGHT,
         fuzzy_tables=[lookup_one_cell, lookup_two_cells],
         results_aggregator=results_aggregator
     )
 
-    for _ in range(10):
+    for _ in range(NUMBER_OF_DRONES):
         builder.add_node(ConfiguredDrone, (0, 0, 0))
 
     #for i in range(MAP_WIDTH):
@@ -80,8 +81,19 @@ def main():
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    individual =  [np.float64(0.1440649407269286), np.float64(0.21641969548096338), np.float64(0.29890579865235795), np.float64(26.105537532686153), np.float64(38.18495818334767), np.float64(34.01857399947521), np.float64(0.3002687008423602), np.float64(0.3107887710774788), np.float64(0.15979961222311245), np.float64(0.17241184562715162), np.float64(0.5078836540840643), np.float64(0.6585830974598943), np.float64(21.8317388375936), np.float64(42.64213912794975), np.float64(18.05825870767923), np.float64(0.2927583897307974), np.float64(0.37619404958239544), np.float64(0.23413715772407398), np.int64(0), np.int64(2), np.int64(2), np.int64(1), np.int64(4), np.int64(4), np.int64(3), np.int64(4), 0, np.int64(0), 2, np.int64(0), np.int64(3), np.int64(2), np.int64(3), np.int64(0), np.int64(2), np.int64(4)]
     for _ in range(1):
+        individual =  [np.float64(0.1440649407269286), np.float64(0.21641969548096338), np.float64(0.29890579865235795),
+                       np.float64(26.105537532686153), np.float64(38.18495818334767), np.float64(34.01857399947521),
+                       np.float64(0.3002687008423602), np.float64(0.3107887710774788), np.float64(0.15979961222311245),
+                       np.float64(0.17241184562715162), np.float64(0.5078836540840643), np.float64(0.6585830974598943),
+                       np.float64(21.8317388375936), np.float64(42.64213912794975), np.float64(18.05825870767923),
+                       np.float64(0.2927583897307974), np.float64(0.37619404958239544), np.float64(0.23413715772407398),
+                       np.int64(0), np.int64(0), np.int64(0),
+                       np.int64(2), np.int64(1), np.int64(0),
+                       np.int64(4), np.int64(3), 3,
+                       np.int64(0),0, np.int64(1),
+                       np.int64(1),np.int64(2), np.int64(3),
+                       np.int64(1),np.int64(3), np.int64(4)]
         create_and_run_simulation(individual)
     
 

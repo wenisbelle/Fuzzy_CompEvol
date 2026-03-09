@@ -28,8 +28,15 @@ class FuzzyLookupTable:
         distance_between_targets_interval = fuzzy_parameters[12:15]
         two_cells_priority_interval = fuzzy_parameters[15:18]
 
+        first_system_rules = fuzzy_parameters[18:27]
+        second_system_rules = fuzzy_parameters[27:36]
 
-        ### First system
+
+        #############################
+        #############################
+        ###### FIRST SYSTEM #########
+        #############################
+        #############################
         uncertainty = ctrl.Antecedent(np.arange(0, 2, 0.05), 'uncertainty')
         distance = ctrl.Antecedent(np.arange(0, 150, 5.0), 'distance')
         one_cell_priority = ctrl.Consequent(np.arange(0, 1.0, 0.01), 'one_cell_priority', defuzzify_method = 'centroid')
@@ -59,29 +66,36 @@ class FuzzyLookupTable:
         #plt.show()
         # 
 
-        #### Rules
-        FS1_rule1 = ctrl.Rule(uncertainty['high'] & distance['close'], one_cell_priority['very_high'])
-        FS1_rule2 = ctrl.Rule(uncertainty['high'] & distance['medium'], one_cell_priority['high'])
-        FS1_rule3 = ctrl.Rule(uncertainty['high'] & distance['far'], one_cell_priority['medium'])
+        uncertainty_sets = ['low', 'medium', 'high']
+        distance_sets = ['close', 'medium', 'far']
+        one_cell_priority_sets = ['very_low', 'low', 'medium', 'high', 'very_high'] ### 0, 1, .., 4
+
+        ### The gene will have also a vector for tuning the rules. This vector has size
+        ### 9, because there are nine different combinations between the inputs. For each
+        ### input combination it will have one of 5 possible outputs (very_low,...,very_high)
+        ### consequently, the value of the vector is an integer from 0 to 4 (5 values). It's assumed that
+        ### for each input combination there is an output in the system. 
+        idx = 0
+        first_system_active_rules = []
+        for u in uncertainty_sets:
+            for d in distance_sets:
+                selected_priority = one_cell_priority_sets[int(first_system_rules[idx])]
+
+                rule = ctrl.Rule(antecedent=(uncertainty[u] & distance[d]), 
+                                consequent=one_cell_priority[selected_priority])
+                first_system_active_rules.append(rule)
+                idx += 1
         
-        FS1_rule4 = ctrl.Rule(uncertainty['medium'] & distance['close'], one_cell_priority['high'])
-        FS1_rule5 = ctrl.Rule(uncertainty['medium'] & distance['medium'], one_cell_priority['medium'])
-        FS1_rule6 = ctrl.Rule(uncertainty['medium'] & distance['far'], one_cell_priority['low'])        
-
-        FS1_rule7 = ctrl.Rule(uncertainty['low'] & distance['close'], one_cell_priority['medium'])
-        FS1_rule8 = ctrl.Rule(uncertainty['low'] & distance['medium'], one_cell_priority['low'])
-        FS1_rule9 = ctrl.Rule(uncertainty['low'] & distance['far'], one_cell_priority['very_low'])
-
-        one_cell_fuzzy = ctrl.ControlSystem([FS1_rule1, FS1_rule2, FS1_rule3, FS1_rule4, FS1_rule5, FS1_rule6, FS1_rule7, FS1_rule8, FS1_rule9])
+        one_cell_fuzzy = ctrl.ControlSystem(first_system_active_rules)
         self.one_cell_priority = ctrl.ControlSystemSimulation(one_cell_fuzzy)
 
-        #check values
-        #one_cell_priority.input['uncertainty'] = 200
-        #one_cell_priority.input['distance'] = 25
-        #one_cell_priority.compute()
-        #print(f"Test output: {one_cell_priority.output['one_cell_priority']}")
 
-          
+        
+        #############################
+        #############################
+        ###### SECOND SYSTEM ########
+        #############################
+        #############################
         sum_priorities = ctrl.Antecedent(np.arange(0, 2.0, 0.01), 'sum_priorities')
         distance_between_targets = ctrl.Antecedent(np.arange(0, 150, 1.0), 'distance_between_targets')
         pair_priority = ctrl.Consequent(np.arange(0, 1.0, 0.01), 'pair_priority', defuzzify_method = 'centroid')
@@ -100,27 +114,27 @@ class FuzzyLookupTable:
         pair_priority['high'] = fuzz.trimf(pair_priority.universe, [two_cells_priority_interval[0]+two_cells_priority_interval[1], two_cells_priority_interval[0]+two_cells_priority_interval[1]+two_cells_priority_interval[2], 1.0])
         pair_priority['very_high'] = fuzz.trimf(pair_priority.universe, [two_cells_priority_interval[0]+two_cells_priority_interval[1]+two_cells_priority_interval[2], 1.0, 1.1])
 
-        #####sanity checks
-        #sum_priorities.view()
-        #plt.show()LOOKUP
-        #distance_between_targets.view()
-        #plt.show()   
-        #pair_priority.view()
-        #plt.show() 
 
         ### Fuzzy Rules
-        FS2_rule1 = ctrl.Rule(sum_priorities['high'] & distance_between_targets['far'], pair_priority['very_high'])
-        FS2_rule2 = ctrl.Rule(sum_priorities['high'] & distance_between_targets['medium'], pair_priority['high'])
-        FS2_rule3 = ctrl.Rule(sum_priorities['high'] & distance_between_targets['close'], pair_priority['low'])
-        FS2_rule4 = ctrl.Rule(sum_priorities['medium'] & distance_between_targets['far'], pair_priority['high'])
-        FS2_rule5 = ctrl.Rule(sum_priorities['medium'] & distance_between_targets['medium'], pair_priority['medium'])
-        FS2_rule6 = ctrl.Rule(sum_priorities['medium'] & distance_between_targets['close'], pair_priority['low'])
-        FS2_rule7 = ctrl.Rule(sum_priorities['low'] & distance_between_targets['far'], pair_priority['medium'])
-        FS2_rule8 = ctrl.Rule(sum_priorities['low'] & distance_between_targets['medium'], pair_priority['low'])
-        FS2_rule9 = ctrl.Rule(sum_priorities['low'] & distance_between_targets['close'], pair_priority['very_low'])
+        # Sets
+        sum_of_uncertainty_sets = ['low', 'medium', 'high']
+        distance_between_targets_sets = ['close', 'medium', 'far']
+        two_cell_priority_sets = ['very_low', 'low', 'medium', 'high', 'very_high'] ### 0, 1, .., 4
 
-        two_cells_fuzzy = ctrl.ControlSystem([FS2_rule1, FS2_rule2, FS2_rule3, FS2_rule4, FS2_rule5, FS2_rule6, FS2_rule7, FS2_rule8, FS2_rule9])
+        idx = 0
+        second_system_active_rules = []
+        for u in sum_of_uncertainty_sets:
+            for d in distance_between_targets_sets:
+                selected_priority = two_cell_priority_sets[int(second_system_rules[idx])]
+
+                rule = ctrl.Rule(antecedent=(sum_priorities[u] & distance_between_targets[d]), 
+                                consequent=pair_priority[selected_priority])
+                second_system_active_rules.append(rule)
+                idx += 1
+        
+        two_cells_fuzzy = ctrl.ControlSystem(second_system_active_rules)
         self.two_cells_priority = ctrl.ControlSystemSimulation(two_cells_fuzzy)
+
         
     def _precompute_one_cell_surface(self):
         """Generates a 3D Lookup Table for the first fuzzy system."""
