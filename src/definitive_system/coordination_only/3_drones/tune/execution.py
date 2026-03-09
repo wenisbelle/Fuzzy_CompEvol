@@ -14,7 +14,7 @@ from deap import algorithms, base, creator, tools
 import numpy as np
 
 how_many_simulations = 0
-CORES_TO_USE = 8
+CORES_TO_USE = 16
 
 #### Objective function using simulation execution ####
 #### GradySim function #######
@@ -29,7 +29,7 @@ def create_and_run_simulation(individual):
     
     ##### Configuring the simulation
     config = SimulationConfiguration(
-        duration=150, 
+        duration=1000, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
@@ -38,50 +38,49 @@ def create_and_run_simulation(individual):
     builder.add_handler(MobilityHandler())
     #builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
-        transmission_range=30
+        transmission_range=200
     )))
 
+    MAP_WIDTH = 50
+    MAP_HEIGHT = 50
+    NUMBER_OF_DRONES = 3
 
     results_aggregator = {}
     ConfiguredDrone = drone_protocol_factory(
-        uncertainty_rate=0.05,
+        uncertainty_rate=0.01,
         vanishing_update_time=10.0,
-        number_of_drones=3,
-        map_width=10,
-        map_height=10,
+        number_of_drones=NUMBER_OF_DRONES,
+        map_width=MAP_WIDTH,
+        map_height=MAP_HEIGHT,
         fuzzy_tables=[lookup_one_cell, lookup_two_cells],
         results_aggregator=results_aggregator
     )
 
-    for _ in range(3):
+    for _ in range(NUMBER_OF_DRONES):
         builder.add_node(ConfiguredDrone, (0, 0, 0))
 
-    map_width = 10
-    map_height = 10
-    for i in range(map_width):
-        for j in range(map_height):
-            # Assuming the coordinate logic is (10*i-50, 10*j-50, 0)
-            # based on the original 10x10 map
-            x_coord = 10 * i - (map_width * 10) / 2
-            y_coord = 10 * j - (map_height * 10) / 2
-            builder.add_node(PointOfInterest,
-                             (x_coord, y_coord, 0))    
 
     # Building & starting
     simulation = builder.build()
     simulation.start_simulation()
 
-    total_uncertainty_drone1 = results_aggregator[0]['accomulated_uncertainty']
-    total_uncertainty_drone2 = results_aggregator[1]['accomulated_uncertainty']
-    total_uncertainty_drone3 = results_aggregator[2]['accomulated_uncertainty']
-    medium_uncertainty = (total_uncertainty_drone1+total_uncertainty_drone2+total_uncertainty_drone3)/3
-
-    total_distance_draveled_drone1 = results_aggregator[0]['total_distance_traveled']
-    total_distance_draveled_drone2 = results_aggregator[1]['total_distance_traveled']
-    total_distance_draveled_drone3 = results_aggregator[2]['total_distance_traveled']
-    medium_distance = (total_distance_draveled_drone1 + total_distance_draveled_drone2 + total_distance_draveled_drone3)/3
-
-    total_cost = medium_uncertainty*0.1 + medium_distance
+    ##### Getting the results of the simulation #####
+    medium_uncertainty = 0
+    medium_battery_final_status = 0
+    battery_penalty = 0
+    for i in range(NUMBER_OF_DRONES):
+        medium_uncertainty += results_aggregator[i]['accomulated_uncertainty']/NUMBER_OF_DRONES
+        medium_battery_final_status += results_aggregator[i]['final_battery_status']/NUMBER_OF_DRONES
+        ##### Giving a penalty if the drone ran out of battery #####
+        ##### 3 is the enum status for DEAD #####
+        if results_aggregator[i]['drone_status'] == 3:
+            battery_penalty = 10000
+            print(f"Drone ran out of battery")
+        
+    medium_battery_consumption = 1.0 - medium_battery_final_status
+    
+    ##### Cost for optimization #####
+    total_cost = medium_uncertainty*0.01
 
     print(f"Individual: {individual}")
     print(f"Variable to be minimized: {total_cost}")
@@ -110,7 +109,7 @@ def is_feasible(individual):
     
     if distance_interval[0] < 0 or distance_interval[1] < 0 or distance_interval[2] < 0:
         return False
-    if distance_interval[0] + distance_interval[1] + distance_interval[2] > 150:
+    if distance_interval[0] + distance_interval[1] + distance_interval[2] > 300:
         return False    
     
     if one_cell_priority_interval[0] < 0 or one_cell_priority_interval[1] < 0 or one_cell_priority_interval[2] < 0:
@@ -125,7 +124,7 @@ def is_feasible(individual):
     
     if distance_between_targets_interval[0] < 0 or distance_between_targets_interval[1] < 0 or distance_between_targets_interval[2] < 0:
         return False
-    if distance_between_targets_interval[0] + distance_between_targets_interval[1] + distance_between_targets_interval[2] > 150:
+    if distance_between_targets_interval[0] + distance_between_targets_interval[1] + distance_between_targets_interval[2] > 300:
         return False   
     
     if two_cells_priority_interval[0] < 0 or two_cells_priority_interval[1] < 0 or two_cells_priority_interval[2] < 0:
@@ -168,8 +167,8 @@ def distance(individual):
     if uncertainty_interval[0] + uncertainty_interval[1] + uncertainty_interval[2] > 2:
         dist1 += (uncertainty_interval[0] + uncertainty_interval[1] + uncertainty_interval[2]) - 2
 
-    if distance_interval[0] + distance_interval[1] + distance_interval[2] > 150:
-        dist2 += (distance_interval[0] + distance_interval[1] + distance_interval[2]) - 150
+    if distance_interval[0] + distance_interval[1] + distance_interval[2] > 300:
+        dist2 += (distance_interval[0] + distance_interval[1] + distance_interval[2]) - 300
 
     if one_cell_priority_interval[0] + one_cell_priority_interval[1] + one_cell_priority_interval[2] > 1:
         dist4 += (one_cell_priority_interval[0] + one_cell_priority_interval[1] + one_cell_priority_interval[2]) - 1
@@ -177,13 +176,13 @@ def distance(individual):
     if sum_of_priorities_interval[0] + sum_of_priorities_interval[1] + sum_of_priorities_interval[2] > 2:
         dist5 += (sum_of_priorities_interval[0] + sum_of_priorities_interval[1] + sum_of_priorities_interval[2]) - 2
     
-    if distance_between_targets_interval[0] + distance_between_targets_interval[1] + distance_between_targets_interval[2] > 150:
-        dist6 += (distance_between_targets_interval[0] + distance_between_targets_interval[1] + distance_between_targets_interval[2]) - 150
+    if distance_between_targets_interval[0] + distance_between_targets_interval[1] + distance_between_targets_interval[2] > 300:
+        dist6 += (distance_between_targets_interval[0] + distance_between_targets_interval[1] + distance_between_targets_interval[2]) - 300
     
     if two_cells_priority_interval[0] + two_cells_priority_interval[1] + two_cells_priority_interval[2] > 1:
         dist6 += (two_cells_priority_interval[0] + two_cells_priority_interval[1] + two_cells_priority_interval[2]) - 1
 
-    return 1000*(dist1/2 + dist2/150 + dist3/1 + dist4/2 + dist5/150 + dist6/1)
+    return 1000*(dist1/2 + dist2/300 + dist3/1 + dist4/2 + dist5/300 + dist6/1)
 
 def init_individual(icls, generators):
     """
@@ -202,8 +201,8 @@ def random_uncertainty_interval():
     return(np.random.normal(loc=hand_tunned, scale=sigma))
 
 def random_distance_interval():
-    hand_tunned = [40, 40, 40]
-    sigma = 10
+    hand_tunned = [80, 80, 80]
+    sigma = 20
     return(np.random.normal(loc=hand_tunned, scale=sigma))
 
 def random_one_cell_priority_interval():
@@ -227,6 +226,38 @@ def random_two_cells_priority_interval():
     sigma = 0.10
     return(np.random.normal(loc=hand_tunned, scale=sigma))
 
+def random_rules(size=18):
+    return np.random.randint(low=0, high=5, size=size)
+
+###### CUSTOM MUTATION FUNCTION ###########
+###### Implementing a custom mutation function due to the different ranges and 
+###### types of each variable. We have some floats and ints and also some numbers with 
+###### very different ranges.
+def custom_mutation(individual, indpb):
+    ## the cromossome has floats and also integers
+    ## so it's necessary a custom mutation function that takes in account the type and the universe 
+    uncertainty_SPLIT = 3
+    distance_SPLIT = 4
+    one_cell_priority_SPLIT = 9
+    sum_of_priorities_SPLIT = 12
+    distance_between_targets_SPLIT = 15
+    two_cells_priority_SPLIT = 18
+    target_rules_SPLIT = 36
+        
+    # if the number is below the split point then just use the standard mutGaussian function
+    # varying the standard deviation for each interval
+    tools.mutGaussian(individual[:uncertainty_SPLIT], mu=0, sigma=0.1, indpb=indpb)
+    tools.mutGaussian(individual[uncertainty_SPLIT:distance_SPLIT], mu=0, sigma=20.0, indpb=indpb)
+    tools.mutGaussian(individual[distance_SPLIT:one_cell_priority_SPLIT], mu=0, sigma=0.10, indpb=indpb)
+    tools.mutGaussian(individual[one_cell_priority_SPLIT:sum_of_priorities_SPLIT], mu=0, sigma=0.25, indpb=indpb)
+    tools.mutGaussian(individual[sum_of_priorities_SPLIT:distance_between_targets_SPLIT], mu=0, sigma=20.0, indpb=indpb)
+    tools.mutGaussian(individual[distance_between_targets_SPLIT:two_cells_priority_SPLIT], mu=0, sigma=0.10, indpb=indpb)
+
+    for i in range(two_cells_priority_SPLIT, target_rules_SPLIT):
+        if np.random.random() < indpb:
+            individual[i] = np.random.randint(0, 5)
+
+    return (individual,)
 
 def main():
     ### Defining the GA ###
@@ -239,7 +270,8 @@ def main():
         random_one_cell_priority_interval,
         random_sum_of_priotities_interval,
         random_distance_between_targets_interval,
-        random_two_cells_priority_interval
+        random_two_cells_priority_interval,
+        random_rules
     ]
     
     toolbox = base.Toolbox()
@@ -248,15 +280,15 @@ def main():
 
     toolbox.register("evaluate", objective_function)
     toolbox.register("mate", tools.cxTwoPoint)
-    toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.05)
+    toolbox.register("mutate", custom_mutation, indpb=0.10)
     toolbox.register("select", tools.selTournament, tournsize=3)
     
     ### Parallelization
     pool = multiprocessing.Pool(processes=CORES_TO_USE)
     toolbox.register("map", pool.map)
 
-    pop = toolbox.population(n=30)                            
-    hof = tools.HallOfFame(1)                                
+    pop = toolbox.population(n=50)                            
+    hof = tools.HallOfFame(5)                                
     stats = tools.Statistics(lambda ind: ind.fitness.values)  
     stats.register("avg", np.mean)
     stats.register("std", np.std)
@@ -278,8 +310,11 @@ def main():
         # Use str(log) to get the Logbook content as a string
         f.write(str(log))
 
-    print("Melhor Indivíduo:")
-    print(hof[0])
+    print("=== Top 5 Best Individuals ===")
+    for rank, individual in enumerate(hof):
+        print(f"Rank {rank + 1}:")
+        print(f"Fitness: {individual.fitness.values[0]}")
+        print(f"Parameters: {individual}\n")
 
 
 if __name__ == "__main__":

@@ -22,7 +22,7 @@ def create_and_run_simulation(individual):
     
     # Configuring simulation
     config = SimulationConfiguration(
-        duration=600, 
+        duration=1000, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
@@ -52,13 +52,7 @@ def create_and_run_simulation(individual):
     for _ in range(NUMBER_OF_DRONES):
         builder.add_node(ConfiguredDrone, (0, 0, 0))
 
-    #for i in range(MAP_WIDTH):
-    #    for j in range(MAP_HEIGHT):
-    #        # Assuming that the distance between POI's is 10 meters
-    #        x_coord = 10 * i - (MAP_WIDTH * 10) / 2
-    #        y_coord = 10 * j - (MAP_HEIGHT * 10) / 2
-    #        builder.add_node(PointOfInterest,
-    #                         (x_coord, y_coord, 0))    
+  
 
     # Building & starting
     simulation = builder.build()
@@ -67,7 +61,8 @@ def create_and_run_simulation(individual):
     total_uncertainty_drone1 = results_aggregator[0]['accomulated_uncertainty']
     total_uncertainty_drone2 = results_aggregator[1]['accomulated_uncertainty']
     total_uncertainty_drone3 = results_aggregator[2]['accomulated_uncertainty']
-    medium_uncertainty = (total_uncertainty_drone1+total_uncertainty_drone2+total_uncertainty_drone3)/3
+    medium_uncertainty = 0.01*(total_uncertainty_drone1+total_uncertainty_drone2+total_uncertainty_drone3)/3
+
     print(f"Variable to be minimized: {medium_uncertainty}")
     
     return medium_uncertainty
@@ -82,18 +77,19 @@ def main():
         format='%(message)s'  
     )
     for _ in range(1):
-        individual =  [np.float64(0.1440649407269286), np.float64(0.21641969548096338), np.float64(0.29890579865235795),
-                       np.float64(26.105537532686153), np.float64(38.18495818334767), np.float64(34.01857399947521),
-                       np.float64(0.3002687008423602), np.float64(0.3107887710774788), np.float64(0.15979961222311245),
-                       np.float64(0.17241184562715162), np.float64(0.5078836540840643), np.float64(0.6585830974598943),
-                       np.float64(21.8317388375936), np.float64(42.64213912794975), np.float64(18.05825870767923),
-                       np.float64(0.2927583897307974), np.float64(0.37619404958239544), np.float64(0.23413715772407398),
-                       np.int64(0), np.int64(0), np.int64(0),
-                       np.int64(2), np.int64(1), np.int64(0),
-                       np.int64(4), np.int64(3), 3,
-                       np.int64(0),0, np.int64(1),
-                       np.int64(1),np.int64(2), np.int64(3),
-                       np.int64(1),np.int64(3), np.int64(4)]
+        individual =  [np.float64(0.1094137597526103), np.float64(0.35318018942776125), np.float64(0.22278092892493662),
+                       np.float64(46.519770642155436), np.float64(52.466594940267875), np.float64(82.58073140145747),
+                       np.float64(0.37411508130478766), np.float64(0.17596331333770734), np.float64(0.16711349778628887),
+                       np.float64(0.22216895092315403), np.float64(0.6309393163492814), np.float64(0.7289220989766821),
+                       np.float64(42.369037382063446), np.float64(46.42035136276111), np.float64(43.856479640279524),
+                       np.float64(0.360617289296038), np.float64(0.18711611697083075), np.float64(0.2827304252906753),
+                       np.int64(1), np.int64(1), np.int64(2),
+                       np.int64(0), np.int64(4), np.int64(3),
+                       np.int64(4), np.int64(4), np.int64(3),
+                       0, np.int64(1), np.int64(1),
+                       np.int64(0), 1, 0,
+                       2, np.int64(3), np.int64(4)]
+
         create_and_run_simulation(individual)
     
 

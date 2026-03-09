@@ -11,11 +11,9 @@ class FuzzyLookupTable:
     def __init__(self,fuzzy_parameters: np.array):
 
         self.create_fuzzy_controller(fuzzy_parameters)
-        print(f"Starting the lookup generation...")
         # 2. GENERATE LOOKUP TABLES (The Optimization)
         self.interp_one_cell = self._precompute_one_cell_surface()
         self.interp_two_cells = self._precompute_two_cells_surface()
-        print(f"Finished the lookup generation...")
     
     def get_interpolators(self):
         return self.interp_one_cell, self.interp_two_cells
@@ -37,8 +35,8 @@ class FuzzyLookupTable:
         ###### FIRST SYSTEM #########
         #############################
         #############################
-        uncertainty = ctrl.Antecedent(np.arange(0, 2, 0.05), 'uncertainty')
-        distance = ctrl.Antecedent(np.arange(0, 150, 5.0), 'distance')
+        uncertainty = ctrl.Antecedent(np.arange(0, 2, 0.02), 'uncertainty')
+        distance = ctrl.Antecedent(np.arange(0, 30*10, 5.0), 'distance')
         one_cell_priority = ctrl.Consequent(np.arange(0, 1.0, 0.01), 'one_cell_priority', defuzzify_method = 'centroid')
 
         uncertainty['low'] = fuzz.trapmf(uncertainty.universe, [-1, 0, uncertainty_interval[0], uncertainty_interval[0]+uncertainty_interval[1]])
@@ -47,7 +45,7 @@ class FuzzyLookupTable:
         
         distance['close'] = fuzz.trapmf(distance.universe, [-1, 0, distance_interval[0], distance_interval[0]+distance_interval[1]])
         distance['medium'] = fuzz.trimf(distance.universe, [distance_interval[0], distance_interval[0]+distance_interval[1], distance_interval[0]+distance_interval[1]+distance_interval[2]])
-        distance['far'] = fuzz.trapmf(distance.universe, [distance_interval[0]+distance_interval[1], distance_interval[0]+distance_interval[1]+distance_interval[2], 150, 151])
+        distance['far'] = fuzz.trapmf(distance.universe, [distance_interval[0]+distance_interval[1], distance_interval[0]+distance_interval[1]+distance_interval[2], 300, 301])
 
         one_cell_priority['very_low'] = fuzz.trimf(one_cell_priority.universe, [-0.1, 0.0, one_cell_priority_interval[0]])
         one_cell_priority['low'] = fuzz.trimf(one_cell_priority.universe, [0.0, one_cell_priority_interval[0], one_cell_priority_interval[0]+one_cell_priority_interval[1]])
@@ -55,16 +53,6 @@ class FuzzyLookupTable:
         one_cell_priority['high'] = fuzz.trimf(one_cell_priority.universe, [one_cell_priority_interval[0]+one_cell_priority_interval[1], one_cell_priority_interval[0]+one_cell_priority_interval[1]+one_cell_priority_interval[2], 1.0])
         one_cell_priority['very_high'] = fuzz.trimf(one_cell_priority.universe, [one_cell_priority_interval[0]+one_cell_priority_interval[1]+one_cell_priority_interval[2], 1.0, 1.1])
 
-        #####sanity checks
-        #uncertainty.view()
-        #plt.show() 
-        #distance.view()
-        #plt.show()
-        #individual_cell_uncertainty.view()
-        #plt.show()
-        #one_cell_priority.view()
-        #plt.show()
-        # 
 
         uncertainty_sets = ['low', 'medium', 'high']
         distance_sets = ['close', 'medium', 'far']
@@ -96,8 +84,8 @@ class FuzzyLookupTable:
         ###### SECOND SYSTEM ########
         #############################
         #############################
-        sum_priorities = ctrl.Antecedent(np.arange(0, 2.0, 0.01), 'sum_priorities')
-        distance_between_targets = ctrl.Antecedent(np.arange(0, 150, 1.0), 'distance_between_targets')
+        sum_priorities = ctrl.Antecedent(np.arange(0, 2.0, 0.02), 'sum_priorities')
+        distance_between_targets = ctrl.Antecedent(np.arange(0, 30*10, 5.0), 'distance_between_targets')
         pair_priority = ctrl.Consequent(np.arange(0, 1.0, 0.01), 'pair_priority', defuzzify_method = 'centroid')
 
         sum_priorities['low'] = fuzz.trapmf(sum_priorities.universe, [-0.1, 0.0, sum_of_priorities_interval[0], sum_of_priorities_interval[0]+sum_of_priorities_interval[1]])
@@ -106,7 +94,7 @@ class FuzzyLookupTable:
 
         distance_between_targets['close'] = fuzz.trapmf(distance_between_targets.universe, [-1, 0, distance_between_targets_interval[0], distance_between_targets_interval[0]+distance_between_targets_interval[1]])
         distance_between_targets['medium'] = fuzz.trimf(distance_between_targets.universe, [distance_between_targets_interval[0], distance_between_targets_interval[0]+distance_between_targets_interval[1], distance_between_targets_interval[0]+distance_between_targets_interval[1]+distance_between_targets_interval[2]])
-        distance_between_targets['far'] = fuzz.trapmf(distance_between_targets.universe, [distance_between_targets_interval[0]+distance_between_targets_interval[1], distance_between_targets_interval[0]+distance_between_targets_interval[1]+distance_between_targets_interval[2], 150, 151])
+        distance_between_targets['far'] = fuzz.trapmf(distance_between_targets.universe, [distance_between_targets_interval[0]+distance_between_targets_interval[1], distance_between_targets_interval[0]+distance_between_targets_interval[1]+distance_between_targets_interval[2], 300, 301])
 
         pair_priority['very_low'] = fuzz.trimf(pair_priority.universe, [-0.1, 0.0, two_cells_priority_interval[0]])
         pair_priority['low'] = fuzz.trimf(pair_priority.universe, [0.0, two_cells_priority_interval[0], two_cells_priority_interval[0]+two_cells_priority_interval[1]])
@@ -138,8 +126,8 @@ class FuzzyLookupTable:
         
     def _precompute_one_cell_surface(self):
         """Generates a 3D Lookup Table for the first fuzzy system."""
-        u_range = np.linspace(0, 2, 40) 
-        d_range = np.linspace(0, 150, 30)
+        u_range = np.linspace(0, 2, 50) 
+        d_range = np.linspace(0, 30*10, 60)
         
         # Create a grid
         output_surface = np.zeros((len(u_range), len(d_range)))
@@ -160,8 +148,8 @@ class FuzzyLookupTable:
     
     def _precompute_two_cells_surface(self):
         """Generates a 2D Lookup Table for the second fuzzy system."""
-        s_range = np.linspace(0, 2.0, 40)
-        d_range = np.linspace(0, 150, 30)
+        s_range = np.linspace(0, 2.0, 50)
+        d_range = np.linspace(0, 30*10, 60)
         
         output_surface = np.zeros((len(s_range), len(d_range)))
 

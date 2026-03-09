@@ -34,8 +34,8 @@ class SanityCheck():
         ###### FIRST SYSTEM #########
         #############################
         #############################
-        uncertainty = ctrl.Antecedent(np.arange(0, 2, 0.05), 'uncertainty')
-        distance = ctrl.Antecedent(np.arange(0, 150, 5.0), 'distance')
+        uncertainty = ctrl.Antecedent(np.arange(0, 2, 0.02), 'uncertainty')
+        distance = ctrl.Antecedent(np.arange(0, 30*10, 5.0), 'distance')
         one_cell_priority = ctrl.Consequent(np.arange(0, 1.0, 0.01), 'one_cell_priority', defuzzify_method = 'centroid')
 
         uncertainty['low'] = fuzz.trapmf(uncertainty.universe, [-1, 0, uncertainty_interval[0], uncertainty_interval[0]+uncertainty_interval[1]])
@@ -44,7 +44,7 @@ class SanityCheck():
         
         distance['close'] = fuzz.trapmf(distance.universe, [-1, 0, distance_interval[0], distance_interval[0]+distance_interval[1]])
         distance['medium'] = fuzz.trimf(distance.universe, [distance_interval[0], distance_interval[0]+distance_interval[1], distance_interval[0]+distance_interval[1]+distance_interval[2]])
-        distance['far'] = fuzz.trapmf(distance.universe, [distance_interval[0]+distance_interval[1], distance_interval[0]+distance_interval[1]+distance_interval[2], 150, 151])
+        distance['far'] = fuzz.trapmf(distance.universe, [distance_interval[0]+distance_interval[1], distance_interval[0]+distance_interval[1]+distance_interval[2], 300, 301])
 
         one_cell_priority['very_low'] = fuzz.trimf(one_cell_priority.universe, [-0.1, 0.0, one_cell_priority_interval[0]])
         one_cell_priority['low'] = fuzz.trimf(one_cell_priority.universe, [0.0, one_cell_priority_interval[0], one_cell_priority_interval[0]+one_cell_priority_interval[1]])
@@ -94,8 +94,8 @@ class SanityCheck():
         ###### SECOND SYSTEM ########
         #############################
         #############################
-        sum_priorities = ctrl.Antecedent(np.arange(0, 2.0, 0.01), 'sum_priorities')
-        distance_between_targets = ctrl.Antecedent(np.arange(0, 150, 1.0), 'distance_between_targets')
+        sum_priorities = ctrl.Antecedent(np.arange(0, 2.0, 0.02), 'sum_priorities')
+        distance_between_targets = ctrl.Antecedent(np.arange(0, 30*10, 5.0), 'distance_between_targets')
         pair_priority = ctrl.Consequent(np.arange(0, 1.0, 0.01), 'pair_priority', defuzzify_method = 'centroid')
 
         sum_priorities['low'] = fuzz.trapmf(sum_priorities.universe, [-0.1, 0.0, sum_of_priorities_interval[0], sum_of_priorities_interval[0]+sum_of_priorities_interval[1]])
@@ -104,14 +104,15 @@ class SanityCheck():
 
         distance_between_targets['close'] = fuzz.trapmf(distance_between_targets.universe, [-1, 0, distance_between_targets_interval[0], distance_between_targets_interval[0]+distance_between_targets_interval[1]])
         distance_between_targets['medium'] = fuzz.trimf(distance_between_targets.universe, [distance_between_targets_interval[0], distance_between_targets_interval[0]+distance_between_targets_interval[1], distance_between_targets_interval[0]+distance_between_targets_interval[1]+distance_between_targets_interval[2]])
-        distance_between_targets['far'] = fuzz.trapmf(distance_between_targets.universe, [distance_between_targets_interval[0]+distance_between_targets_interval[1], distance_between_targets_interval[0]+distance_between_targets_interval[1]+distance_between_targets_interval[2], 150, 151])
+        distance_between_targets['far'] = fuzz.trapmf(distance_between_targets.universe, [distance_between_targets_interval[0]+distance_between_targets_interval[1], distance_between_targets_interval[0]+distance_between_targets_interval[1]+distance_between_targets_interval[2], 300, 301])
 
         pair_priority['very_low'] = fuzz.trimf(pair_priority.universe, [-0.1, 0.0, two_cells_priority_interval[0]])
         pair_priority['low'] = fuzz.trimf(pair_priority.universe, [0.0, two_cells_priority_interval[0], two_cells_priority_interval[0]+two_cells_priority_interval[1]])
         pair_priority['medium'] = fuzz.trimf(pair_priority.universe, [two_cells_priority_interval[0], two_cells_priority_interval[0]+two_cells_priority_interval[1], two_cells_priority_interval[0]+two_cells_priority_interval[1]+two_cells_priority_interval[2]])
         pair_priority['high'] = fuzz.trimf(pair_priority.universe, [two_cells_priority_interval[0]+two_cells_priority_interval[1], two_cells_priority_interval[0]+two_cells_priority_interval[1]+two_cells_priority_interval[2], 1.0])
         pair_priority['very_high'] = fuzz.trimf(pair_priority.universe, [two_cells_priority_interval[0]+two_cells_priority_interval[1]+two_cells_priority_interval[2], 1.0, 1.1])
-
+        
+        
         sum_priorities.view()
         plt.show() 
         distance_between_targets.view()
@@ -143,18 +144,7 @@ class SanityCheck():
 
 
 def main():
-    individual =  [np.float64(0.1440649407269286), np.float64(0.21641969548096338), np.float64(0.29890579865235795),
-                   np.float64(26.105537532686153), np.float64(38.18495818334767), np.float64(34.01857399947521),
-                   np.float64(0.3002687008423602), np.float64(0.3107887710774788), np.float64(0.15979961222311245),
-                   np.float64(0.17241184562715162), np.float64(0.5078836540840643), np.float64(0.6585830974598943),
-                   np.float64(21.8317388375936), np.float64(42.64213912794975), np.float64(18.05825870767923),
-                   np.float64(0.2927583897307974), np.float64(0.37619404958239544), np.float64(0.23413715772407398),
-                   np.int64(0), np.int64(0), np.int64(0),
-                   np.int64(2), np.int64(1), np.int64(0),
-                   np.int64(4), np.int64(3), 3,
-                   np.int64(0),0, np.int64(1),
-                   np.int64(1),np.int64(2), np.int64(3),
-                   np.int64(1),np.int64(3), np.int64(4)]
+    individual =  [np.float64(0.1094137597526103), np.float64(0.35318018942776125), np.float64(0.22278092892493662), np.float64(46.519770642155436), np.float64(52.466594940267875), np.float64(82.58073140145747), np.float64(0.37411508130478766), np.float64(0.17596331333770734), np.float64(0.16711349778628887), np.float64(0.22216895092315403), np.float64(0.6309393163492814), np.float64(0.7289220989766821), np.float64(42.369037382063446), np.float64(46.42035136276111), np.float64(43.856479640279524), np.float64(0.360617289296038), np.float64(0.18711611697083075), np.float64(0.2827304252906753), np.int64(1), np.int64(1), np.int64(2), np.int64(0), np.int64(4), np.int64(3), np.int64(4), np.int64(4), np.int64(3), 0, np.int64(4), np.int64(4), np.int64(0), 1, 0, 2, np.int64(3), np.int64(4)]
     evaluator = SanityCheck(fuzzy_parameters=individual)
     
 if __name__ == "__main__":
