@@ -14,7 +14,7 @@ from deap import algorithms, base, creator, tools
 import numpy as np
 
 how_many_simulations = 0
-CORES_TO_USE = 16
+CORES_TO_USE = 24
 
 #### Objective function using simulation execution ####
 #### GradySim function #######
@@ -296,7 +296,7 @@ def main():
     stats.register("max", np.max)
 
     try:
-        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.8, mutpb=0.1, ngen=50, 
+        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.8, mutpb=0.05, ngen=50, 
                                        stats=stats, halloffame=hof, verbose=True)
     finally:
         pool.close() 
@@ -305,7 +305,7 @@ def main():
     print("=== Final Results ===")
     print(log)
 
-    log_filename = "ga_logbook.txt"
+    log_filename = "definitive_system/coordination_only/3_drones/tune/save.txt"
     with open(log_filename, "w") as f:
         # Use str(log) to get the Logbook content as a string
         f.write(str(log))

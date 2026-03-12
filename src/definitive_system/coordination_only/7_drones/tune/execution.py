@@ -288,7 +288,7 @@ def main():
     toolbox.register("map", pool.map)
 
     pop = toolbox.population(n=50)                            
-    hof = tools.HallOfFame(5)                                
+    hof = tools.HallOfFame(3)                                
     stats = tools.Statistics(lambda ind: ind.fitness.values)  
     stats.register("avg", np.mean)
     stats.register("std", np.std)
@@ -296,7 +296,7 @@ def main():
     stats.register("max", np.max)
 
     try:
-        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.8, mutpb=0.1, ngen=50, 
+        pop, log = algorithms.eaSimple(pop, toolbox, cxpb=0.8, mutpb=0.05, ngen=50, 
                                        stats=stats, halloffame=hof, verbose=True)
     finally:
         pool.close() 
@@ -305,7 +305,7 @@ def main():
     print("=== Final Results ===")
     print(log)
 
-    log_filename = "ga_logbook.txt"
+    log_filename = "definitive_system/coordination_only/7_drones/tune/ga_logbook.txt"
     with open(log_filename, "w") as f:
         # Use str(log) to get the Logbook content as a string
         f.write(str(log))
