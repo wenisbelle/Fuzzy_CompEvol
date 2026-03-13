@@ -19,14 +19,13 @@ def create_and_run_simulation(individual):
     
     # Configuring simulation
     config = SimulationConfiguration(
-        duration=1000, 
+        duration=2000, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
 
     builder.add_handler(TimerHandler())
     builder.add_handler(MobilityHandler())
-    builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
         transmission_range=200
     )))
@@ -66,13 +65,13 @@ def create_and_run_simulation(individual):
 def main():
     logging.basicConfig(
         level=logging.INFO,  
-        filename=f'definitive_system/coordination_only/5_drones/analytical/test/logs/simulation.log', 
+        filename=f'definitive_system/coordination_only/10_drones/test/logs/analytical_2000/simulation.log', 
         filemode='w', 
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    for _ in range(1):
-        individual =  [500.0, 50.0] 
+    for _ in range(20):
+        individual =  [2018.0, 1538.0] 
         create_and_run_simulation(individual)
     
 

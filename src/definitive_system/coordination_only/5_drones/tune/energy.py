@@ -11,10 +11,10 @@ class BatteryError(Exception):
 
 class EnergyComsuption:
     def __init__(self, mass: float = 1.5, ## Kg
-                 payload: float = 0.5, ## kg, battery more payload
-                 power_efficiency: float = 0.5, ### from the article
+                 payload: float = 0.0, ## kg, battery more payload
+                 power_efficiency: float = 1.0, ### from the article original value is 0.5
                  lift_drag_ration: float = 3.0, ### benchmarket 
-                 external_power: float =10.0, # Watts
+                 external_power: float = 0.0, # Watts
                  battery_charging_constant: float = 0.01,
                  battery_capacity: float = 5000.0,  ## mAh
                  battery_voltage: float=14.0,  ## Volts)

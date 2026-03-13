@@ -13,7 +13,7 @@ from deap import algorithms, base, creator, tools
 import numpy as np
 
 how_many_simulations = 0
-CORES_TO_USE = 16
+CORES_TO_USE = 24
 
 #### Objective function using simulation execution ####
 #### GradySim function #######
@@ -25,7 +25,7 @@ def create_and_run_simulation(individual):
    
     ##### Configuring the simulation
     config = SimulationConfiguration(
-        duration=1000, 
+        duration=2000, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
@@ -120,7 +120,7 @@ def main():
     toolbox.register("map", pool.map)
 
     pop = toolbox.population(n=50)                            
-    hof = tools.HallOfFame(5)                                
+    hof = tools.HallOfFame(1)                                
     stats = tools.Statistics(lambda ind: ind.fitness.values)  
     stats.register("avg", np.mean)
     stats.register("std", np.std)
@@ -142,7 +142,7 @@ def main():
         # Use str(log) to get the Logbook content as a string
         f.write(str(log))
 
-    print("=== Top 5 Best Individuals ===")
+    print("=== Top Best Individuals ===")
     for rank, individual in enumerate(hof):
         print(f"Rank {rank + 1}:")
         print(f"Fitness: {individual.fitness.values[0]}")

@@ -18,14 +18,14 @@ import numpy as np
 def create_and_run_simulation(individual, lookup_one_cell, lookup_two_cells):
     # Configuring simulation
     config = SimulationConfiguration(
-        duration=1000, 
+        duration=2000, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
 
     builder.add_handler(TimerHandler())
     builder.add_handler(MobilityHandler())
-    builder.add_handler(VisualizationHandler())
+    #builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
         transmission_range=200
     )))
@@ -53,19 +53,18 @@ def create_and_run_simulation(individual, lookup_one_cell, lookup_two_cells):
     simulation = builder.build()
     simulation.start_simulation()
 
-    total_uncertainty_drone1 = results_aggregator[0]['accomulated_uncertainty']
-    total_uncertainty_drone2 = results_aggregator[1]['accomulated_uncertainty']
-    total_uncertainty_drone3 = results_aggregator[2]['accomulated_uncertainty']
-    medium_uncertainty = 0.01*(total_uncertainty_drone1+total_uncertainty_drone2+total_uncertainty_drone3)/3
-    print(f"Variable to be minimized: {medium_uncertainty}")
-    
+    medium_uncertainty = 0
+    for i in range(NUMBER_OF_DRONES):
+        medium_uncertainty += 0.01*results_aggregator[i]['accomulated_uncertainty']/NUMBER_OF_DRONES
+
+    print(f"Variable to be minimized: {medium_uncertainty}")    
     return medium_uncertainty
 
 
 def main():
     logging.basicConfig(
         level=logging.INFO,  
-        filename=f'logs/simulation.log', 
+        filename=f'definitive_system/coordination_only/7_drones/test/logs/fuzzy_2000_modified/simulation.log', 
         filemode='w', 
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  

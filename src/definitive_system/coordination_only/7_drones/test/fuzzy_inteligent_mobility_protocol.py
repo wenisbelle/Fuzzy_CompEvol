@@ -162,10 +162,10 @@ class Drone(IProtocol):
         self.provider.schedule_timer("battery", self.provider.current_time() + 1)
 
         ##### Visualizing the MAP #####
-        if Drone.visualizer is None:
-            # We have 3 drones in the simulation.
-            # I have to think a better way to do this.
-            Drone.visualizer = MapVisualizer(num_drones=self.NUMBER_OF_DRONES, map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells=self.DISTANCE_BETWEEN_CELLS)
+        #if Drone.visualizer is None:
+        #    # We have 3 drones in the simulation.
+        #    # I have to think a better way to do this.
+        #    Drone.visualizer = MapVisualizer(num_drones=self.NUMBER_OF_DRONES, map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells=self.DISTANCE_BETWEEN_CELLS)
         
         #if self.visualizer:
         #    self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])

@@ -19,14 +19,14 @@ def create_and_run_simulation(individual, lookup_one_cell, lookup_two_cells):
         
     # Configuring simulation
     config = SimulationConfiguration(
-        duration=1000, 
+        duration=2000, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
 
     builder.add_handler(TimerHandler())
     builder.add_handler(MobilityHandler())
-    builder.add_handler(VisualizationHandler())
+    #builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
         transmission_range=200
     )))
@@ -68,18 +68,28 @@ def create_and_run_simulation(individual, lookup_one_cell, lookup_two_cells):
 def main():
     logging.basicConfig(
         level=logging.INFO,  
-        filename=f'definitive_system/coordination_only/3_drones/test/logs/simulation.log', 
+        filename=f'definitive_system/coordination_only/3_drones/test/logs/fuzzy_modified_2000/simulation.log', 
         filemode='w', 
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    individual = [np.float64(0.3016017252572088), np.float64(0.3689492662528065), np.float64(0.16615127867290264), np.float64(64.87864115655191), np.float64(76.145066071908), np.float64(91.31303192923832), np.float64(0.18813807055184711), np.float64(0.18079248076861443), np.float64(0.10863734568525232), np.float64(0.505080320416538), np.float64(0.3371722189839078), np.float64(0.3276336576734477), np.float64(39.7996092540598), np.float64(28.364776785809596), np.float64(41.932421470701456), np.float64(0.2868023793768918), np.float64(0.13232743595774496), np.float64(0.06696275294570064), np.int64(1), 2, np.int64(2), np.int64(1), 0, np.int64(3), 4, 4, 0, 2, np.int64(0), np.int64(4), np.int64(3), np.int64(2), np.int64(4), np.int64(4), np.int64(2), np.int64(1)]
-
+    individual = [np.float64(0.1765550275716401), np.float64(0.26504925419859754), np.float64(0.5328280594467583),
+                  np.float64(65.76913130640668), np.float64(60.579250249961284), np.float64(86.06840306949528),
+                  np.float64(0.09459789068662158), np.float64(0.2810259583239695), np.float64(0.31808056721276934),
+                  np.float64(0.2109100989454195), np.float64(0.5282720591027129), np.float64(0.8521749796977374),
+                  np.float64(34.58815897497721), np.float64(27.237106487346836), np.float64(56.10639222453888),
+                  np.float64(0.15270903952109194), np.float64(0.21795421097999682), np.float64(0.23102459648581986),
+                  np.int64(1), np.int64(1), np.int64(0),
+                  np.int64(2), 1, np.int64(2),
+                  np.int64(4), np.int64(3), np.int64(1),
+                  np.int64(0), np.int64(1), np.int64(1),
+                  np.int64(2), np.int64(2), np.int64(3),
+                  np.int64(2), np.int64(3), np.int64(4)]
     ##### Creating the fuzzy lookup tables
     fuzzy_lookup = FuzzyLookupTable(fuzzy_parameters= np.array(individual)) 
     lookup_one_cell, lookup_two_cells = fuzzy_lookup.get_interpolators()
     
-    for _ in range(20):
+    for _ in range(5):
                 create_and_run_simulation(individual, lookup_one_cell, lookup_two_cells)    
 
 if __name__ == "__main__":

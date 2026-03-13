@@ -63,3 +63,63 @@ Parameters: [np.float64(0.13178514521050166), np.float64(0.22052666462927448), n
 Rank 3:
 Fitness: 6018.65416
 Parameters: [np.float64(0.13178514521050166), np.float64(0.22052666462927448), np.float64(0.1833223146881966), np.float64(93.09861893576988), np.float64(109.73193263405224), np.float64(62.63335295427316), np.float64(0.24051449596701177), np.float64(0.22396387718086452), np.float64(0.28687473624994975), np.float64(0.9308023066008706), np.float64(0.07933787608140352), np.float64(0.35790689192113645), np.float64(46.57233582664971), np.float64(34.09404197285841), np.float64(46.356999913792095), np.float64(0.23034430043956328), np.float64(0.34214931547671845), np.float64(0.30865084755944355), np.int64(1), np.int64(1), np.int64(0), np.int64(0), 3, 0, np.int64(4), np.int64(3), 0, np.int64(1), np.int64(0), np.int64(1), np.int64(0), np.int64(4), 3, 4, np.int64(4), 4]
+
+
+Rules Print:
+
+Rule: IF uncertainty is low AND distance is close THEN one_cell_priority is low
+Rule: IF uncertainty is low AND distance is medium THEN one_cell_priority is low
+Rule: IF uncertainty is low AND distance is far THEN one_cell_priority is very_low
+Rule: IF uncertainty is medium AND distance is close THEN one_cell_priority is very_low
+Rule: IF uncertainty is medium AND distance is medium THEN one_cell_priority is high
+Rule: IF uncertainty is medium AND distance is far THEN one_cell_priority is high
+Rule: IF uncertainty is high AND distance is close THEN one_cell_priority is very_high
+Rule: IF uncertainty is high AND distance is medium THEN one_cell_priority is high
+Rule: IF uncertainty is high AND distance is far THEN one_cell_priority is medium
+Rule: IF sum_priorities is low AND distance_between_targets is close THEN pair_priority is low
+Rule: IF sum_priorities is low AND distance_between_targets is medium THEN pair_priority is very_low
+Rule: IF sum_priorities is low AND distance_between_targets is far THEN pair_priority is low
+Rule: IF sum_priorities is medium AND distance_between_targets is close THEN pair_priority is very_low
+Rule: IF sum_priorities is medium AND distance_between_targets is medium THEN pair_priority is very_high
+Rule: IF sum_priorities is medium AND distance_between_targets is far THEN pair_priority is very_low
+Rule: IF sum_priorities is high AND distance_between_targets is close THEN pair_priority is very_high
+Rule: IF sum_priorities is high AND distance_between_targets is medium THEN pair_priority is very_high
+Rule: IF sum_priorities is high AND distance_between_targets is far THEN pair_priority is very_high
+
+Rule: IF uncertainty is low AND distance is close THEN one_cell_priority is low
+Rule: IF uncertainty is low AND distance is medium THEN one_cell_priority is low
+Rule: IF uncertainty is low AND distance is far THEN one_cell_priority is very_low
+Rule: IF uncertainty is medium AND distance is close THEN one_cell_priority is very_low
+Rule: IF uncertainty is medium AND distance is medium THEN one_cell_priority is high
+Rule: IF uncertainty is medium AND distance is far THEN one_cell_priority is very_low
+Rule: IF uncertainty is high AND distance is close THEN one_cell_priority is very_high
+Rule: IF uncertainty is high AND distance is medium THEN one_cell_priority is high
+Rule: IF uncertainty is high AND distance is far THEN one_cell_priority is medium
+Rule: IF sum_priorities is low AND distance_between_targets is close THEN pair_priority is low
+Rule: IF sum_priorities is low AND distance_between_targets is medium THEN pair_priority is very_low
+Rule: IF sum_priorities is low AND distance_between_targets is far THEN pair_priority is low
+Rule: IF sum_priorities is medium AND distance_between_targets is close THEN pair_priority is very_low
+Rule: IF sum_priorities is medium AND distance_between_targets is medium THEN pair_priority is very_high
+Rule: IF sum_priorities is medium AND distance_between_targets is far THEN pair_priority is very_low
+Rule: IF sum_priorities is high AND distance_between_targets is close THEN pair_priority is very_high
+Rule: IF sum_priorities is high AND distance_between_targets is medium THEN pair_priority is very_high
+Rule: IF sum_priorities is high AND distance_between_targets is far THEN pair_priority is very_high
+
+Rule: IF uncertainty is low AND distance is close THEN one_cell_priority is low
+Rule: IF uncertainty is low AND distance is medium THEN one_cell_priority is low
+Rule: IF uncertainty is low AND distance is far THEN one_cell_priority is very_low
+Rule: IF uncertainty is medium AND distance is close THEN one_cell_priority is very_low
+Rule: IF uncertainty is medium AND distance is medium THEN one_cell_priority is high
+Rule: IF uncertainty is medium AND distance is far THEN one_cell_priority is very_low
+Rule: IF uncertainty is high AND distance is close THEN one_cell_priority is very_high
+Rule: IF uncertainty is high AND distance is medium THEN one_cell_priority is high
+Rule: IF uncertainty is high AND distance is far THEN one_cell_priority is very_low
+Rule: IF sum_priorities is low AND distance_between_targets is close THEN pair_priority is low
+Rule: IF sum_priorities is low AND distance_between_targets is medium THEN pair_priority is very_low
+Rule: IF sum_priorities is low AND distance_between_targets is far THEN pair_priority is low
+Rule: IF sum_priorities is medium AND distance_between_targets is close THEN pair_priority is very_low
+Rule: IF sum_priorities is medium AND distance_between_targets is medium THEN pair_priority is very_high
+Rule: IF sum_priorities is medium AND distance_between_targets is far THEN pair_priority is high
+Rule: IF sum_priorities is high AND distance_between_targets is close THEN pair_priority is very_high
+Rule: IF sum_priorities is high AND distance_between_targets is medium THEN pair_priority is very_high
+Rule: IF sum_priorities is high AND distance_between_targets is far THEN pair_priority is very_high

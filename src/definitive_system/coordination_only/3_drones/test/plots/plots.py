@@ -14,8 +14,7 @@ def parse_uav_log(log_file_path):
     uncertainty_pattern = re.compile(r"At time: ([\d\.]+), node (\d+) map has total uncertainty of ([\d\.]+)")
     unvisited_pattern = re.compile(r"At time: ([\d\.]+), the node (\d+) has ([\d\.]+) unvisited cells")
     accomulated_uncertainty_pattern = re.compile(r"At time: ([\d\.]+), node (\d+) map has a accomulated uncertainty of ([\d\.]+)")
-    accomulated_distance = re.compile(r"At time: ([\d\.]+), node (\d+) has traveled a total distance of ([\d\.]+)")
-    
+   
     
     try:
         with open(log_file_path, 'r') as f:
@@ -23,7 +22,6 @@ def parse_uav_log(log_file_path):
                 match_uncertainty = uncertainty_pattern.match(line)
                 match_unvisited = unvisited_pattern.match(line)
                 match_accomulated = accomulated_uncertainty_pattern.match(line)
-                match_distance = accomulated_distance.match(line)
 
                 if match_uncertainty:
                     time, uav_id, value = match_uncertainty.groups()
@@ -34,9 +32,6 @@ def parse_uav_log(log_file_path):
                 elif match_accomulated:
                     time, uav_id, value = match_accomulated.groups()
                     uav_data_lists[int(uav_id)][2].append([float(value), float(time)])
-                elif match_distance:
-                    time, uav_id, value = match_distance.groups()
-                    uav_data_lists[int(uav_id)][3].append([float(value), float(time)])
 
     except FileNotFoundError:
         print(f"Error: The file '{log_file_path}' was not found.")
@@ -47,8 +42,7 @@ def parse_uav_log(log_file_path):
         uncertainty_arr = np.array(data_lists[0]).T if data_lists[0] else np.empty((2, 0))
         unvisited_arr = np.array(data_lists[1]).T if data_lists[1] else np.empty((2, 0))
         accomulated_uncertainty_arr = np.array(data_lists[2]).T if data_lists[2] else np.empty((2, 0))
-        accomulated_distance_arr = np.array(data_lists[3]).T if data_lists[3] else np.empty((2, 0))
-        processed_uav_data[uav_id] = [uncertainty_arr, unvisited_arr, accomulated_uncertainty_arr, accomulated_distance_arr]
+        processed_uav_data[uav_id] = [uncertainty_arr, unvisited_arr, accomulated_uncertainty_arr]
 
     return processed_uav_data
 
@@ -148,7 +142,8 @@ def plot_uncertainty_comparison_stacked_triple(
 def parse_and_average_logs_from_folder(folder_path):
     """
     Parses all .log files in a given folder, averages the results across
-    all simulations, and returns a single processed data dictionary.
+    all simulations FOR EACH UAV individually, and returns a single processed 
+    data dictionary.
     """
     log_files = glob.glob(os.path.join(folder_path, 'simulation*.log'))
     if not log_files:
@@ -168,16 +163,16 @@ def parse_and_average_logs_from_folder(folder_path):
         print("No data could be parsed from any log file.")
         return None
 
-    # 2. Average the data across all collected simulations
+    # 2. Average the data across all collected simulations PER UAV
     averaged_data = defaultdict(list)
     
-    # Find all unique UAV IDs across all simulations
+    # Find all unique UAV IDs across all simulations (e.g., Drones 0, 1, 2, 3, 4)
     all_uav_ids = set()
     for sim_data in all_simulations_data:
         all_uav_ids.update(sim_data.keys())
 
     for uav_id in sorted(list(all_uav_ids)):
-        for metric_idx in range(4): # 0: uncertainty, 1: unvisited, 2: accomulated uncertainty, 3: accomulated distance
+        for metric_idx in range(3): # 0: uncertainty, 1: unvisited, 2: accomulated uncertainty
             
             # Gather data for this specific UAV and metric from every simulation
             all_runs_for_metric = []
@@ -185,25 +180,45 @@ def parse_and_average_logs_from_folder(folder_path):
             for sim_data in all_simulations_data:
                 if uav_id in sim_data and sim_data[uav_id][metric_idx].size > 0:
                     metric_data = sim_data[uav_id][metric_idx]
-                    all_runs_for_metric.append(metric_data)
-                    all_times_for_metric.extend(metric_data[1])
+                    
+                    # Sort timestamps chronologically ---
+                    # metric_data[0] is values, metric_data[1] is times
+                    sorted_indices = np.argsort(metric_data[1])
+                    sorted_times = metric_data[1][sorted_indices]
+                    sorted_values = metric_data[0][sorted_indices]
+                    
+                    # Store the cleaned, sorted run
+                    all_runs_for_metric.append((sorted_values, sorted_times))
+                    all_times_for_metric.extend(sorted_times)
 
             if not all_runs_for_metric:
                 averaged_data[uav_id].append(np.empty((2, 0)))
                 continue
 
-            # Create a common time axis and interpolate
+            # Create a common time axis for this specific UAV across all runs
             common_times = np.linspace(min(all_times_for_metric), max(all_times_for_metric), num=200)
-            interpolated_runs = [np.interp(common_times, run[1], run[0]) for run in all_runs_for_metric]
+            
+            interpolated_runs = []
+            for run_vals, run_times in all_runs_for_metric:
+                
+                # If calculating 'Accumulated Uncertainty' (idx 2), force it to start at 0.0
+                # before the drone's first logged timestamp. 
+                if metric_idx == 2:
+                    interp_vals = np.interp(common_times, run_times, run_vals, left=0.0)
+                else:
+                    # For total uncertainty or unvisited cells, default padding is safer
+                    interp_vals = np.interp(common_times, run_times, run_vals)
+                
+                interpolated_runs.append(interp_vals)
 
-            # Calculate the mean across the simulations
+            # Calculate the mean across the simulations for THIS specific UAV
             mean_values = np.mean(interpolated_runs, axis=0)
             
             # Store in the final format: [[values...], [times...]]
             final_metric_array = np.array([mean_values, common_times])
             averaged_data[uav_id].append(final_metric_array)
 
-    return dict(averaged_data) # Convert back to a regular dict
+    return dict(averaged_data)
 
 def plot_swarm_comparison(labeled_datasets):
     """
@@ -219,7 +234,7 @@ def plot_swarm_comparison(labeled_datasets):
         return
 
     # --- 1. Setup the Figure ---
-    fig, axes = plt.subplots(4 ,1, figsize=(14, 18), sharex=True)
+    fig, axes = plt.subplots(3 ,1, figsize=(14, 18), sharex=True)
     fig.suptitle('Comparison of Swarm Performance Metrics', fontsize=18)
 
     # --- 2. Define Metrics and Colors for different datasets ---
@@ -227,7 +242,6 @@ def plot_swarm_comparison(labeled_datasets):
         {'title': 'Total Map Uncertainty', 'ylabel': 'Uncertainty Value'},
         {'title': 'Number of Unvisited Cells', 'ylabel': 'Cell Count'},
         {'title': 'Accomulated Uncertainty', 'ylabel': 'Accomulated Uncertainty Value'},
-        {'title': 'Accomulated Distance Traveled', 'ylabel': 'Distance (meters)'}
     ]
     # Define a list of colors to cycle through for each dataset
     dataset_colors = ['#1f77b4', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
@@ -371,67 +385,25 @@ def plot_swarm_uncertainty(labeled_datasets):
     plt.show()
 
 
-uav_GA_fitness_function_cell = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fitness/cell/test_ga_just_uncertainty")
+Fuzzy_first_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/test/logs/fuzzy_2000")
 
-uav_GA_fitness_function_cell_distance_uncertainty = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fitness/cell/test_ga_distance_uncertainty")
+Fuzzy_modified_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/test/logs/fuzzy_modified_2000")
 
-uav_GA_fitness_function_cell_distance_uncertainty2 = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fitness/cell/test_ga_distance_uncertainty2")
+Analytical_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/test/logs/analytical_2000")
 
-uav_GA_fuzzy_function_cell_hand_tunning = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fuzzy/hand_tunning")
 
-uav_GA_fuzzy_function_cell_just_uncertainty = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fuzzy/test_ga_just_uncertainty")
-
-uav_GA_fuzzy_function_cell_uncertainty_distance = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fuzzy/test_ga_uncertainty_distance")
-
-uav_GA_fuzzy_funtion_cell_uncertainty_more_distance = parse_and_average_logs_from_folder("/FuzzyGA/src/new_system/logs/fuzzy/test_ga_uncertainty_distance2")
-
-labeled_datasets1 = {
-    "Cluster Fitness": uav_GA_fitness_function_cell,
-}
+#labeled_datasets1 = {
+#    "First and Second Best Individual": Fuzzy_first_second_best_individual,
+#    "Third Best Individual": Fuzzy_third_best_individual,
+#    "Fuzzy modified": Fuzzy_modified_individual
+#}
 
 labeled_datasets2 = {
-    "Distance & Uncertainty Fitness": uav_GA_fitness_function_cell_distance_uncertainty,
-}  
-
-labeled_datasets3 = {
-    "Distance first & Uncertainty Fitness": uav_GA_fitness_function_cell_distance_uncertainty2,
+    "Fuzzy Best Individual": Fuzzy_first_individual,
+    #"Analytical Best Individual": Analytical_individual,
+    "Fuzzy modified": Fuzzy_modified_individual,
 }
-
-labeled_datasets4 = {
-    "Hand Tunning Fuzzy": uav_GA_fuzzy_function_cell_hand_tunning,
-}
-
-labeled_datasets5 = {
-    "Fuzzy: Uncertainty only": uav_GA_fuzzy_function_cell_just_uncertainty,
-}
-
-labeled_datasets6 = {
-    "Fuzzy: Uncertainty & Distance": uav_GA_fuzzy_function_cell_uncertainty_distance,
-}
-
-labeled_datasets7 = {
-    "Fuzzy: More Distance & Uncertainty": uav_GA_fuzzy_funtion_cell_uncertainty_more_distance,
-}
-"""
-plot_swarm_uncertainty(labeled_datasets1)
-plot_swarm_comparison(labeled_datasets1)
 
 plot_swarm_uncertainty(labeled_datasets2)
 plot_swarm_comparison(labeled_datasets2)
 
-plot_swarm_uncertainty(labeled_datasets3)
-plot_swarm_comparison(labeled_datasets3)
-
-
-plot_swarm_uncertainty(labeled_datasets4)
-plot_swarm_comparison(labeled_datasets4)
-"""
-
-plot_swarm_uncertainty(labeled_datasets5)
-plot_swarm_comparison(labeled_datasets5)
-
-plot_swarm_uncertainty(labeled_datasets6)
-plot_swarm_comparison(labeled_datasets6)
-
-plot_swarm_uncertainty(labeled_datasets7)
-plot_swarm_comparison(labeled_datasets7)

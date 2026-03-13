@@ -19,7 +19,7 @@ def create_and_run_simulation(individual):
     
     # Configuring simulation
     config = SimulationConfiguration(
-        duration=1000, 
+        duration=2000, 
         real_time=False,
     )
     builder = SimulationBuilder(config)
@@ -57,7 +57,7 @@ def create_and_run_simulation(individual):
 
     medium_uncertainty = 0
     for i in range(NUMBER_OF_DRONES):
-        medium_uncertainty += results_aggregator[i]['accomulated_uncertainty']/NUMBER_OF_DRONES
+        medium_uncertainty += 0.01*results_aggregator[i]['accomulated_uncertainty']/NUMBER_OF_DRONES
 
     print(f"Variable to be minimized: {medium_uncertainty}")    
     return medium_uncertainty
@@ -66,13 +66,13 @@ def create_and_run_simulation(individual):
 def main():
     logging.basicConfig(
         level=logging.INFO,  
-        filename=f'definitive_system/coordination_only/5_drones/analytical/test/logs/simulation.log', 
+        filename=f'definitive_system/coordination_only/5_drones/test/logs/analytical_2000/simulation.log', 
         filemode='w', 
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    for _ in range(1):
-        individual =  [500.0, 50.0] 
+    for _ in range(20):
+        individual =  [1756.1772600172187, 1375.6420768717649]
         create_and_run_simulation(individual)
     
 

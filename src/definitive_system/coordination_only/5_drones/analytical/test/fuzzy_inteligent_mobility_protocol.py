@@ -153,10 +153,10 @@ class Drone(IProtocol):
         self.provider.schedule_timer("battery", self.provider.current_time() + 1)
 
         ##### Visualizing the MAP #####
-        if Drone.visualizer is None:
-            # We have 3 drones in the simulation.
-            # I have to think a better way to do this.
-            Drone.visualizer = MapVisualizer(num_drones=self.NUMBER_OF_DRONES, map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells=self.DISTANCE_BETWEEN_CELLS)
+        #if Drone.visualizer is None:
+        #    # We have 3 drones in the simulation.
+        #    # I have to think a better way to do this.
+        #    Drone.visualizer = MapVisualizer(num_drones=self.NUMBER_OF_DRONES, map_width=self.MAP_WIDTH, map_height=self.MAP_HEIGHT, distance_between_cells=self.DISTANCE_BETWEEN_CELLS)
         
         #if self.visualizer:
         #    self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0])
@@ -201,7 +201,7 @@ class Drone(IProtocol):
         
         self.total_uncertainty = self.map[:,:,0].sum()
         self.accomulated_uncertainty += self.total_uncertainty
-        #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
+        self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has a accomulated uncertainty of {self.accomulated_uncertainty}")
         
         if self.visualizer:
             self.visualizer.update_map(self.provider.get_id(), self.map[:,:,0], [current_x, current_y])
@@ -209,7 +209,7 @@ class Drone(IProtocol):
         ###### Printar isso aqui depois nos testes####
         ##############################################
         ##############################################                
-        #self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
+        self._log.info(f"At time: {self.provider.current_time()}, node {self.provider.get_id()} map has total uncertainty of {self.total_uncertainty}")         
 
 
     ##### Map updating ##### 
@@ -226,7 +226,7 @@ class Drone(IProtocol):
         ###### Printar isso aqui depois nos testes####
         ##############################################
         ############################################## 
-        #self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
+        self._log.info(f"At time: {self.provider.current_time()}, the node {self.provider.get_id()} has {self.MAP_WIDTH*self.MAP_HEIGHT - np.sum(self.is_cell_visited)} unvisited cells")
 
          
     ##### Self mobility command. When the drone reaches the destination, it calculates the next one #####
@@ -242,7 +242,6 @@ class Drone(IProtocol):
         target_coords, value = self.fitness.choose_one_cell(cells_fitness_scores)
         target_row, target_col = target_coords
         
-        self._log.info(f"Drone {self.provider.get_id()} going to cell ({target_row}, {target_col}). Fitness value: {value}")
         #### Setting the speed
         speed = SetSpeedMobilityCommand(self.speed_command)
         self.provider.send_mobility_command(speed)
