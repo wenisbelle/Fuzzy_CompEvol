@@ -1,125 +1,32 @@
-=== Final Results ===
-gen	nevals	avg    	std    	min    	max        
-0  	50    	589399 	482604 	9219.37	1.00028e+06
-1  	39    	255200 	418607 	9033.47	1.00003e+06
-2  	42    	35998.4	137913 	7264.77	1e+06      
-3  	39    	13156.4	5666.37	8038.19	30235.2    
-4  	39    	12236.7	4840.35	6095.9 	28486.5    
-5  	39    	12311.7	6309.96	7530.81	32396.1    
-6  	43    	9807.44	4093.97	7071.01	29139.6    
-7  	47    	9341.22	4805.49	6730.03	33455.5    
-8  	45    	8951.21	3303.69	6528.92	27526.6    
-9  	43    	7433.68	1164.08	6493.19	13310.6    
-10 	39    	7118.73	1146.85	6362.09	13728.1    
-11 	50    	6761.34	426.46 	6227.42	8813.74    
-12 	43    	6860.75	977.513	6202.41	12772.5    
-13 	41    	6582.55	281.925	6139.01	8280.06    
-14 	44    	6533.05	181.768	6232.7 	7076.29    
-15 	41    	6662.86	665.056	6196.75	10165.6    
-16 	38    	6488.59	145.529	6196.75	6923.2     
-17 	38    	6672.04	867.593	6114.73	10878.8    
-18 	46    	6550.75	442.639	6112.53	8795.85    
-19 	40    	6532.62	688.211	6129.53	11254.6    
-20 	46    	6949.35	2681.27	6142.18	25409.6    
-21 	44    	6438.77	171.159	6085.76	6908.1     
-22 	34    	6940.98	3056.75	6085.76	27968.2    
-23 	43    	6924.53	2784.17	6085.76	26020.8    
-24 	44    	6650.79	1134.46	6189.7 	14487.9    
-25 	44    	6492.76	254.263	6096.56	7868.32    
-26 	42    	6577.2 	709.72 	6096.56	11435.7    
-27 	38    	6452.55	175.418	6088.07	6944.64    
-28 	40    	6690.11	1398.3 	6119.74	15461.8    
-29 	47    	6717.06	1356.7 	6208.12	14253.9    
-30 	39    	6811.8 	1311.02	6201.82	12700.8    
-31 	44    	6491.13	629.359	6090.39	10764.1    
-32 	42    	6685.98	1180.96	6090.39	11927.2    
-33 	39    	6760.11	996.486	6132.93	9957.48    
-34 	40    	6876.56	1734.12	6126.35	14855.5    
-35 	46    	6778.93	1139.13	6126.35	12295.7    
-36 	42    	6599.71	1705.71	5980.65	18487.3    
-37 	44    	6424.93	266.448	6132.67	7862.8     
-38 	45    	6808.08	1588.56	6007.27	14061.5    
-39 	44    	6425.76	288.254	6109.04	8096.69    
-40 	45    	6453.58	710.918	6057.59	11172.2    
-41 	36    	7098.29	3510.35	6057.59	30058.6    
-42 	42    	6446.38	717.363	6046.46	10515.8    
-43 	43    	6671.76	1309.64	6076.5 	12851.6    
-44 	38    	6282.59	136.614	6111.51	6693.31    
-45 	39    	6333.29	309.864	6104.61	8234.56    
-46 	45    	6328.93	176.658	6018.65	7005.85    
-47 	33    	6567.34	975.107	6018.65	11029.5    
-48 	37    	6476.66	868.997	6018.65	11262.9    
-49 	44    	6381.78	342.715	5982.79	8222.44    
-50 	41    	6405.19	733.68 	5982.79	10685.9    
-=== Top 5 Best Individuals ===
-Rank 1:
-Fitness: 5980.645069999997
-Parameters: [np.float64(0.13178514521050166), np.float64(0.22052666462927448), np.float64(0.1833223146881966), np.float64(93.09861893576988), np.float64(109.73193263405224), np.float64(62.63335295427316), np.float64(0.24051449596701177), np.float64(0.22396387718086452), np.float64(0.28687473624994975), np.float64(0.9308023066008706), np.float64(0.07933787608140352), np.float64(0.35790689192113645), np.float64(46.57233582664971), np.float64(34.09404197285841), np.float64(46.356999913792095), np.float64(0.23034430043956328), np.float64(0.34214931547671845), np.float64(0.30865084755944355), np.int64(1), np.int64(1), np.int64(0), np.int64(0), 3, np.int64(3), np.int64(4), np.int64(3), np.int64(2), np.int64(1), np.int64(0), np.int64(1), np.int64(0), np.int64(4), np.int64(0), 4, np.int64(4), 4]
-
-Rank 2:
-Fitness: 6007.269219999999
-Parameters: [np.float64(0.13178514521050166), np.float64(0.22052666462927448), np.float64(0.1833223146881966), np.float64(93.09861893576988), np.float64(109.73193263405224), np.float64(62.63335295427316), np.float64(0.24051449596701177), np.float64(0.22396387718086452), np.float64(0.28687473624994975), np.float64(0.9308023066008706), np.float64(0.07933787608140352), np.float64(0.35790689192113645), np.float64(46.57233582664971), np.float64(34.09404197285841), np.float64(46.356999913792095), np.float64(0.23034430043956328), np.float64(0.34214931547671845), np.float64(0.30865084755944355), np.int64(1), np.int64(1), np.int64(0), np.int64(0), 3, 0, np.int64(4), 3, np.int64(2), np.int64(1), np.int64(0), np.int64(1), np.int64(0), np.int64(4), np.int64(0), 4, np.int64(4), 4]
-
-Rank 3:
-Fitness: 6018.65416
-Parameters: [np.float64(0.13178514521050166), np.float64(0.22052666462927448), np.float64(0.1833223146881966), np.float64(93.09861893576988), np.float64(109.73193263405224), np.float64(62.63335295427316), np.float64(0.24051449596701177), np.float64(0.22396387718086452), np.float64(0.28687473624994975), np.float64(0.9308023066008706), np.float64(0.07933787608140352), np.float64(0.35790689192113645), np.float64(46.57233582664971), np.float64(34.09404197285841), np.float64(46.356999913792095), np.float64(0.23034430043956328), np.float64(0.34214931547671845), np.float64(0.30865084755944355), np.int64(1), np.int64(1), np.int64(0), np.int64(0), 3, 0, np.int64(4), np.int64(3), 0, np.int64(1), np.int64(0), np.int64(1), np.int64(0), np.int64(4), 3, 4, np.int64(4), 4]
-
-
-Rules Print:
-
-Rule: IF uncertainty is low AND distance is close THEN one_cell_priority is low
-Rule: IF uncertainty is low AND distance is medium THEN one_cell_priority is low
-Rule: IF uncertainty is low AND distance is far THEN one_cell_priority is very_low
-Rule: IF uncertainty is medium AND distance is close THEN one_cell_priority is very_low
-Rule: IF uncertainty is medium AND distance is medium THEN one_cell_priority is high
-Rule: IF uncertainty is medium AND distance is far THEN one_cell_priority is high
-Rule: IF uncertainty is high AND distance is close THEN one_cell_priority is very_high
-Rule: IF uncertainty is high AND distance is medium THEN one_cell_priority is high
-Rule: IF uncertainty is high AND distance is far THEN one_cell_priority is medium
-Rule: IF sum_priorities is low AND distance_between_targets is close THEN pair_priority is low
-Rule: IF sum_priorities is low AND distance_between_targets is medium THEN pair_priority is very_low
-Rule: IF sum_priorities is low AND distance_between_targets is far THEN pair_priority is low
-Rule: IF sum_priorities is medium AND distance_between_targets is close THEN pair_priority is very_low
-Rule: IF sum_priorities is medium AND distance_between_targets is medium THEN pair_priority is very_high
-Rule: IF sum_priorities is medium AND distance_between_targets is far THEN pair_priority is very_low
-Rule: IF sum_priorities is high AND distance_between_targets is close THEN pair_priority is very_high
-Rule: IF sum_priorities is high AND distance_between_targets is medium THEN pair_priority is very_high
-Rule: IF sum_priorities is high AND distance_between_targets is far THEN pair_priority is very_high
-
-Rule: IF uncertainty is low AND distance is close THEN one_cell_priority is low
-Rule: IF uncertainty is low AND distance is medium THEN one_cell_priority is low
-Rule: IF uncertainty is low AND distance is far THEN one_cell_priority is very_low
-Rule: IF uncertainty is medium AND distance is close THEN one_cell_priority is very_low
-Rule: IF uncertainty is medium AND distance is medium THEN one_cell_priority is high
-Rule: IF uncertainty is medium AND distance is far THEN one_cell_priority is very_low
-Rule: IF uncertainty is high AND distance is close THEN one_cell_priority is very_high
-Rule: IF uncertainty is high AND distance is medium THEN one_cell_priority is high
-Rule: IF uncertainty is high AND distance is far THEN one_cell_priority is medium
-Rule: IF sum_priorities is low AND distance_between_targets is close THEN pair_priority is low
-Rule: IF sum_priorities is low AND distance_between_targets is medium THEN pair_priority is very_low
-Rule: IF sum_priorities is low AND distance_between_targets is far THEN pair_priority is low
-Rule: IF sum_priorities is medium AND distance_between_targets is close THEN pair_priority is very_low
-Rule: IF sum_priorities is medium AND distance_between_targets is medium THEN pair_priority is very_high
-Rule: IF sum_priorities is medium AND distance_between_targets is far THEN pair_priority is very_low
-Rule: IF sum_priorities is high AND distance_between_targets is close THEN pair_priority is very_high
-Rule: IF sum_priorities is high AND distance_between_targets is medium THEN pair_priority is very_high
-Rule: IF sum_priorities is high AND distance_between_targets is far THEN pair_priority is very_high
-
-Rule: IF uncertainty is low AND distance is close THEN one_cell_priority is low
-Rule: IF uncertainty is low AND distance is medium THEN one_cell_priority is low
-Rule: IF uncertainty is low AND distance is far THEN one_cell_priority is very_low
-Rule: IF uncertainty is medium AND distance is close THEN one_cell_priority is very_low
-Rule: IF uncertainty is medium AND distance is medium THEN one_cell_priority is high
-Rule: IF uncertainty is medium AND distance is far THEN one_cell_priority is very_low
-Rule: IF uncertainty is high AND distance is close THEN one_cell_priority is very_high
-Rule: IF uncertainty is high AND distance is medium THEN one_cell_priority is high
-Rule: IF uncertainty is high AND distance is far THEN one_cell_priority is very_low
-Rule: IF sum_priorities is low AND distance_between_targets is close THEN pair_priority is low
-Rule: IF sum_priorities is low AND distance_between_targets is medium THEN pair_priority is very_low
-Rule: IF sum_priorities is low AND distance_between_targets is far THEN pair_priority is low
-Rule: IF sum_priorities is medium AND distance_between_targets is close THEN pair_priority is very_low
-Rule: IF sum_priorities is medium AND distance_between_targets is medium THEN pair_priority is very_high
-Rule: IF sum_priorities is medium AND distance_between_targets is far THEN pair_priority is high
-Rule: IF sum_priorities is high AND distance_between_targets is close THEN pair_priority is very_high
-Rule: IF sum_priorities is high AND distance_between_targets is medium THEN pair_priority is very_high
-Rule: IF sum_priorities is high AND distance_between_targets is far THEN pair_priority is very_high
+gen	nevals	avg    	std    	min    	max    
+0  	50    	80119.7	30626.1	11817.9	100198 
+1  	41    	54157.8	33917  	10653  	100025 
+2  	34    	33117.2	28888.7	10375.8	100100 
+3  	40    	18987.5	15746.5	10095  	86506.2
+4  	39    	16510.4	12598.4	10249  	71463.9
+5  	40    	14453.2	10914.1	10041.3	69522.9
+6  	48    	17108.5	14572.3	10236  	86774.5
+7  	39    	16244.3	16077.3	9383.67	89773.5
+8  	50    	14889.1	12848.9	9514.08	86388.9
+9  	36    	11867  	4570.18	9321.04	41950.3
+10 	50    	13167.9	6436.46	9357.81	39683  
+11 	36    	13158.3	9410.12	9357.81	68390.3
+12 	40    	11258.7	4665.85	9243.85	39605.2
+13 	40    	10965.6	3953.15	9261.18	27488.1
+14 	42    	11342  	5649.04	9084.8 	44235.7
+15 	38    	9933.75	1764.67	8978.3 	20873.4
+16 	44    	9482.8 	527.406	8726.74	11941.5
+17 	36    	9406.63	660.648	8710.42	12543.8
+18 	45    	9182.47	178.379	8785.06	9618.12
+19 	46    	9186.31	810.625	8693.13	14627.2
+20 	40    	9152.02	1677.09	8373.36	20819.8
+21 	42    	8995.2 	1089.57	8373.36	16551.3
+22 	42    	8768.33	86.241 	8595.45	8974.54
+23 	32    	10171.2	9860.15	8592.47	79188.9
+24 	44    	8786.71	112.841	8588.23	9038.56
+25 	30    	8754.63	104.635	8578.1 	9064.78
+26 	36    	10263.8	9538.9 	8588.23	76700.6
+27 	30    	8774.25	105.679	8588.23	9049.22
+28 	43    	8776.91	115.42 	8579.77	9068.16
+29 	43    	8897.93	512.85 	8585.68	12394.2
+30 	38    	8798.89	198.266	8555.09	10003.2

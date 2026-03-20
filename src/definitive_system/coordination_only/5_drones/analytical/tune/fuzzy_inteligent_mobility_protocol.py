@@ -271,10 +271,8 @@ class Drone(IProtocol):
 
         target_coords, value = self.fitness.choose_two_cells(cells_fitness_scores)
 
-        minimized_traveled_distance_coords = self.get_pair_to_minimize_traveled_distance(target_coords, self.drone_position, another_drone_position, map_center_offset)
-
-        target_row_1, target_col_1 = minimized_traveled_distance_coords[0]
-        target_row_2, target_col_2 = minimized_traveled_distance_coords[1]
+        target_row_1, target_col_1 = target_coords[0]
+        target_row_2, target_col_2 = target_coords[1]
         
 
         #### Setting position to go to
@@ -297,31 +295,6 @@ class Drone(IProtocol):
         send_command = np.array([x_send_command, y_send_command, self.DRONE_ALTITUDE])
         
         return send_command, value
-
-    def get_pair_to_minimize_traveled_distance(self, target_coords:list, first_drone_pos: tuple, second_drone_pos: tuple, map_center_offset: float):
-        target_row_1, target_col_1 = target_coords[0]
-        target_row_2, target_col_2 = target_coords[1]
-
-        x_target_1 = target_row_1 * self.DISTANCE_BETWEEN_CELLS - map_center_offset
-        y_target_1 = target_col_1 * self.DISTANCE_BETWEEN_CELLS - map_center_offset
-
-        x_target_2 = target_row_2 * self.DISTANCE_BETWEEN_CELLS - map_center_offset
-        y_target_2 = target_col_2 * self.DISTANCE_BETWEEN_CELLS - map_center_offset
-
-        distance_first_drone_to_target_1 = np.sqrt((x_target_1 - first_drone_pos[0])**2 + (y_target_1 - first_drone_pos[1])**2)
-        distance_second_drone_to_target_2 = np.sqrt((x_target_2 - second_drone_pos[0])**2 + (y_target_2 - second_drone_pos[1])**2)
-
-        distance_first_drone_to_target_2 = np.sqrt((x_target_2 - first_drone_pos[0])**2 + (y_target_2 - first_drone_pos[1])**2)
-        distance_second_drone_to_target_1 = np.sqrt((x_target_1 - second_drone_pos[0])**2 + (y_target_1 - second_drone_pos[1])**2)
-
-        total_distance_option_1 = distance_first_drone_to_target_1 + distance_second_drone_to_target_2
-        total_distance_option_2 = distance_first_drone_to_target_2 + distance_second_drone_to_target_1
-
-        if total_distance_option_1 <= total_distance_option_2:
-            return (target_row_1, target_col_1), (target_row_2, target_col_2)
-        else:
-            return (target_row_2, target_col_2), (target_row_1, target_col_1)
-
     
     def send_heartbeat(self):
         #self._log.info(f"Sending heartbeat ...")

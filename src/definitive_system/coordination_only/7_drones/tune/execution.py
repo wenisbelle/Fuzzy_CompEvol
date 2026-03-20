@@ -89,10 +89,13 @@ def create_and_run_simulation(individual):
 
 ########### GA part ##########
 def objective_function(individual):
-    if not is_feasible(individual):
-        return 1000000.0 + distance(individual),    
-    
-    return create_and_run_simulation(individual),
+    NUMBER_OF_RUNS_PER_EPISODE = 3
+    average_return = 0.0
+    for _ in range(NUMBER_OF_RUNS_PER_EPISODE):
+        if not is_feasible(individual):
+            return 100000.0 + distance(individual),    
+        average_return += create_and_run_simulation(individual)/NUMBER_OF_RUNS_PER_EPISODE
+    return average_return,
 
 def is_feasible(individual):
     uncertainty_interval = individual[0:3]
@@ -305,7 +308,7 @@ def main():
     print("=== Final Results ===")
     print(log)
 
-    log_filename = "definitive_system/coordination_only/7_drones/tune/ga_logbook_2000.txt"
+    log_filename = "definitive_system/coordination_only/7_drones/tune/ga_logbook.txt"
     with open(log_filename, "w") as f:
         # Use str(log) to get the Logbook content as a string
         f.write(str(log))

@@ -106,7 +106,7 @@ def main():
     creator.create("Individual", list,  fitness=creator.FitnessMin) ## individual
     
     toolbox = base.Toolbox()
-    toolbox.register("attr_float", random.uniform, 0.1, 2000.0)
+    toolbox.register("attr_float", random.uniform, 0.1, 5000.0)
     toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_float, n=2)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual) 
 

@@ -389,6 +389,8 @@ Fuzzy_first_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/defini
 
 Fuzzy_modified_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/test/logs/fuzzy_modified_2000")
 
+Fuzzy_modified_individual_2 = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/test/logs/fuzzy_modified_2000_2")
+
 Analytical_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/test/logs/analytical_2000")
 
 
@@ -399,9 +401,10 @@ Analytical_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definit
 #}
 
 labeled_datasets2 = {
-    "Fuzzy Best Individual": Fuzzy_first_individual,
+    #"Fuzzy Best Individual": Fuzzy_first_individual,
     #"Analytical Best Individual": Analytical_individual,
     "Fuzzy modified": Fuzzy_modified_individual,
+    "Fuzzy modified 2": Fuzzy_modified_individual_2,
 }
 
 plot_swarm_uncertainty(labeled_datasets2)

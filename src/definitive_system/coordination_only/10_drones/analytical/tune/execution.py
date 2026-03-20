@@ -83,10 +83,13 @@ def create_and_run_simulation(individual):
 
 ########### GA part ##########
 def objective_function(individual):
-    if not is_feasible(individual):
-        return 1000000.0,  # Return a large cost for infeasible solutions    
-    
-    return create_and_run_simulation(individual),
+    NUMBER_OF_RUNS_PER_EPISODE = 3
+    average_return = 0.0
+    for _ in range(NUMBER_OF_RUNS_PER_EPISODE):
+        if not is_feasible(individual):
+            return 100000.0,    
+        average_return += create_and_run_simulation(individual)/NUMBER_OF_RUNS_PER_EPISODE
+    return average_return,
 
 def is_feasible(individual):
     distance_norm=individual[0]
@@ -106,7 +109,7 @@ def main():
     creator.create("Individual", list,  fitness=creator.FitnessMin) ## individual
     
     toolbox = base.Toolbox()
-    toolbox.register("attr_float", random.uniform, 0.1, 2000.0)
+    toolbox.register("attr_float", random.uniform, 0.1, 5000.0)
     toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_float, n=2)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual) 
 

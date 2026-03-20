@@ -142,7 +142,19 @@ class SanityCheck():
         self.two_cells_priority = ctrl.ControlSystemSimulation(two_cells_fuzzy)
 
 def main():
-    individual = [np.float64(0.1765550275716401), np.float64(0.26504925419859754), np.float64(0.5328280594467583), np.float64(65.76913130640668), np.float64(60.579250249961284), np.float64(86.06840306949528), np.float64(0.09459789068662158), np.float64(0.2810259583239695), np.float64(0.31808056721276934), np.float64(0.2109100989454195), np.float64(0.5282720591027129), np.float64(0.8521749796977374), np.float64(34.58815897497721), np.float64(27.237106487346836), np.float64(56.10639222453888), np.float64(0.15270903952109194), np.float64(0.21795421097999682), np.float64(0.23102459648581986), np.int64(1), np.int64(1), np.int64(0), np.int64(2), 1, np.int64(2), np.int64(4), np.int64(3), np.int64(1), np.int64(3), np.int64(3), np.int64(0), np.int64(3), np.int64(2), np.int64(4), np.int64(1), np.int64(0), np.int64(3)]
+    individual = [np.float64(0.3248127455923747), np.float64(0.20860769421745035), np.float64(0.27431761275359057),
+             np.float64(100.34266202816676), np.float64(98.70594746717698), np.float64(55.25734200472341),
+             np.float64(0.21746882646881088), np.float64(0.17717368698370328), np.float64(0.14634633466609104),
+             np.float64(0.3932135340662621), np.float64(0.23662882290049053), np.float64(0.5133610758578467),
+             np.float64(63.82574448279179), np.float64(36.041582825725534), np.float64(38.28506155920144),
+             np.float64(0.2806972718209198), np.float64(0.09444144502150142), np.float64(0.3162077455438398),
+             np.int64(1), np.int64(1), np.int64(1),
+             np.int64(1), np.int64(2), 1,
+             np.int64(4), np.int64(1), 3,
+             np.int64(3), np.int64(0), np.int64(4),
+             np.int64(1), np.int64(2), np.int64(2),
+             np.int64(1), np.int64(2), np.int64(4)] 
+    
     evaluator = SanityCheck(fuzzy_parameters=individual)
     
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ from deap import algorithms, base, creator, tools
 import numpy as np
 
 how_many_simulations = 0
-CORES_TO_USE = 24
+CORES_TO_USE = 16
 
 #### Objective function using simulation execution ####
 #### GradySim function #######
@@ -89,10 +89,13 @@ def create_and_run_simulation(individual):
 
 ########### GA part ##########
 def objective_function(individual):
-    if not is_feasible(individual):
-        return 1000000.0 + distance(individual),    
-    
-    return create_and_run_simulation(individual),
+    NUMBER_OF_RUNS_PER_EPISODE = 3
+    average_return = 0.0
+    for _ in range(NUMBER_OF_RUNS_PER_EPISODE):
+        if not is_feasible(individual):
+            return 100000.0 + distance(individual),    
+        average_return += create_and_run_simulation(individual)/NUMBER_OF_RUNS_PER_EPISODE
+    return average_return,
 
 def is_feasible(individual):
     uncertainty_interval = individual[0:3]

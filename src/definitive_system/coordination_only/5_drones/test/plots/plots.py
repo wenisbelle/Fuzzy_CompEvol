@@ -400,8 +400,8 @@ Analytical_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definit
 #}
 
 labeled_datasets2 = {
-    #"Fuzzy Best Individual": Fuzzy_first_individual,
-    "Analytical Best Individual": Analytical_individual,
+    "Fuzzy Best Individual": Fuzzy_first_individual,
+    #"Analytical Best Individual": Analytical_individual,
     "Fuzzy Modified Individual": Fuzzy_modified_individual,
 }
 
