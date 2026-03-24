@@ -364,21 +364,14 @@ def plot_swarm_uncertainty(labeled_datasets):
     plt.show()
 
 
-Fuzzy_first_second_best_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_best")
+Fuzzy_first_second_best_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_2000")
 
-Fuzzy_third_best_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_second_best")
+#Fuzzy_third_best_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_second_best")
 
-Fuzzy_modified_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_modified")
+#Fuzzy_modified_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_modified")
 
-Analytical_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/analytical")
+Analytical_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/analytical_2000")
 
-
-labeled_datasets1 = {
-    "First and Second Best Individual": Fuzzy_first_second_best_individual,
-    "Third Best Individual": Fuzzy_third_best_individual,
-    "Fuzzy modified": Fuzzy_modified_individual,
-    "Analytical": Analytical_individual,
-}
 
 labeled_datasets2 = {
     "First and Second Best Individual": Fuzzy_first_second_best_individual,

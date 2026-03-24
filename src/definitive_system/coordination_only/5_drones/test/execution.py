@@ -65,32 +65,19 @@ def create_and_run_simulation(individual, lookup_one_cell, lookup_two_cells):
 def main():
     logging.basicConfig(
         level=logging.INFO,  
-        filename=f'definitive_system/coordination_only/5_drones/test/logs/fuzzy_2000_modified/simulation.log', 
+        filename=f'definitive_system/coordination_only/5_drones/test/logs/fuzzy_2000/simulation.log', 
         filemode='w', 
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    individual = [np.float64(0.0981836852626658), np.float64(0.39823123425496115), np.float64(0.16054817954314526),
-            np.float64(83.89382541378083), np.float64(83.48405608641099), np.float64(80.19027847452021),
-            np.float64(0.08537202583746739), np.float64(0.22064110276808918), np.float64(0.08468486491055341),
-            np.float64(0.781600537288768), np.float64(0.14279249103885555), np.float64(0.6683300577689935),
-            np.float64(50.383763478430325), np.float64(40.049383832055256), np.float64(45.49243243462786),
-            np.float64(0.2736919999205339), np.float64(0.34228046734274264), np.float64(0.1823828011916267),
-            np.int64(2), np.int64(2), np.int64(1),
-            np.int64(3), np.int64(3), 2,
-            np.int64(4),np.int64(4), np.int64(3),
-            np.int64(3),np.int64(1), np.int64(3),
-            np.int64(2),np.int64(1), np.int64(3),
-            np.int64(0), np.int64(3), np.int64(4)]
-
-
+    individual = [np.float64(0.19511017566525324), np.float64(0.4309758541982476), np.float64(0.350731124740028), np.float64(100.11351892845472), np.float64(68.84790030238547), np.float64(89.18437035447316), np.float64(0.18903312312891912), np.float64(0.22087464719649408), np.float64(0.14753098335769377), np.float64(0.5422002300209398), np.float64(0.7061747159395654), np.float64(0.3934331442863811), np.float64(39.92150940682009), np.float64(29.457925760999963), np.float64(37.284010839850154), np.float64(0.299463233622177), np.float64(0.22464422969065315), np.float64(0.33439383400548406), 0, np.int64(2), np.int64(1), np.int64(0), np.int64(3), np.int64(1), np.int64(1), np.int64(4), np.int64(4), np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(1), np.int64(4), np.int64(1), np.int64(2), 4]
 
 
     ##### Creating the fuzzy lookup tables
     fuzzy_lookup = FuzzyLookupTable(fuzzy_parameters= np.array(individual)) 
     lookup_one_cell, lookup_two_cells = fuzzy_lookup.get_interpolators()
 
-    for _ in range(10):
+    for _ in range(20):
         create_and_run_simulation(individual, lookup_one_cell, lookup_two_cells)    
 
 

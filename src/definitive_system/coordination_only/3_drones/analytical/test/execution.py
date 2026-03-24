@@ -72,7 +72,7 @@ def main():
         format='%(message)s'  
     )
     for _ in range(20):
-        individual =  [996.0, 873.0]
+        individual =  [3611.5, 3563.1]
         create_and_run_simulation(individual)
     
 

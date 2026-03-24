@@ -70,18 +70,18 @@ def main():
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    individual =  [np.float64(0.13178514521050166), np.float64(0.22052666462927448), np.float64(0.1833223146881966),
-                   np.float64(93.09861893576988), np.float64(109.73193263405224), np.float64(62.63335295427316),
-                   np.float64(0.24051449596701177), np.float64(0.22396387718086452), np.float64(0.28687473624994975),
-                   np.float64(0.9308023066008706), np.float64(0.07933787608140352), np.float64(0.35790689192113645),
-                   np.float64(46.57233582664971), np.float64(34.09404197285841), np.float64(46.356999913792095),
-                   np.float64(0.23034430043956328), np.float64(0.34214931547671845), np.float64(0.30865084755944355),
-                   np.int64(1), np.int64(1), np.int64(0),
-                   np.int64(3), 3, 0,
-                   np.int64(4), np.int64(3), 0,
-                   np.int64(1), np.int64(0), np.int64(1),
-                   np.int64(0), np.int64(4), 3,
-                   2, np.int64(4), 4]
+    individual =  [np.float64(0.08879789658449988), np.float64(0.2990584261575781), np.float64(0.32384850500067697),
+            np.float64(59.67149923152216), np.float64(74.61556171321105), np.float64(87.84193135295521),
+            np.float64(0.2771856390455823), np.float64(0.2787134317315393), np.float64(0.1638125494958381),
+            np.float64(0.673782021688156), np.float64(0.6329466169294924), np.float64(0.5591202075074384),
+            np.float64(50.54463178241406), np.float64(42.27566047833311), np.float64(44.5656822753396),
+            np.float64(0.32012394689951496), np.float64(0.2040906672593554), np.float64(0.280814060613372),
+            np.int64(0), np.int64(2), np.int64(1),
+            np.int64(0), np.int64(4), np.int64(1),
+            np.int64(3), np.int64(4), np.int64(3),
+            np.int64(1), np.int64(0), np.int64(2),
+            np.int64(2), np.int64(3), np.int64(3),
+            np.int64(4), np.int64(3), np.int64(4)] 
 
     ##### Creating the fuzzy lookup tables
     fuzzy_lookup = FuzzyLookupTable(fuzzy_parameters= np.array(individual)) 

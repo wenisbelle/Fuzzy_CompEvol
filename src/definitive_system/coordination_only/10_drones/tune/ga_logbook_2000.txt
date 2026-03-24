@@ -34,4 +34,15 @@ gen	nevals	avg    	std    	min    	max
 === Top Best Individuals ===
 Rank 1:
 Fitness: 8373.361959999998
-Parameters: [np.float64(0.08879789658449988), np.float64(0.2990584261575781), np.float64(0.32384850500067697), np.float64(59.67149923152216), np.float64(74.61556171321105), np.float64(87.84193135295521), np.float64(0.2771856390455823), np.float64(0.2787134317315393), np.float64(0.1638125494958381), np.float64(0.673782021688156), np.float64(0.6329466169294924), np.float64(0.5591202075074384), np.float64(50.54463178241406), np.float64(42.27566047833311), np.float64(44.5656822753396), np.float64(0.32012394689951496), np.float64(0.2040906672593554), np.float64(0.280814060613372), np.int64(0), np.int64(2), np.int64(1), np.int64(0), np.int64(4), np.int64(1), np.int64(3), np.int64(4), np.int64(3), np.int64(1), np.int64(0), np.int64(2), np.int64(2), np.int64(3), np.int64(3), np.int64(4), np.int64(3), np.int64(4)]
+Parameters: [np.float64(0.08879789658449988), np.float64(0.2990584261575781), np.float64(0.32384850500067697),
+            np.float64(59.67149923152216), np.float64(74.61556171321105), np.float64(87.84193135295521),
+            np.float64(0.2771856390455823), np.float64(0.2787134317315393), np.float64(0.1638125494958381),
+            np.float64(0.673782021688156), np.float64(0.6329466169294924), np.float64(0.5591202075074384),
+            np.float64(50.54463178241406), np.float64(42.27566047833311), np.float64(44.5656822753396),
+            np.float64(0.32012394689951496), np.float64(0.2040906672593554), np.float64(0.280814060613372),
+            np.int64(0), np.int64(2), np.int64(1),
+            np.int64(0), np.int64(4), np.int64(1),
+            np.int64(3), np.int64(4), np.int64(3),
+            np.int64(1), np.int64(0), np.int64(2),
+            np.int64(2), np.int64(3), np.int64(3),
+            np.int64(4), np.int64(3), np.int64(4)]

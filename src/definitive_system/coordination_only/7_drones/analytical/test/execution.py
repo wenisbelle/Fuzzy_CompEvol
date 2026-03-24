@@ -26,7 +26,7 @@ def create_and_run_simulation(individual):
 
     builder.add_handler(TimerHandler())
     builder.add_handler(MobilityHandler())
-    builder.add_handler(VisualizationHandler())
+    #builder.add_handler(VisualizationHandler())
     builder.add_handler(CommunicationHandler(CommunicationMedium(
         transmission_range=200
     )))
@@ -72,7 +72,7 @@ def main():
         format='%(message)s'  
     )
     for _ in range(1):
-        individual =  [500.0, 50.0] 
+        individual =  [4534.5, 2710.4] 
         create_and_run_simulation(individual)
     
 

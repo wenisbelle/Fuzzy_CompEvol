@@ -71,7 +71,7 @@ def main():
         format='%(message)s'  
     )
     for _ in range(20):
-        individual =  [2018.0, 1538.0] 
+        individual =  [4411.89, 2840.38]
         create_and_run_simulation(individual)
     
 

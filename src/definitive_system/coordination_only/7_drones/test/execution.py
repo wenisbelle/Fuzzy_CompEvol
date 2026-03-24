@@ -64,12 +64,12 @@ def create_and_run_simulation(individual, lookup_one_cell, lookup_two_cells):
 def main():
     logging.basicConfig(
         level=logging.INFO,  
-        filename=f'definitive_system/coordination_only/7_drones/test/logs/fuzzy_2000_modified/simulation.log', 
+        filename=f'definitive_system/coordination_only/7_drones/test/logs/fuzzy_2000/simulation.log', 
         filemode='w', 
         #format='%(asctime)s - %(levelname)s - %(message)s'
         format='%(message)s'  
     )
-    individual =  [np.float64(0.009598218750528936), np.float64(0.38309031666688365), np.float64(0.5464715792450225), np.float64(59.46087613645159), np.float64(21.901328499990107), np.float64(51.486265776138836), np.float64(0.21425141782193335), np.float64(0.14579579001118176), np.float64(0.2543935518834503), np.float64(0.41202899669965515), np.float64(0.6502140585224361), np.float64(0.33818087613615844), np.float64(11.785379640652145), np.float64(39.42669012151829), np.float64(29.617132344080574), np.float64(0.2684364094637851), np.float64(0.20961702211472472), np.float64(0.20529641794914164), np.int64(1), np.int64(2), np.int64(2), np.int64(0), np.int64(2), np.int64(2), np.int64(3), np.int64(4), 3, np.int64(0), 3, 0, np.int64(0), np.int64(1), np.int64(3), np.int64(3), 3, np.int64(4)]
+    individual =  [np.float64(0.06857275692600859), np.float64(0.6769496995692293), np.float64(0.2923137159018423), np.float64(54.436036489196034), np.float64(67.71584424679985), np.float64(43.650261074561946), np.float64(0.14519916426860197), np.float64(0.30393938502017437), np.float64(0.18288765641927784), np.float64(0.4653139297512423), np.float64(0.48401146561645225), np.float64(0.541515745550534), np.float64(42.902161854501905), np.float64(54.74880854328866), np.float64(56.98007622064712), np.float64(0.39739517303321276), np.float64(0.26347021615780347), np.float64(0.32425017055923433), np.int64(1), np.int64(0), np.int64(2), 4, np.int64(3), np.int64(3), np.int64(0), np.int64(3), np.int64(0), 1, np.int64(0), np.int64(1), np.int64(1), 0, np.int64(1), np.int64(1), np.int64(1), np.int64(2)]
 
     ##### Creating the fuzzy lookup tables
     fuzzy_lookup = FuzzyLookupTable(fuzzy_parameters= np.array(individual)) 
