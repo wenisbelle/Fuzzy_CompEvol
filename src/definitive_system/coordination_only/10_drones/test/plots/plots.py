@@ -364,18 +364,20 @@ def plot_swarm_uncertainty(labeled_datasets):
     plt.show()
 
 
-Fuzzy_first_second_best_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_2000")
-
-#Fuzzy_third_best_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_second_best")
-
-#Fuzzy_modified_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_modified")
+Fuzzy_first_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/fuzzy_2000")
 
 Analytical_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/test/logs/analytical_2000")
 
+Greed = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/greed/logs")
+
+eGreed = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/10_drones/e_greed/logs")
+
 
 labeled_datasets2 = {
-    "First and Second Best Individual": Fuzzy_first_second_best_individual,
-    "Analytical": Analytical_individual,
+    "Fuzzy Best Individual": Fuzzy_first_individual,
+    "Analytical Best Individual": Analytical_individual,
+    "Greed": Greed,
+    "e-Greed": eGreed,
 }
 
 plot_swarm_uncertainty(labeled_datasets2)
