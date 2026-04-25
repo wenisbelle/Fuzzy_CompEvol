@@ -142,18 +142,18 @@ class SanityCheck():
         self.two_cells_priority = ctrl.ControlSystemSimulation(two_cells_fuzzy)
 
 def main():
-    individual = [np.float64(0.3248127455923747), np.float64(0.20860769421745035), np.float64(0.27431761275359057),
-             np.float64(100.34266202816676), np.float64(98.70594746717698), np.float64(55.25734200472341),
-             np.float64(0.21746882646881088), np.float64(0.17717368698370328), np.float64(0.14634633466609104),
-             np.float64(0.3932135340662621), np.float64(0.23662882290049053), np.float64(0.5133610758578467),
-             np.float64(63.82574448279179), np.float64(36.041582825725534), np.float64(38.28506155920144),
-             np.float64(0.2806972718209198), np.float64(0.09444144502150142), np.float64(0.3162077455438398),
-             np.int64(1), np.int64(1), np.int64(1),
-             np.int64(1), np.int64(2), 1,
-             np.int64(4), np.int64(1), 3,
-             np.int64(3), np.int64(0), np.int64(4),
-             np.int64(1), np.int64(2), np.int64(2),
-             np.int64(1), np.int64(2), np.int64(4)] 
+    individual = [np.float64(0.14096521481670332), np.float64(0.6302666709175262), np.float64(0.23828589684651877),
+                  np.float64(76.9642128330259), np.float64(73.09834769417856), np.float64(86.48930169835975),
+                  np.float64(0.27770662335759483), np.float64(0.27961929474353586), np.float64(0.2506011356399168),
+                  np.float64(0.5591706633738546), np.float64(0.7888351550206498), np.float64(0.48787776176527164),
+                  np.float64(60.30931111169186), np.float64(35.97497838548361), np.float64(50.676817397372915),
+                  np.float64(0.10247093805588445), np.float64(0.16016706177221007), np.float64(0.18517072054655448),
+                  np.int64(2), np.int64(2), np.int64(0),
+                  4, np.int64(3), np.int64(4),
+                  np.int64(4), np.int64(4), np.int64(4),
+                  np.int64(2), np.int64(2), 0,
+                  np.int64(2), 4, np.int64(4),
+                  np.int64(3), np.int64(0), np.int64(0)]
     
     evaluator = SanityCheck(fuzzy_parameters=individual)
     

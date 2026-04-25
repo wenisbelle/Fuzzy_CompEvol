@@ -144,7 +144,18 @@ class SanityCheck():
 
 
 def main():
-    individual =  [np.float64(0.21004696123279104), np.float64(0.4783592856339613), np.float64(1.0244277135760358), np.float64(80.07862590813492), np.float64(64.63377363065867), np.float64(79.45349394923406), np.float64(0.04719858730593485), np.float64(0.18737324138840816), np.float64(0.33102982907122125), np.float64(0.3658227471364214), np.float64(0.09821433715595324), np.float64(0.397743552292422), np.float64(33.00871359186337), np.float64(21.027846614676076), np.float64(33.989783273247504), np.float64(0.32902790987685127), np.float64(0.23526479532752664), np.float64(0.19400900860857542), np.int64(2), np.int64(1), np.int64(2), np.int64(1), np.int64(4), 2, np.int64(0), 4, np.int64(3), 2, np.int64(2), np.int64(4), np.int64(4), np.int64(3), np.int64(0), np.int64(4), np.int64(2), np.int64(4)]
+    individual =  [np.float64(0.06857275692600859), np.float64(0.6769496995692293), np.float64(0.2923137159018423),
+                   np.float64(54.436036489196034), np.float64(67.71584424679985), np.float64(43.650261074561946),
+                   np.float64(0.14519916426860197), np.float64(0.30393938502017437), np.float64(0.18288765641927784),
+                   np.float64(0.4653139297512423), np.float64(0.48401146561645225), np.float64(0.541515745550534),
+                   np.float64(42.902161854501905), np.float64(54.74880854328866), np.float64(56.98007622064712),
+                   np.float64(0.39739517303321276), np.float64(0.26347021615780347), np.float64(0.32425017055923433),
+                   np.int64(1), np.int64(0), np.int64(2),
+                   4, np.int64(3), np.int64(3),
+                   np.int64(0), np.int64(3), np.int64(0),
+                   1, np.int64(0), np.int64(1),
+                   np.int64(1), 0, np.int64(1),
+                   np.int64(1), np.int64(1), np.int64(2)]
 
     evaluator = SanityCheck(fuzzy_parameters=individual)
     

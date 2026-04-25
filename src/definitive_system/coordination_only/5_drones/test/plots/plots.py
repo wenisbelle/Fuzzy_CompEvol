@@ -396,8 +396,8 @@ eGreed = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coor
 
 
 labeled_datasets2 = {
-    "Fuzzy Best Individual": Fuzzy_first_individual,
-    "Analytical Best Individual": Analytical_individual,
+    "Fuzzy": Fuzzy_first_individual,
+    "Fitness Function": Analytical_individual,
     "Greed": Greed,
     "e-Greed": eGreed,
 }

@@ -390,7 +390,7 @@ Fuzzy_first_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/defini
 
 Analytical_individual = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/test/logs/analytical_2000")
 
-Greed = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/greed/test/logs")
+Greed = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/greed/logs")
 
 eGreed = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coordination_only/3_drones/e_greed/logs")
 
@@ -401,12 +401,10 @@ eGreed = parse_and_average_logs_from_folder("/FuzzyGA/src/definitive_system/coor
 #}
 
 labeled_datasets2 = {
-    "Fuzzy Best Individual": Fuzzy_first_individual,
-    "Analytical Best Individual": Analytical_individual,
+    "Fuzzy": Fuzzy_first_individual,
+    "Fitness Function": Analytical_individual,
     "Greed": Greed,
     "e-Greed": eGreed,
-    #"Fuzzy modified": Fuzzy_modified_individual,
-    #"Fuzzy modified 2": Fuzzy_modified_individual_2,
 }
 
 plot_swarm_uncertainty(labeled_datasets2)
